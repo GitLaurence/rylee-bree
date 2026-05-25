@@ -47,36 +47,41 @@ Or drag the file into Chrome, Firefox, Safari, or Edge. That's it.
 
 A GitHub Action runs every 6 hours, fetches the latest posts from `@mariaaajoy`, downloads the photos, and updates `data/story.js` automatically — no manual steps needed after setup.
 
-### One-time setup (do this on your own machine)
+### One-time setup using GitHub Codespaces (no local install needed)
 
-Instagram blocks logins from unknown servers (like GitHub Actions). The fix is a **session file** — you log in once from your own computer and upload the session as a secret.
+Instagram blocks logins from unknown servers. The fix is a **session file** — log in once from a trusted environment and store the session as a GitHub Secret. You can do this entirely in your browser using Codespaces.
 
-**Step 1 — generate the session on your machine:**
+**Step 1 — open this repo in Codespaces:**
+
+On the repo page → click the green **Code** button → **Codespaces** tab → **Create codespace on main**.  
+Wait about 60 seconds for it to load. You'll get a full VS Code environment with a terminal.
+
+**Step 2 — generate the session file in the Codespaces terminal:**
+
 ```bash
 pip install instaloader
 python scripts/save_session.py
-# Enter your Instagram username + password when prompted.
-# Copy the long base64 string that's printed.
 ```
 
-**Step 2 — add GitHub Secrets:**
+Enter your Instagram username and password when prompted. If Instagram sends a notification to your phone to confirm the login, approve it. The script will print a long base64 string — **copy it**.
 
-Go to your repo on GitHub → **Settings → Secrets and variables → Actions**, then add:
+> **Note:** `@mariaaajoy` is a private account. The Instagram account you log in with must already **follow** `@mariaaajoy` — otherwise the fetch will return no posts.
+
+**Step 3 — add GitHub Secrets:**
+
+Go to your repo → **Settings → Secrets and variables → Actions** → **New repository secret**:
 
 | Secret name | Value |
 |---|---|
-| `INSTAGRAM_SESSION` | The base64 string from step 1 |
+| `INSTAGRAM_SESSION` | The base64 string from step 2 |
 | `INSTAGRAM_USERNAME` | Your Instagram username |
 
-> The Action runs every 6 hours automatically. You can also trigger it manually anytime from **Actions → Update Storybook from Instagram → Run workflow**.
+**Step 4 — trigger the first run:**
 
-### Run locally
+Go to **Actions → Update Storybook from Instagram → Run workflow → Run workflow**.  
+The story will be populated with Maria's posts within a minute.
 
-```bash
-pip install instaloader
-python scripts/save_session.py          # one-time: generates INSTAGRAM_SESSION value
-INSTAGRAM_SESSION=<base64> INSTAGRAM_USERNAME=you python scripts/fetch_and_update.py
-```
+After this, the Action runs automatically every 6 hours — no further steps needed.
 
 ---
 
