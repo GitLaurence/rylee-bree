@@ -848,8 +848,9 @@ function sceneArt(scene, w, h) {
   <!-- Bubbles (iridescent) -->
   ${Array.from({length:12},(_,i)=>{
     const bx=(s*(.14+i*.06)).toFixed(1), by=(t*(.62-i*.01)).toFixed(1), br=(3+i*.5).toFixed(1);
+    const nbx=+bx, nby=+by, nbr=+br;
     return `<circle cx="${bx}" cy="${by}" r="${br}" fill="url(#btBub)" opacity=".8"/>
-<path d="M${(+bx-+br*.5).toFixed(1)},${(+by-+br*.6).toFixed(1)} Q${bx},${(+by-+br).toFixed(1)} ${(+bx++br*.5).toFixed(1)},${(+by-+br*.6).toFixed(1)}" stroke="rgba(255,255,255,.7)" stroke-width=".9" fill="none"/>`;
+<path d="M${(nbx-nbr*.5).toFixed(1)},${(nby-nbr*.6).toFixed(1)} Q${bx},${(nby-nbr).toFixed(1)} ${(nbx+nbr*.5).toFixed(1)},${(nby-nbr*.6).toFixed(1)}" stroke="rgba(255,255,255,.7)" stroke-width=".9" fill="none"/>`;
   }).join('')}
   <!-- Steam wisps -->
   <path d="M${s*.35},${t*.5} Q${s*.33},${t*.42} ${s*.35},${t*.34}" stroke="rgba(180,220,240,.6)" stroke-width="3" fill="none" stroke-linecap="round"/>
