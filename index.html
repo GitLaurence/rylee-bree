@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Adventures of Rylee & Bree</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/animations.css">
+</head>
+<body>
+  <div class="wrapper">
+    <div class="book">
+      <div class="page" id="page">
+        <!-- Rendered dynamically by book.js -->
+      </div>
+      <div class="nav-bar">
+        <button class="nav-btn" id="prev-btn" aria-label="Previous page">&#10094;</button>
+        <div class="dots" id="dots"></div>
+        <button class="nav-btn" id="next-btn" aria-label="Next page">&#10095;</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="data/story.js"></script>
+  <script src="js/book.js"></script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+/* ── Page Slide Transitions ─────────────────────────────── */
+@keyframes slideOutLeft {
+  from { transform: translateX(0);     opacity: 1; }
+  to   { transform: translateX(-100%); opacity: 0; }
+}
+@keyframes slideInRight {
+  from { transform: translateX(100%);  opacity: 0; }
+  to   { transform: translateX(0);     opacity: 1; }
+}
+@keyframes slideOutRight {
+  from { transform: translateX(0);    opacity: 1; }
+  to   { transform: translateX(100%); opacity: 0; }
+}
+@keyframes slideInLeft {
+  from { transform: translateX(-100%); opacity: 0; }
+  to   { transform: translateX(0);     opacity: 1; }
+}
+
+.page.slide-out-left  { animation: slideOutLeft  0.28s cubic-bezier(0.4,0,1,1) forwards; }
+.page.slide-in-right  { animation: slideInRight  0.32s cubic-bezier(0,0,0.2,1) forwards; }
+.page.slide-out-right { animation: slideOutRight 0.28s cubic-bezier(0.4,0,1,1) forwards; }
+.page.slide-in-left   { animation: slideInLeft   0.32s cubic-bezier(0,0,0.2,1) forwards; }
+
+/* ── Content Entrance ───────────────────────────────────── */
+@keyframes fadeUp {
+  from { transform: translateY(16px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes scaleIn {
+  from { transform: scale(0.88); opacity: 0; }
+  to   { transform: scale(1);    opacity: 1; }
+}
+
+.cover-body        { animation: fadeIn  0.6s 0.15s ease both; }
+.portraits-title   { animation: fadeUp  0.5s 0.1s  ease both; }
+.portraits-names   { animation: fadeUp  0.5s 0.25s ease both; }
+.story-body        { animation: fadeUp  0.45s 0.1s ease both; }
+.ending-body       { animation: scaleIn 0.6s 0.1s  ease both; }
+
+/* Scene SVG art */
+.scene-art         { animation: fadeIn 0.5s ease both; }
+
+/* ── Decorative animations ──────────────────────────────── */
+
+/* Twinkling stars on ending/cover pages */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50%       { opacity: 1;   transform: scale(1.3); }
+}
+.star-twinkle { animation: twinkle 2s ease-in-out infinite; }
+.star-twinkle:nth-child(2n)   { animation-delay: 0.4s; animation-duration: 2.6s; }
+.star-twinkle:nth-child(3n)   { animation-delay: 0.9s; animation-duration: 1.8s; }
+.star-twinkle:nth-child(4n)   { animation-delay: 1.3s; animation-duration: 3.1s; }
+.star-twinkle:nth-child(5n)   { animation-delay: 0.2s; animation-duration: 2.2s; }
+
+/* Gentle float for cover figures */
+@keyframes gentleFloat {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-6px); }
+}
+.float { animation: gentleFloat 3.5s ease-in-out infinite; }
+
+/* Sun rays rotating slowly */
+@keyframes rotateSlow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.sun-rays { animation: rotateSlow 20s linear infinite; transform-origin: center; }
+
+/* Clouds drifting */
+@keyframes driftRight {
+  from { transform: translateX(-8px); }
+  to   { transform: translateX(8px); }
+}
+.cloud-drift {
+  animation: driftRight 6s ease-in-out infinite alternate;
+}
+.cloud-drift-slow {
+  animation: driftRight 9s ease-in-out infinite alternate-reverse;
+}
