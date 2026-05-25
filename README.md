@@ -56,16 +56,27 @@ Instagram blocks logins from unknown servers. The fix is a **session file** — 
 On the repo page → click the green **Code** button → **Codespaces** tab → **Create codespace on main**.  
 Wait about 60 seconds for it to load. You'll get a full VS Code environment with a terminal.
 
-**Step 2 — generate the session file in the Codespaces terminal:**
+**Step 2 — get your Instagram session cookie (no password needed):**
+
+In a **new browser tab**, open [instagram.com](https://instagram.com) and make sure you're logged in.  
+Then open **DevTools** (`F12` or right-click → Inspect) and go to:
+
+```
+Application tab → Cookies → https://www.instagram.com
+```
+
+Find the row named **`sessionid`** and copy its Value (a long string of letters and numbers).
+
+Come back to the Codespaces terminal and run:
 
 ```bash
 pip install instaloader
 python scripts/save_session.py
 ```
 
-Enter your Instagram username and password when prompted. If Instagram sends a notification to your phone to confirm the login, approve it. The script will print a long base64 string — **copy it**.
+Paste the sessionid when prompted. The script will verify it works against `@mariaaajoy` and print the two secrets you need.
 
-> **Note:** `@mariaaajoy` is a private account. The Instagram account you log in with must already **follow** `@mariaaajoy` — otherwise the fetch will return no posts.
+> **Note:** `@mariaaajoy` is a private account. The Instagram account whose cookie you use must already **follow** `@mariaaajoy`.
 
 **Step 3 — add GitHub Secrets:**
 
@@ -73,7 +84,7 @@ Go to your repo → **Settings → Secrets and variables → Actions** → **New
 
 | Secret name | Value |
 |---|---|
-| `INSTAGRAM_SESSION` | The base64 string from step 2 |
+| `INSTAGRAM_SESSIONID` | The sessionid cookie value |
 | `INSTAGRAM_USERNAME` | Your Instagram username |
 
 **Step 4 — trigger the first run:**

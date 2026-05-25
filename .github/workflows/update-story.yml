@@ -26,12 +26,11 @@ jobs:
 
       - name: Fetch Instagram posts and update story
         env:
-          # Preferred: base64-encoded session file (no checkpoint risk)
-          # Generate with: python scripts/save_session.py
-          INSTAGRAM_SESSION:  ${{ secrets.INSTAGRAM_SESSION }}
-          INSTAGRAM_USERNAME: ${{ secrets.INSTAGRAM_USERNAME }}
-          # Only needed if falling back to password login:
-          INSTAGRAM_PASSWORD: ${{ secrets.INSTAGRAM_PASSWORD }}
+          # sessionid cookie value from your browser — see scripts/save_session.py
+          INSTAGRAM_SESSIONID: ${{ secrets.INSTAGRAM_SESSIONID }}
+          INSTAGRAM_USERNAME:  ${{ secrets.INSTAGRAM_USERNAME }}
+          # Legacy fallback (base64 instaloader session file)
+          INSTAGRAM_SESSION:   ${{ secrets.INSTAGRAM_SESSION }}
         run: python scripts/fetch_and_update.py
 
       - name: Commit and push changes

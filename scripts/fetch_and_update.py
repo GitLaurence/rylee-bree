@@ -25,6 +25,8 @@ import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 
+# Auth priority: INSTAGRAM_SESSIONID (browser cookie) > INSTAGRAM_SESSION (legacy file)
+
 ROOT      = Path(__file__).resolve().parent.parent
 STORY_JS  = ROOT / "data" / "story.js"
 PHOTOS    = ROOT / "assets" / "photos"
@@ -44,32 +46,35 @@ def build_loader() -> tuple[instaloader.Instaloader, str]:
         quiet=True,
     )
 
-    session_b64 = os.environ.get("INSTAGRAM_SESSION", "").strip()
     username    = os.environ.get("INSTAGRAM_USERNAME", "").strip()
-    password    = os.environ.get("INSTAGRAM_PASSWORD", "").strip()
+    session_id  = os.environ.get("INSTAGRAM_SESSIONID", "").strip()
+    session_b64 = os.environ.get("INSTAGRAM_SESSION", "").strip()
 
-    if session_b64:
-        if not username:
-            print("Error: INSTAGRAM_USERNAME is required alongside INSTAGRAM_SESSION.")
-            sys.exit(1)
-        # Write the session file to a temp location and load it
+    if not username:
+        print("Error: INSTAGRAM_USERNAME env var is required.")
+        sys.exit(1)
+
+    if session_id:
+        # Preferred: raw sessionid cookie from browser — no login needed
+        L.context._session.cookies.set("sessionid", session_id, domain=".instagram.com")
+        L.context.username = username
+        print(f"Using session cookie for {username}.")
+
+    elif session_b64:
+        # Legacy: base64-encoded instaloader session file
         with tempfile.NamedTemporaryFile(delete=False, suffix=".session") as tf:
             tf.write(base64.b64decode(session_b64))
             tmp_path = tf.name
         try:
             L.load_session_from_file(username, filename=tmp_path)
-            print(f"Loaded session for {username}.")
+            print(f"Loaded session file for {username}.")
         finally:
             os.unlink(tmp_path)
 
-    elif username and password:
-        print(f"Logging in as {username} with password...")
-        L.login(username, password)
-
     else:
         print(
-            "Error: provide either INSTAGRAM_SESSION (recommended) "
-            "or INSTAGRAM_USERNAME + INSTAGRAM_PASSWORD."
+            "Error: INSTAGRAM_SESSIONID secret is missing.\n"
+            "Run  python scripts/save_session.py  in Codespaces to generate it."
         )
         sys.exit(1)
 

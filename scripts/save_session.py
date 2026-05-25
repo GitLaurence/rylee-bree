@@ -1,38 +1,38 @@
 #!/usr/bin/env python3
 """
-Run this ONCE on your own machine to generate a session file.
-The printed base64 string goes into INSTAGRAM_SESSION in GitHub Secrets.
+Extracts your Instagram session cookie and verifies it works.
+Run this in GitHub Codespaces — no password required.
 
-Usage:
-  pip install instaloader
-  python scripts/save_session.py
+Steps:
+  1. Open instagram.com in your browser and make sure you're logged in.
+  2. Open DevTools  →  Application tab  →  Cookies  →  https://www.instagram.com
+  3. Find the row named  sessionid  and copy its Value.
+  4. Come back to this terminal and paste it when prompted.
 """
 
-import base64
-import getpass
 import instaloader
-import tempfile
-from pathlib import Path
+import sys
 
-username = input("Your Instagram username: ").strip()
-password = getpass.getpass("Your Instagram password: ")
+username   = input("Your Instagram username: ").strip()
+session_id = input("Paste your Instagram sessionid cookie value: ").strip()
 
+if not session_id:
+    print("No session ID entered. Exiting.")
+    sys.exit(1)
+
+print("Verifying session…")
 L = instaloader.Instaloader(quiet=True)
-print("Logging in (you may need to confirm a notification in the Instagram app)...")
+L.context._session.cookies.set("sessionid", session_id, domain=".instagram.com")
+L.context.username = username
 
 try:
-    L.login(username, password)
-except instaloader.exceptions.TwoFactorAuthRequiredException:
-    code = input("Two-factor code: ").strip()
-    L.two_factor_login(code)
+    profile = instaloader.Profile.from_username(L.context, "mariaaajoy")
+    print(f"✓ Session works! Found @mariaaajoy ({profile.mediacount} posts).")
+except Exception as exc:
+    print(f"✗ Session check failed: {exc}")
+    print("Make sure you're logged in at instagram.com and copied the right cookie.")
+    sys.exit(1)
 
-with tempfile.NamedTemporaryFile(delete=False, suffix=".session") as tf:
-    tmp = tf.name
-
-L.save_session_to_file(filename=tmp)
-encoded = base64.b64encode(Path(tmp).read_bytes()).decode()
-Path(tmp).unlink()
-
-print("\n✓ Session saved. Copy the line below into GitHub Secrets as INSTAGRAM_SESSION:\n")
-print(encoded)
-print(f"\nAlso add INSTAGRAM_USERNAME = {username} as a secret.")
+print("\nAdd these two GitHub Secrets (Settings → Secrets and variables → Actions):\n")
+print(f"  INSTAGRAM_SESSIONID = {session_id}")
+print(f"  INSTAGRAM_USERNAME  = {username}")
