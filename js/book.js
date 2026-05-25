@@ -474,6 +474,21 @@ function renderStory(data, sceneHtml) {
     </div>`;
 }
 
+function renderPhotoStory(data) {
+  const paragraphs = data.text.map(t => `<p>${t}</p>`).join('');
+  const dateHtml   = data.date ? `<span class="post-date">${data.date}</span>` : '';
+  return `
+    <div class="photo-area">
+      <img src="${data.photo}" alt="${data.title}" loading="lazy"
+           onerror="this.closest('.photo-area').classList.add('photo-missing')">
+    </div>
+    <div class="story-body">
+      ${dateHtml}
+      <h2 class="chapter-title">${data.title.replace(/\n/g, '<br>')}</h2>
+      <div class="story-text">${paragraphs}</div>
+    </div>`;
+}
+
 function renderEnding(data) {
   const paragraphs = data.text.map(t => `<p class="ending-text">${t}</p>`).join('');
   return `
@@ -505,8 +520,9 @@ function renderCurrentPage() {
   switch (data.layout) {
     case 'cover':     html = renderCover(data);                          break;
     case 'portraits': html = renderPortraits(data);                      break;
-    case 'story':     html = renderStory(data, SCENE_MAP[data.scene]()); break;
-    case 'ending':    html = renderEnding(data);                         break;
+    case 'story':       html = renderStory(data, SCENE_MAP[data.scene]()); break;
+    case 'photo-story': html = renderPhotoStory(data);                    break;
+    case 'ending':      html = renderEnding(data);                        break;
   }
 
   page.innerHTML = html;

@@ -43,6 +43,31 @@ Or drag the file into Chrome, Firefox, Safari, or Edge. That's it.
 
 ---
 
+## Auto-Updates from Instagram
+
+A GitHub Action runs every 6 hours, fetches the latest posts from `@mariaaajoy`, downloads the photos, and updates `data/story.js` automatically — no manual steps needed after setup.
+
+### One-time setup: add GitHub Secrets
+
+1. Go to your repo on GitHub → **Settings** → **Secrets and variables** → **Actions**
+2. Click **New repository secret** and add both:
+
+| Secret name | Value |
+|---|---|
+| `INSTAGRAM_USERNAME` | Your Instagram username (used to log in and fetch Maria's posts) |
+| `INSTAGRAM_PASSWORD` | Your Instagram password |
+
+> The Action runs on a schedule. You can also trigger it manually anytime from **Actions** → **Update Storybook from Instagram** → **Run workflow**.
+
+### Run locally
+
+```bash
+pip install instaloader
+INSTAGRAM_USERNAME=you INSTAGRAM_PASSWORD=secret python scripts/fetch_and_update.py
+```
+
+---
+
 ## Customizing the Story
 
 ### Edit story text
