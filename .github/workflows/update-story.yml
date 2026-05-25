@@ -10,7 +10,10 @@ permissions:
 
 jobs:
   update-story:
-    runs-on: ubuntu-latest
+    # Use a self-hosted runner so requests come from your home IP (not a blocked datacenter).
+    # Setup: repo Settings → Actions → Runners → New self-hosted runner
+    # To use GitHub's servers instead (may be blocked by Instagram): change to ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - name: Checkout repo
