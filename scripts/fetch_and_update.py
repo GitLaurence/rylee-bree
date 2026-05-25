@@ -1,31 +1,22 @@
 #!/usr/bin/env python3
 """
-Fetches recent posts from @mariaaajoy on Instagram and rewrites data/story.js.
+Fetches recent posts from @mariaaajoy using Instagram's internal API.
+No instaloader — uses requests + sessionid cookie directly.
 
-Authentication (in order of preference):
-  1. INSTAGRAM_SESSION env var — base64-encoded instaloader session file (recommended)
-  2. INSTAGRAM_USERNAME + INSTAGRAM_PASSWORD env vars — direct login (may hit checkpoint)
-
-Generate a session file on your own machine (one-time setup):
-  pip install instaloader
-  python scripts/save_session.py          # prompts for username + password
-  # Then add the printed base64 string as INSTAGRAM_SESSION in GitHub Secrets.
-
-Requires: pip install instaloader
+Secrets needed in GitHub:
+  INSTAGRAM_SESSIONID  — sessionid cookie from instagram.com browser DevTools
+  INSTAGRAM_USERNAME   — your Instagram username
 """
 
-import base64
-import instaloader
 import json
 import os
 import re
 import sys
-import tempfile
 import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 
-# Auth priority: INSTAGRAM_SESSIONID (browser cookie) > INSTAGRAM_SESSION (legacy file)
+import requests
 
 ROOT      = Path(__file__).resolve().parent.parent
 STORY_JS  = ROOT / "data" / "story.js"
@@ -34,93 +25,103 @@ TARGET    = "mariaaajoy"
 MAX_POSTS = 12
 SCENES    = ["morning", "backyard", "living-room", "bedroom"]
 
+_UA = (
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+    "AppleWebKit/537.36 (KHTML, like Gecko) "
+    "Chrome/120.0.0.0 Safari/537.36"
+)
+_HEADERS = {
+    "User-Agent": _UA,
+    "Accept": "*/*",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Referer": "https://www.instagram.com/",
+    "X-IG-App-ID": "936619743392459",
+    "Origin": "https://www.instagram.com",
+}
 
-# ── Auth ────────────────────────────────────────────────────
 
-def build_loader() -> tuple[instaloader.Instaloader, str]:
-    """Return (Instaloader instance already authenticated, username)."""
-    L = instaloader.Instaloader(
-        download_pictures=False,
-        download_videos=False,
-        save_metadata=False,
-        quiet=True,
+# ── Session ──────────────────────────────────────────────────
+
+def make_session(session_id: str) -> requests.Session:
+    sess = requests.Session()
+    sess.headers.update(_HEADERS)
+    sess.cookies.set("sessionid", session_id, domain=".instagram.com")
+    # Grab csrftoken by visiting the homepage once
+    try:
+        sess.get("https://www.instagram.com/", timeout=15)
+        csrf = sess.cookies.get("csrftoken", "")
+        if csrf:
+            sess.headers["X-CSRFToken"] = csrf
+    except Exception:
+        pass
+    return sess
+
+
+# ── Instagram API calls ──────────────────────────────────────
+
+def get_user_id(sess: requests.Session) -> str:
+    resp = sess.get(
+        "https://www.instagram.com/api/v1/users/web_profile_info/",
+        params={"username": TARGET},
+        timeout=20,
     )
-
-    username    = os.environ.get("INSTAGRAM_USERNAME", "").strip()
-    session_id  = os.environ.get("INSTAGRAM_SESSIONID", "").strip()
-    session_b64 = os.environ.get("INSTAGRAM_SESSION", "").strip()
-
-    if not username:
-        print("Error: INSTAGRAM_USERNAME env var is required.")
-        sys.exit(1)
-
-    if session_id:
-        # Preferred: raw sessionid cookie from browser — no login needed
-        L.context._session.cookies.set("sessionid", session_id, domain=".instagram.com")
-        L.context.username = username
-        print(f"Using session cookie for {username}.")
-
-    elif session_b64:
-        # Legacy: base64-encoded instaloader session file
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".session") as tf:
-            tf.write(base64.b64decode(session_b64))
-            tmp_path = tf.name
-        try:
-            L.load_session_from_file(username, filename=tmp_path)
-            print(f"Loaded session file for {username}.")
-        finally:
-            os.unlink(tmp_path)
-
-    else:
-        print(
-            "Error: INSTAGRAM_SESSIONID secret is missing.\n"
-            "Run  python scripts/save_session.py  in Codespaces to generate it."
-        )
-        sys.exit(1)
-
-    return L, username
+    resp.raise_for_status()
+    return resp.json()["data"]["user"]["id"]
 
 
-# ── Fetch ────────────────────────────────────────────────────
+def fetch_items(sess: requests.Session, user_id: str) -> list:
+    resp = sess.get(
+        f"https://www.instagram.com/api/v1/feed/user/{user_id}/",
+        params={"count": MAX_POSTS},
+        timeout=20,
+    )
+    resp.raise_for_status()
+    return resp.json().get("items", [])
 
-def fetch_posts(L: instaloader.Instaloader) -> list:
-    profile = instaloader.Profile.from_username(L.context, TARGET)
-    posts = []
-    for i, post in enumerate(profile.get_posts()):
-        if i >= MAX_POSTS:
-            break
-        posts.append(post)
-    return posts
+
+# ── Post data extraction ─────────────────────────────────────
+
+def get_image_url(item: dict) -> str | None:
+    # Carousel posts: use first frame
+    media = item.get("carousel_media") or [item]
+    candidates = media[0].get("image_versions2", {}).get("candidates", [])
+    return candidates[0]["url"] if candidates else None
+
+
+def get_caption(item: dict) -> str:
+    cap = item.get("caption")
+    return cap.get("text", "") if isinstance(cap, dict) else ""
+
+
+def get_date(item: dict) -> datetime:
+    return datetime.fromtimestamp(item.get("taken_at", 0), tz=timezone.utc)
+
+
+def get_shortcode(item: dict) -> str:
+    return item.get("code") or item.get("shortcode") or str(item["id"])
 
 
 # ── Caption parsing ──────────────────────────────────────────
 
 def parse_caption(caption: str) -> tuple[str, list[str]]:
-    """Return (title, [paragraph, ...]) stripped of hashtag blocks."""
     if not caption:
         return "A Moment to Remember", []
 
-    lines = caption.split("\n")
     clean = []
-    for line in lines:
+    for line in caption.split("\n"):
         words = line.strip().split()
         if not words:
             clean.append("")
             continue
-        hashtag_ratio = sum(1 for w in words if w.startswith("#")) / len(words)
-        if hashtag_ratio < 0.6:
+        if sum(1 for w in words if w.startswith("#")) / len(words) < 0.6:
             clean.append(line.strip())
 
-    text       = "\n".join(clean).strip()
-    paragraphs = [p.strip() for p in re.split(r"\n{2,}|\n", text) if p.strip()]
-
+    paragraphs = [p for p in re.split(r"\n{2,}|\n", "\n".join(clean)) if p.strip()]
     if not paragraphs:
         return "A Moment to Remember", []
 
-    title = paragraphs[0]
-    if len(title) > 60:
-        title = title[:57].rstrip() + "…"
-
+    raw_title = paragraphs[0]
+    title = raw_title[:57].rstrip() + ("…" if len(raw_title) > 60 else "")
     return title, paragraphs[1:6]
 
 
@@ -132,7 +133,7 @@ def download_photo(url: str, shortcode: str) -> str | None:
     if dest.exists():
         return f"assets/photos/{shortcode}.jpg"
     try:
-        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        req = urllib.request.Request(url, headers={"User-Agent": _UA})
         with urllib.request.urlopen(req, timeout=30) as resp:
             dest.write_bytes(resp.read())
         print(f"  Downloaded {shortcode}.jpg")
@@ -144,7 +145,7 @@ def download_photo(url: str, shortcode: str) -> str | None:
 
 # ── Story builder ────────────────────────────────────────────
 
-def build_story(posts: list) -> list:
+def build_story(items: list) -> list:
     pages = [{
         "id": "cover",
         "scene": "cover",
@@ -154,13 +155,15 @@ def build_story(posts: list) -> list:
         "dedication": "Made with love for Maria, Rylee & Brielle ♥",
     }]
 
-    for i, post in enumerate(posts):
-        title, body  = parse_caption(post.caption)
-        date_str     = post.date.strftime("%B %d, %Y")
-        photo_path   = download_photo(post.url, post.shortcode)
+    for i, item in enumerate(items[:MAX_POSTS]):
+        shortcode   = get_shortcode(item)
+        title, body = parse_caption(get_caption(item))
+        date_str    = get_date(item).strftime("%B %d, %Y")
+        img_url     = get_image_url(item)
+        photo_path  = download_photo(img_url, shortcode) if img_url else None
 
         page = {
-            "id":     f"post_{post.shortcode}",
+            "id":     f"post_{shortcode}",
             "scene":  SCENES[i % len(SCENES)],
             "layout": "photo-story" if photo_path else "story",
             "title":  title,
@@ -169,7 +172,6 @@ def build_story(posts: list) -> list:
         }
         if photo_path:
             page["photo"] = photo_path
-
         pages.append(page)
 
     pages.append({
@@ -183,7 +185,6 @@ def build_story(posts: list) -> list:
         ],
         "dedication": "For Rylee, Brielle, and their amazing mom Maria.\nThis is your story. ♥",
     })
-
     return pages
 
 
@@ -201,17 +202,32 @@ def write_story_js(story: list):
 # ── Entry point ──────────────────────────────────────────────
 
 def main():
-    L, _ = build_loader()
+    username   = os.environ.get("INSTAGRAM_USERNAME", "").strip()
+    session_id = os.environ.get("INSTAGRAM_SESSIONID", "").strip()
 
-    print(f"Fetching posts from @{TARGET}...")
+    if not username or not session_id:
+        print("Error: INSTAGRAM_USERNAME and INSTAGRAM_SESSIONID must be set.")
+        sys.exit(1)
+
+    sess = make_session(session_id)
+
+    print(f"Fetching profile @{TARGET}…")
     try:
-        posts = fetch_posts(L)
+        user_id = get_user_id(sess)
+        print(f"  User ID: {user_id}")
+    except Exception as exc:
+        print(f"Error fetching profile: {exc}")
+        sys.exit(1)
+
+    print("Fetching posts…")
+    try:
+        items = fetch_items(sess, user_id)
     except Exception as exc:
         print(f"Error fetching posts: {exc}")
         sys.exit(1)
 
-    print(f"Fetched {len(posts)} posts.")
-    story = build_story(posts)
+    print(f"Fetched {len(items)} posts.")
+    story = build_story(items)
     write_story_js(story)
 
 

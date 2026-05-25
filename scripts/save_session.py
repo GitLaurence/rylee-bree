@@ -1,38 +1,47 @@
 #!/usr/bin/env python3
 """
-Extracts your Instagram session cookie and verifies it works.
-Run this in GitHub Codespaces — no password required.
+Optional helper: verifies your sessionid cookie can access @mariaaajoy.
 
-Steps:
-  1. Open instagram.com in your browser and make sure you're logged in.
-  2. Open DevTools  →  Application tab  →  Cookies  →  https://www.instagram.com
-  3. Find the row named  sessionid  and copy its Value.
-  4. Come back to this terminal and paste it when prompted.
+You can skip this entirely and just add the cookie to GitHub Secrets directly.
+This script only confirms it works before you commit it as a secret.
 """
 
-import instaloader
 import sys
+import requests
+
+TARGET = "mariaaajoy"
 
 username   = input("Your Instagram username: ").strip()
-session_id = input("Paste your Instagram sessionid cookie value: ").strip()
+session_id = input("Paste your sessionid cookie value: ").strip()
 
 if not session_id:
-    print("No session ID entered. Exiting.")
+    print("No value entered.")
     sys.exit(1)
 
-print("Verifying session…")
-L = instaloader.Instaloader(quiet=True)
-L.context._session.cookies.set("sessionid", session_id, domain=".instagram.com")
-L.context.username = username
+sess = requests.Session()
+sess.headers.update({
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "X-IG-App-ID": "936619743392459",
+    "Referer": "https://www.instagram.com/",
+})
+sess.cookies.set("sessionid", session_id, domain=".instagram.com")
 
+print("Verifying…")
 try:
-    profile = instaloader.Profile.from_username(L.context, "mariaaajoy")
-    print(f"✓ Session works! Found @mariaaajoy ({profile.mediacount} posts).")
+    resp = sess.get(
+        "https://www.instagram.com/api/v1/users/web_profile_info/",
+        params={"username": TARGET},
+        timeout=15,
+    )
+    resp.raise_for_status()
+    user = resp.json()["data"]["user"]
+    count = user.get("edge_owner_to_timeline_media", {}).get("count", "?")
+    print(f"✓ Works! Found @{TARGET} ({count} posts).")
 except Exception as exc:
-    print(f"✗ Session check failed: {exc}")
-    print("Make sure you're logged in at instagram.com and copied the right cookie.")
+    print(f"✗ Failed: {exc}")
+    print("Make sure you're logged in and your account follows @mariaaajoy.")
     sys.exit(1)
 
-print("\nAdd these two GitHub Secrets (Settings → Secrets and variables → Actions):\n")
+print("\nAdd these two GitHub Secrets:\n")
 print(f"  INSTAGRAM_SESSIONID = {session_id}")
 print(f"  INSTAGRAM_USERNAME  = {username}")
