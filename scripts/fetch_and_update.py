@@ -2,18 +2,25 @@
 """
 Fetches recent posts from @mariaaajoy on Instagram and rewrites data/story.js.
 
-Usage:
-  INSTAGRAM_USERNAME=you INSTAGRAM_PASSWORD=secret python scripts/fetch_and_update.py
+Authentication (in order of preference):
+  1. INSTAGRAM_SESSION env var — base64-encoded instaloader session file (recommended)
+  2. INSTAGRAM_USERNAME + INSTAGRAM_PASSWORD env vars — direct login (may hit checkpoint)
+
+Generate a session file on your own machine (one-time setup):
+  pip install instaloader
+  python scripts/save_session.py          # prompts for username + password
+  # Then add the printed base64 string as INSTAGRAM_SESSION in GitHub Secrets.
 
 Requires: pip install instaloader
-Secrets needed in GitHub: INSTAGRAM_USERNAME, INSTAGRAM_PASSWORD
 """
 
+import base64
 import instaloader
 import json
 import os
 import re
 import sys
+import tempfile
 import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
@@ -26,7 +33,64 @@ MAX_POSTS = 12
 SCENES    = ["morning", "backyard", "living-room", "bedroom"]
 
 
-def parse_caption(caption: str):
+# ── Auth ────────────────────────────────────────────────────
+
+def build_loader() -> tuple[instaloader.Instaloader, str]:
+    """Return (Instaloader instance already authenticated, username)."""
+    L = instaloader.Instaloader(
+        download_pictures=False,
+        download_videos=False,
+        save_metadata=False,
+        quiet=True,
+    )
+
+    session_b64 = os.environ.get("INSTAGRAM_SESSION", "").strip()
+    username    = os.environ.get("INSTAGRAM_USERNAME", "").strip()
+    password    = os.environ.get("INSTAGRAM_PASSWORD", "").strip()
+
+    if session_b64:
+        if not username:
+            print("Error: INSTAGRAM_USERNAME is required alongside INSTAGRAM_SESSION.")
+            sys.exit(1)
+        # Write the session file to a temp location and load it
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".session") as tf:
+            tf.write(base64.b64decode(session_b64))
+            tmp_path = tf.name
+        try:
+            L.load_session_from_file(username, filename=tmp_path)
+            print(f"Loaded session for {username}.")
+        finally:
+            os.unlink(tmp_path)
+
+    elif username and password:
+        print(f"Logging in as {username} with password...")
+        L.login(username, password)
+
+    else:
+        print(
+            "Error: provide either INSTAGRAM_SESSION (recommended) "
+            "or INSTAGRAM_USERNAME + INSTAGRAM_PASSWORD."
+        )
+        sys.exit(1)
+
+    return L, username
+
+
+# ── Fetch ────────────────────────────────────────────────────
+
+def fetch_posts(L: instaloader.Instaloader) -> list:
+    profile = instaloader.Profile.from_username(L.context, TARGET)
+    posts = []
+    for i, post in enumerate(profile.get_posts()):
+        if i >= MAX_POSTS:
+            break
+        posts.append(post)
+    return posts
+
+
+# ── Caption parsing ──────────────────────────────────────────
+
+def parse_caption(caption: str) -> tuple[str, list[str]]:
     """Return (title, [paragraph, ...]) stripped of hashtag blocks."""
     if not caption:
         return "A Moment to Remember", []
@@ -42,7 +106,7 @@ def parse_caption(caption: str):
         if hashtag_ratio < 0.6:
             clean.append(line.strip())
 
-    text = "\n".join(clean).strip()
+    text       = "\n".join(clean).strip()
     paragraphs = [p.strip() for p in re.split(r"\n{2,}|\n", text) if p.strip()]
 
     if not paragraphs:
@@ -52,9 +116,10 @@ def parse_caption(caption: str):
     if len(title) > 60:
         title = title[:57].rstrip() + "…"
 
-    body = paragraphs[1:6]
-    return title, body
+    return title, paragraphs[1:6]
 
+
+# ── Photo download ───────────────────────────────────────────
 
 def download_photo(url: str, shortcode: str) -> str | None:
     PHOTOS.mkdir(parents=True, exist_ok=True)
@@ -68,62 +133,42 @@ def download_photo(url: str, shortcode: str) -> str | None:
         print(f"  Downloaded {shortcode}.jpg")
         return f"assets/photos/{shortcode}.jpg"
     except Exception as exc:
-        print(f"  Warning: could not download photo for {shortcode}: {exc}")
+        print(f"  Warning: could not download {shortcode}: {exc}")
         return None
 
 
-def fetch_posts(username: str, password: str):
-    L = instaloader.Instaloader(
-        download_pictures=False,
-        download_videos=False,
-        save_metadata=False,
-        quiet=True,
-    )
-    L.login(username, password)
-    profile = instaloader.Profile.from_username(L.context, TARGET)
-    posts = []
-    for i, post in enumerate(profile.get_posts()):
-        if i >= MAX_POSTS:
-            break
-        posts.append(post)
-    return posts
+# ── Story builder ────────────────────────────────────────────
 
-
-def build_story(posts) -> list:
-    pages = []
-
-    # Cover (static)
-    pages.append({
+def build_story(posts: list) -> list:
+    pages = [{
         "id": "cover",
         "scene": "cover",
         "layout": "cover",
         "title": "The Adventures of\nRylee & Bree",
         "subtitle": "A story about two sisters",
         "dedication": "Made with love for Maria, Rylee & Brielle ♥",
-    })
+    }]
 
-    # Instagram posts
     for i, post in enumerate(posts):
-        title, body = parse_caption(post.caption)
-        date_str = post.date.strftime("%B %d, %Y")
-        photo_path = download_photo(post.url, post.shortcode)
+        title, body  = parse_caption(post.caption)
+        date_str     = post.date.strftime("%B %d, %Y")
+        photo_path   = download_photo(post.url, post.shortcode)
 
         page = {
-            "id": f"post_{post.shortcode}",
-            "scene": SCENES[i % len(SCENES)],
+            "id":     f"post_{post.shortcode}",
+            "scene":  SCENES[i % len(SCENES)],
             "layout": "photo-story" if photo_path else "story",
-            "title": title,
-            "text": body if body else [date_str],
-            "date": date_str,
+            "title":  title,
+            "text":   body if body else [date_str],
+            "date":   date_str,
         }
         if photo_path:
             page["photo"] = photo_path
 
         pages.append(page)
 
-    # Ending (static)
     pages.append({
-        "id": "end",
+        "id":    "end",
         "scene": "stars",
         "layout": "ending",
         "title": "The End",
@@ -148,19 +193,16 @@ def write_story_js(story: list):
     print(f"Wrote {len(story)} pages to {STORY_JS}")
 
 
+# ── Entry point ──────────────────────────────────────────────
+
 def main():
-    username = os.environ.get("INSTAGRAM_USERNAME", "").strip()
-    password = os.environ.get("INSTAGRAM_PASSWORD", "").strip()
+    L, _ = build_loader()
 
-    if not username or not password:
-        print("Error: INSTAGRAM_USERNAME and INSTAGRAM_PASSWORD must be set.")
-        sys.exit(1)
-
-    print(f"Logging in as {username} and fetching @{TARGET}...")
+    print(f"Fetching posts from @{TARGET}...")
     try:
-        posts = fetch_posts(username, password)
+        posts = fetch_posts(L)
     except Exception as exc:
-        print(f"Error: {exc}")
+        print(f"Error fetching posts: {exc}")
         sys.exit(1)
 
     print(f"Fetched {len(posts)} posts.")

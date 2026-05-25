@@ -47,23 +47,35 @@ Or drag the file into Chrome, Firefox, Safari, or Edge. That's it.
 
 A GitHub Action runs every 6 hours, fetches the latest posts from `@mariaaajoy`, downloads the photos, and updates `data/story.js` automatically — no manual steps needed after setup.
 
-### One-time setup: add GitHub Secrets
+### One-time setup (do this on your own machine)
 
-1. Go to your repo on GitHub → **Settings** → **Secrets and variables** → **Actions**
-2. Click **New repository secret** and add both:
+Instagram blocks logins from unknown servers (like GitHub Actions). The fix is a **session file** — you log in once from your own computer and upload the session as a secret.
+
+**Step 1 — generate the session on your machine:**
+```bash
+pip install instaloader
+python scripts/save_session.py
+# Enter your Instagram username + password when prompted.
+# Copy the long base64 string that's printed.
+```
+
+**Step 2 — add GitHub Secrets:**
+
+Go to your repo on GitHub → **Settings → Secrets and variables → Actions**, then add:
 
 | Secret name | Value |
 |---|---|
-| `INSTAGRAM_USERNAME` | Your Instagram username (used to log in and fetch Maria's posts) |
-| `INSTAGRAM_PASSWORD` | Your Instagram password |
+| `INSTAGRAM_SESSION` | The base64 string from step 1 |
+| `INSTAGRAM_USERNAME` | Your Instagram username |
 
-> The Action runs on a schedule. You can also trigger it manually anytime from **Actions** → **Update Storybook from Instagram** → **Run workflow**.
+> The Action runs every 6 hours automatically. You can also trigger it manually anytime from **Actions → Update Storybook from Instagram → Run workflow**.
 
 ### Run locally
 
 ```bash
 pip install instaloader
-INSTAGRAM_USERNAME=you INSTAGRAM_PASSWORD=secret python scripts/fetch_and_update.py
+python scripts/save_session.py          # one-time: generates INSTAGRAM_SESSION value
+INSTAGRAM_SESSION=<base64> INSTAGRAM_USERNAME=you python scripts/fetch_and_update.py
 ```
 
 ---
