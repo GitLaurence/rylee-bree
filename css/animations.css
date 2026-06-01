@@ -1,102 +1,132 @@
-/* ── Twinkle ────────────────────────────────────────── */
+/* ══════════════════════════════════════════════════
+   Animations — Claymorphism timing
+   Bouncy easing: cubic-bezier(0.34, 1.56, 0.64, 1)
+   Micro-interactions: 150–300ms
+   ══════════════════════════════════════════════════ */
+
+/* ── Twinkle ────────────────────────────────────── */
 @keyframes twinkle {
-  0%, 100% { opacity: 0; transform: scale(.6); }
-  50%       { opacity: 1; transform: scale(1); }
+  0%, 100% { opacity: 0; transform: scale(.5); }
+  50%       { opacity: 1; transform: scale(1.1); }
 }
 .star-twinkle { animation: twinkle 2s ease-in-out infinite; }
-.star-twinkle:nth-child(2n) { animation-delay: .4s; animation-duration: 2.6s; }
-.star-twinkle:nth-child(3n) { animation-delay: .9s; animation-duration: 1.8s; }
-.star-twinkle:nth-child(4n) { animation-delay: 1.3s; animation-duration: 3.1s; }
-.star-twinkle:nth-child(5n) { animation-delay: .2s;  animation-duration: 2.2s; }
+.star-twinkle:nth-child(2n) { animation-delay: .45s; animation-duration: 2.7s; }
+.star-twinkle:nth-child(3n) { animation-delay: .9s;  animation-duration: 1.9s; }
+.star-twinkle:nth-child(4n) { animation-delay: 1.4s; animation-duration: 3.2s; }
+.star-twinkle:nth-child(5n) { animation-delay: .2s;  animation-duration: 2.3s; }
 
-/* ── Float ──────────────────────────────────────────── */
+/* ── Float ──────────────────────────────────────── */
 @keyframes gentleFloat {
   0%, 100% { transform: translateY(0); }
-  50%       { transform: translateY(-8px); }
+  50%       { transform: translateY(-7px); }
 }
 .float { animation: gentleFloat 3.5s ease-in-out infinite; }
 
-/* ── Page transitions ───────────────────────────────── */
+/* ── Page transitions (Claymorphism bounce) ─────── */
 @keyframes slideInRight {
-  from { transform: translateX(100%); opacity: 0; }
-  to   { transform: translateX(0);    opacity: 1; }
+  0%   { transform: translateX(100%) scale(.96); opacity: 0; }
+  60%  { transform: translateX(-2%) scale(1.01); }
+  100% { transform: translateX(0) scale(1); opacity: 1; }
 }
 @keyframes slideOutLeft {
-  from { transform: translateX(0);     opacity: 1; }
-  to   { transform: translateX(-100%); opacity: 0; }
+  0%   { transform: translateX(0) scale(1); opacity: 1; }
+  100% { transform: translateX(-105%) scale(.94); opacity: 0; }
 }
 @keyframes slideInLeft {
-  from { transform: translateX(-100%); opacity: 0; }
-  to   { transform: translateX(0);     opacity: 1; }
+  0%   { transform: translateX(-100%) scale(.96); opacity: 0; }
+  60%  { transform: translateX(2%) scale(1.01); }
+  100% { transform: translateX(0) scale(1); opacity: 1; }
 }
 @keyframes slideOutRight {
-  from { transform: translateX(0);    opacity: 1; }
-  to   { transform: translateX(100%); opacity: 0; }
+  0%   { transform: translateX(0) scale(1); opacity: 1; }
+  100% { transform: translateX(105%) scale(.94); opacity: 0; }
 }
 
-.page.slide-in-right  { animation: slideInRight  .34s cubic-bezier(.22,.61,.36,1) both; }
-.page.slide-out-left  { animation: slideOutLeft  .34s cubic-bezier(.22,.61,.36,1) both; }
-.page.slide-in-left   { animation: slideInLeft   .34s cubic-bezier(.22,.61,.36,1) both; }
-.page.slide-out-right { animation: slideOutRight .34s cubic-bezier(.22,.61,.36,1) both; }
+.page.slide-in-right  { animation: slideInRight  .38s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+.page.slide-out-left  { animation: slideOutLeft  .32s cubic-bezier(0.55, 0, 1, 0.45) both; }
+.page.slide-in-left   { animation: slideInLeft   .38s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+.page.slide-out-right { animation: slideOutRight .32s cubic-bezier(0.55, 0, 1, 0.45) both; }
 
-/* ── Reader open/close ──────────────────────────────── */
+/* ── Reader open / close ────────────────────────── */
 @keyframes readerIn {
-  from { opacity: 0; transform: scale(.94); }
-  to   { opacity: 1; transform: scale(1); }
+  0%   { opacity: 0; transform: scale(.92) translateY(12px); }
+  70%  { transform: scale(1.01); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
 }
 @keyframes readerOut {
   from { opacity: 1; transform: scale(1); }
-  to   { opacity: 0; transform: scale(.94); }
+  to   { opacity: 0; transform: scale(.94) translateY(8px); }
 }
-.reader.opening { animation: readerIn  .28s ease both; }
+.reader.opening { animation: readerIn  .32s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
 .reader.closing { animation: readerOut .22s ease both; display: flex !important; }
 
-/* ── Text entrance ──────────────────────────────────── */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(12px); }
+/* ── Story panel entrance ───────────────────────── */
+@keyframes panelSlideUp {
+  from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+.story-panel { animation: panelSlideUp .3s .12s ease both; }
+
+/* ── Scene art fade ─────────────────────────────── */
 @keyframes fadeIn {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
-.story-panel { animation: fadeUp .35s .15s ease both; }
-.scene-art   { animation: fadeIn .4s ease both; }
+.scene-art { animation: fadeIn .4s ease both; }
 
-/* ── Card entrance ──────────────────────────────────── */
+/* ── Card entrance (staggered bounce) ───────────── */
 @keyframes cardIn {
-  from { opacity: 0; transform: translateY(18px) scale(.96); }
-  to   { opacity: 1; transform: translateY(0) scale(1); }
+  0%   { opacity: 0; transform: translateY(22px) scale(.93); }
+  70%  { transform: translateY(-3px) scale(1.02); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 .story-card {
-  animation: cardIn .4s ease both;
-  animation-delay: calc(var(--card-i, 0) * 28ms);
+  animation: cardIn .42s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  animation-delay: calc(var(--card-i, 0) * 25ms);
 }
 
-/* ── Pulse glow on random btn ───────────────────────── */
-@keyframes pulseGlow {
-  0%, 100% { box-shadow: 0 4px 14px rgba(255,62,157,.35); }
-  50%       { box-shadow: 0 4px 26px rgba(255,62,157,.7); }
+/* ── Random btn pulse glow ──────────────────────── */
+@keyframes glowPulse {
+  0%, 100% { box-shadow: inset -1px -2px 6px rgba(0,0,0,.25), 4px 6px 16px rgba(255,62,157,.4); }
+  50%       { box-shadow: inset -1px -2px 6px rgba(0,0,0,.2),  5px 8px 28px rgba(255,62,157,.65); }
 }
-.random-btn { animation: pulseGlow 2.4s ease-in-out infinite; }
+.random-btn { animation: glowPulse 2.8s ease-in-out infinite; }
 
-/* ── Sun rays ───────────────────────────────────────── */
+/* ── Sun rays ───────────────────────────────────── */
 @keyframes rotateSlow {
   from { transform: rotate(0deg); }
   to   { transform: rotate(360deg); }
 }
 .sun-rays { animation: rotateSlow 20s linear infinite; transform-origin: center; }
 
-/* ── Cloud drift ────────────────────────────────────── */
+/* ── Cloud drift ────────────────────────────────── */
 @keyframes driftRight {
-  from { transform: translateX(-8px); }
-  to   { transform: translateX(8px); }
+  from { transform: translateX(-9px); }
+  to   { transform: translateX(9px); }
 }
 .cloud-drift      { animation: driftRight 6s ease-in-out infinite alternate; }
 .cloud-drift-slow { animation: driftRight 9s ease-in-out infinite alternate-reverse; }
 
-/* ── Sway ───────────────────────────────────────────── */
+/* ── Sway ───────────────────────────────────────── */
 @keyframes sway {
   0%, 100% { transform: rotate(-4deg); }
   50%       { transform: rotate(4deg); }
+}
+
+/* ── prefers-reduced-motion override ───────────── */
+@media (prefers-reduced-motion: reduce) {
+  .story-card,
+  .story-panel,
+  .scene-art,
+  .reader.opening,
+  .reader.closing,
+  .page.slide-in-right,
+  .page.slide-out-left,
+  .page.slide-in-left,
+  .page.slide-out-right {
+    animation: none !important;
+    transition: none !important;
+  }
+  .random-btn { animation: none; }
+  .star-twinkle { animation: twinkle 4s ease-in-out infinite; }
 }
