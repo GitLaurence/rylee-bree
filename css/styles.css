@@ -737,3 +737,349 @@ body {
   from { opacity: 0; transform: translateX(20px) scale(.97); }
   to   { opacity: 1; transform: translateX(0) scale(1); }
 }
+
+/* ══════════════════════════════════════════════════
+   Games Overlay — Toddler Mini-Games (ages 1-3)
+   ══════════════════════════════════════════════════ */
+
+/* ── Games launcher button ──────────────────────── */
+.games-launch-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px;
+  background: linear-gradient(135deg, #FFD700, #FF9800);
+  color: #5c2d00;
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  border: 3px solid rgba(255,255,255,.35);
+  border-radius: var(--radius-btn);
+  cursor: pointer;
+  box-shadow: inset -1px -2px 6px rgba(0,0,0,.2), 3px 5px 14px rgba(255,152,0,.5);
+  transition: transform var(--dur-fast) var(--ease-bounce), box-shadow var(--dur-fast);
+  min-height: 48px;
+}
+.games-launch-btn:hover  { transform: scale(1.06); }
+.games-launch-btn:active { transform: scale(.95); }
+
+/* ── Overlay ─────────────────────────────────────── */
+.games-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10,1,24,.82);
+  backdrop-filter: blur(6px);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.games-overlay.hidden  { display: none; }
+.games-overlay.opening { animation: readerIn .32s var(--ease-bounce) both; }
+.games-overlay.closing { animation: readerOut .22s ease both; display:flex !important; }
+
+.games-panel {
+  background: linear-gradient(155deg, #1e0c40, #0d0824);
+  border: var(--border-clay);
+  border-radius: 28px;
+  box-shadow: 0 24px 64px rgba(0,0,0,.7), inset 0 1px 0 rgba(255,255,255,.08);
+  width: 100%;
+  max-width: 480px;
+  padding: 28px 24px 32px;
+  position: relative;
+  min-height: 440px;
+  display: flex;
+  flex-direction: column;
+}
+
+.games-close-btn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.1);
+  border: 2px solid rgba(255,255,255,.15);
+  color: #fff;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background var(--dur-fast);
+  flex-shrink: 0;
+}
+.games-close-btn:hover { background: rgba(255,255,255,.2); }
+
+#games-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+}
+
+/* ── Common game text ────────────────────────────── */
+.game-title {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: clamp(1.6rem, 6vw, 2.2rem);
+  color: #fff;
+  text-align: center;
+  margin-top: 8px;
+}
+.game-subtitle {
+  font-family: 'Nunito', sans-serif;
+  font-size: 1.05rem;
+  color: rgba(255,255,255,.65);
+  text-align: center;
+}
+.game-prompt {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: clamp(1.3rem, 5vw, 1.8rem);
+  color: #fff;
+  text-align: center;
+  line-height: 1.3;
+  margin-top: 4px;
+}
+.game-round-bar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 4px;
+}
+.game-round { font-family: 'Nunito', sans-serif; font-size: .92rem; color: rgba(255,255,255,.55); }
+.game-score { font-family: 'Baloo 2', sans-serif; font-size: 1.1rem; color: #FFD700; font-weight: 700; }
+
+/* ── Game menu ───────────────────────────────────── */
+.game-menu {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+  margin-top: 8px;
+}
+.game-menu-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 18px 14px 14px;
+  background: color-mix(in srgb, var(--gc) 22%, transparent);
+  border: 3px solid color-mix(in srgb, var(--gc) 60%, transparent);
+  border-radius: 20px;
+  cursor: pointer;
+  min-width: 100px;
+  flex: 1;
+  max-width: 130px;
+  transition: transform var(--dur-fast) var(--ease-bounce), box-shadow var(--dur-fast);
+  box-shadow: 0 6px 18px rgba(0,0,0,.35);
+}
+.game-menu-btn:hover  { transform: scale(1.08) translateY(-3px); box-shadow: 0 12px 28px rgba(0,0,0,.4); }
+.game-menu-btn:active { transform: scale(.93); }
+.game-menu-icon { font-size: 2.6rem; line-height: 1; }
+.game-menu-name {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+/* ── Game 1: Color Pop ───────────────────────────── */
+.color-pop-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  width: 100%;
+  max-width: 320px;
+  margin-top: 8px;
+}
+.color-bubble {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 4px solid rgba(255,255,255,.3);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform var(--dur-fast) var(--ease-bounce);
+  min-height: 110px;
+}
+.color-bubble:hover  { transform: scale(1.1); }
+.color-bubble:active { transform: scale(.88); }
+.color-bubble-shine {
+  position: absolute;
+  top: 12%;
+  left: 18%;
+  width: 35%;
+  height: 25%;
+  background: rgba(255,255,255,.45);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* ── Game 2: Star Count ──────────────────────────── */
+.star-display {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  padding: 18px 0 8px;
+}
+.count-star {
+  font-size: clamp(2.6rem, 9vw, 3.4rem);
+  animation: starBounceIn .4s var(--ease-bounce) both;
+}
+.count-star:nth-child(2) { animation-delay: .1s; }
+.count-star:nth-child(3) { animation-delay: .2s; }
+
+@keyframes starBounceIn {
+  from { opacity: 0; transform: scale(0) rotate(-20deg); }
+  to   { opacity: 1; transform: scale(1) rotate(0); }
+}
+
+.number-grid {
+  display: flex;
+  gap: 18px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+.number-btn {
+  width: 90px;
+  height: 90px;
+  border-radius: 20px;
+  border: 4px solid rgba(255,255,255,.35);
+  color: #fff;
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 2.6rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: inset -2px -3px 8px rgba(0,0,0,.2), 0 6px 18px rgba(255,152,0,.4);
+  transition: transform var(--dur-fast) var(--ease-bounce);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-shadow: 0 2px 6px rgba(0,0,0,.3);
+}
+.number-btn:hover  { transform: scale(1.12); }
+.number-btn:active { transform: scale(.88); }
+
+/* ── Game 3: Find the Friend ─────────────────────── */
+.friend-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  width: 100%;
+  max-width: 340px;
+  margin-top: 4px;
+}
+.friend-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 16px 10px 12px;
+  background: rgba(255,255,255,.05);
+  border: 3px solid var(--fcolor, #fff);
+  border-radius: 18px;
+  cursor: pointer;
+  transition: transform var(--dur-fast) var(--ease-bounce), box-shadow var(--dur-fast);
+  box-shadow: 0 5px 16px rgba(0,0,0,.3);
+  min-height: 120px;
+}
+.friend-btn:hover  { transform: scale(1.08) translateY(-3px); box-shadow: 0 10px 28px rgba(0,0,0,.45); }
+.friend-btn:active { transform: scale(.9); }
+.friend-btn svg    { overflow: visible; }
+.friend-name {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+  text-align: center;
+}
+
+/* ── Feedback & confetti ─────────────────────────── */
+.game-feedback {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: clamp(1.4rem, 5vw, 1.8rem);
+  font-weight: 800;
+  text-align: center;
+  height: 2.2rem;
+  transition: opacity .25s;
+  pointer-events: none;
+}
+.game-feedback.correct { color: #4CAF50; }
+.game-feedback.wrong   { color: #FF9800; }
+
+@keyframes confettiFall {
+  0%   { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(120px) rotate(360deg); opacity: 0; }
+}
+.confetti-dot {
+  position: absolute;
+  top: 10px;
+  border-radius: 50%;
+  animation: confettiFall 1.2s ease-in both;
+  pointer-events: none;
+  z-index: 10;
+}
+
+@keyframes correctFlash {
+  0%   { filter: brightness(1); }
+  30%  { filter: brightness(1.7) saturate(1.4); }
+  100% { filter: brightness(1); }
+}
+.game-correct-flash { animation: correctFlash .55s ease both; }
+
+/* ── Game over ───────────────────────────────────── */
+.game-over {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  text-align: center;
+  padding-top: 8px;
+}
+.game-over-stars {
+  font-size: 3rem;
+  letter-spacing: 6px;
+}
+.game-over-btns {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 8px;
+}
+.game-action-btn {
+  padding: 14px 26px;
+  background: linear-gradient(135deg, #8B44F0, #FF3E9D);
+  color: #fff;
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  border: 3px solid rgba(255,255,255,.25);
+  border-radius: var(--radius-btn);
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(139,68,240,.4);
+  transition: transform var(--dur-fast) var(--ease-bounce);
+  min-height: 52px;
+}
+.game-action-btn:hover  { transform: scale(1.07); }
+.game-action-btn:active { transform: scale(.93); }
+.game-action-btn.game-secondary {
+  background: rgba(255,255,255,.1);
+  box-shadow: none;
+  border-color: rgba(255,255,255,.2);
+}
+
+/* ── Responsive ──────────────────────────────────── */
+@media (max-width: 400px) {
+  .color-pop-grid { gap: 10px; max-width: 280px; }
+  .color-bubble   { min-height: 90px; }
+  .number-btn     { width: 76px; height: 76px; font-size: 2.2rem; }
+  .friend-grid    { gap: 10px; max-width: 300px; }
+}

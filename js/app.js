@@ -874,6 +874,383 @@ function sceneArt(scene, w, h) {
   <line x1="${s*.87}" y1="${t*.64}" x2="${s*.97}" y2="${t*.64}" stroke="#F48FB1" stroke-width="2"/>
 </svg>`;
 
+    case 'park': return `
+<svg viewBox="0 0 ${s} ${t}" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="pkSky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#5bbde4"/><stop offset="100%" stop-color="#a8dff5"/>
+    </linearGradient>
+    <radialGradient id="pkSun" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFF176"/><stop offset="100%" stop-color="#FFD600"/>
+    </radialGradient>
+  </defs>
+  <!-- Sky -->
+  <rect width="${s}" height="${t*.52}" fill="url(#pkSky)"/>
+  <!-- Grass -->
+  <rect x="0" y="${t*.52}" width="${s}" height="${t*.48}" fill="#5cb85c"/>
+  <ellipse cx="${s*.5}" cy="${t*.52}" rx="${s*.7}" ry="${t*.05}" fill="#3d8b3d"/>
+  <!-- Puffy clouds -->
+  <ellipse cx="${s*.18}" cy="${t*.13}" rx="${s*.13}" ry="${t*.065}" fill="white" opacity=".93"/>
+  <ellipse cx="${s*.27}" cy="${t*.11}" rx="${s*.09}" ry="${t*.055}" fill="white" opacity=".93"/>
+  <ellipse cx="${s*.22}" cy="${t*.09}" rx="${s*.07}" ry="${t*.045}" fill="white" opacity=".97"/>
+  <ellipse cx="${s*.6}"  cy="${t*.16}" rx="${s*.11}" ry="${t*.055}" fill="white" opacity=".88"/>
+  <ellipse cx="${s*.69}" cy="${t*.14}" rx="${s*.08}" ry="${t*.05}"  fill="white" opacity=".88"/>
+  <ellipse cx="${s*.64}" cy="${t*.12}" rx="${s*.065}" ry="${t*.04}" fill="white" opacity=".92"/>
+  <!-- Sun top-right -->
+  <circle cx="${s*.88}" cy="${t*.1}" r="${s*.09}" fill="url(#pkSun)"/>
+  ${sunRays(s*.88, t*.1, s*.09, s*.17)}
+  <!-- Tree (left side) -->
+  <rect x="${s*.08}" y="${t*.34}" width="${s*.05}" height="${t*.22}" rx="3" fill="#6d4c41"/>
+  <circle cx="${s*.105}" cy="${t*.28}" r="${s*.11}" fill="#388E3C"/>
+  <circle cx="${s*.085}" cy="${t*.33}" r="${s*.085}" fill="#2E7D32"/>
+  <circle cx="${s*.13}"  cy="${t*.32}" r="${s*.08}"  fill="#43A047"/>
+  <!-- Slide structure -->
+  <!-- Slide frame/ladder side -->
+  <rect x="${s*.52}" y="${t*.36}" width="${s*.03}" height="${t*.2}" rx="2" fill="#e65100"/>
+  <rect x="${s*.68}" y="${t*.36}" width="${s*.03}" height="${t*.2}" rx="2" fill="#e65100"/>
+  <!-- Top platform of slide -->
+  <rect x="${s*.5}" y="${t*.34}" width="${s*.23}" height="${t*.04}" rx="2" fill="#ff7043"/>
+  <!-- Slide body (angled path) -->
+  <path d="M${s*.71},${t*.38} Q${s*.78},${t*.46} ${s*.82},${t*.56}" stroke="#ff5722" stroke-width="${s*.045}" fill="none" stroke-linecap="round"/>
+  <!-- Ladder rungs -->
+  <line x1="${s*.52}" y1="${t*.43}" x2="${s*.71}" y2="${t*.43}" stroke="#bf360c" stroke-width="2.5"/>
+  <line x1="${s*.52}" y1="${t*.49}" x2="${s*.71}" y2="${t*.49}" stroke="#bf360c" stroke-width="2.5"/>
+  <!-- Swing set horizontal bar -->
+  <rect x="${s*.28}" y="${t*.32}" width="${s*.2}"  height="${t*.025}" rx="2" fill="#5D4037"/>
+  <rect x="${s*.27}" y="${t*.3}"  width="${s*.03}" height="${t*.08}"  rx="2" fill="#5D4037"/>
+  <rect x="${s*.46}" y="${t*.3}"  width="${s*.03}" height="${t*.08}"  rx="2" fill="#5D4037"/>
+  <!-- Swing 1 ropes + seat -->
+  <rect x="${s*.305}" y="${t*.34}" width="${s*.007}" height="${t*.14}" fill="#8D6E63"/>
+  <rect x="${s*.325}" y="${t*.34}" width="${s*.007}" height="${t*.14}" fill="#8D6E63"/>
+  <ellipse cx="${s*.319}" cy="${t*.495}" rx="${s*.025}" ry="${t*.018}" fill="#ff7043"/>
+  <!-- Swing 2 ropes + seat -->
+  <rect x="${s*.395}" y="${t*.34}" width="${s*.007}" height="${t*.14}" fill="#8D6E63"/>
+  <rect x="${s*.415}" y="${t*.34}" width="${s*.007}" height="${t*.14}" fill="#8D6E63"/>
+  <ellipse cx="${s*.409}" cy="${t*.495}" rx="${s*.025}" ry="${t*.018}" fill="#42a5f5"/>
+  <!-- Small birds (v-shape) in sky -->
+  <path d="M${s*.35},${t*.22} Q${s*.37},${t*.2} ${s*.39},${t*.22}" stroke="#555" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+  <path d="M${s*.44},${t*.18} Q${s*.46},${t*.16} ${s*.48},${t*.18}" stroke="#555" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+  <path d="M${s*.5},${ t*.24} Q${s*.52},${t*.22} ${s*.54},${t*.24}" stroke="#555" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+  <!-- Flowers in grass -->
+  ${flowers(s, t)}
+</svg>`;
+
+    case 'castle': return `
+<svg viewBox="0 0 ${s} ${t}" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="csSky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0f0c29"/><stop offset="55%" stop-color="#302b63"/><stop offset="100%" stop-color="#24243e"/>
+    </linearGradient>
+    <radialGradient id="csMoon" cx="38%" cy="32%" r="60%">
+      <stop offset="0%" stop-color="#fffde0"/><stop offset="100%" stop-color="#f0d060"/>
+    </radialGradient>
+    <radialGradient id="csGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fff" stop-opacity=".22"/>
+      <stop offset="100%" stop-color="#fff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="csWin" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFF9C4" stop-opacity=".95"/>
+      <stop offset="100%" stop-color="#FFD600" stop-opacity=".4"/>
+    </radialGradient>
+  </defs>
+  <!-- Deep twilight sky -->
+  <rect width="${s}" height="${t}" fill="url(#csSky)"/>
+  <!-- Stars -->
+  ${Array.from({length:45},(_,i)=>{
+    const sx=(Math.random()*s).toFixed(1), sy=(Math.random()*t*.65).toFixed(1);
+    const r=(.4+Math.random()*2.2).toFixed(1), op=(.25+Math.random()*.75).toFixed(2);
+    const cls=i%4===0?' class="star-twinkle"':'';
+    return `<circle cx="${sx}" cy="${sy}" r="${r}" fill="#fff" opacity="${op}"${cls}/>`;
+  }).join('')}
+  <!-- Moon -->
+  <circle cx="${s*.82}" cy="${t*.12}" r="${s*.1}" fill="url(#csMoon)"/>
+  <circle cx="${s*.87}" cy="${t*.09}" r="${s*.088}" fill="#0f0c29"/>
+  <circle cx="${s*.82}" cy="${t*.12}" r="${s*.17}" fill="url(#csGlow)"/>
+  <!-- Rolling hills silhouette at base -->
+  <ellipse cx="${s*.2}"  cy="${t*.85}" rx="${s*.35}" ry="${t*.12}" fill="#4a3d8f"/>
+  <ellipse cx="${s*.78}" cy="${t*.88}" rx="${s*.3}"  ry="${t*.1}"  fill="#3d3175"/>
+  <rect x="0" y="${t*.88}" width="${s}" height="${t*.12}" fill="#4a3d8f"/>
+  <!-- Castle wide base -->
+  <rect x="${s*.2}" y="${t*.52}" width="${s*.6}" height="${t*.36}" rx="2" fill="#c5c8f5"/>
+  <!-- Castle shadow side -->
+  <rect x="${s*.58}" y="${t*.52}" width="${s*.22}" height="${t*.36}" rx="0 2 2 0" fill="#a8acec"/>
+  <!-- Left side tower -->
+  <rect x="${s*.14}" y="${t*.44}" width="${s*.18}" height="${t*.44}" rx="2" fill="#c5c8f5"/>
+  <rect x="${s*.24}" y="${t*.44}" width="${s*.08}" height="${t*.44}" rx="0 2 2 0" fill="#a8acec"/>
+  <!-- Right side tower -->
+  <rect x="${s*.68}" y="${t*.44}" width="${s*.18}" height="${t*.44}" rx="2" fill="#c5c8f5"/>
+  <rect x="${s*.76}" y="${t*.44}" width="${s*.1}"  height="${t*.44}" rx="0 2 2 0" fill="#a8acec"/>
+  <!-- Center (taller) tower -->
+  <rect x="${s*.37}" y="${t*.32}" width="${s*.26}" height="${t*.56}" rx="2" fill="#c5c8f5"/>
+  <rect x="${s*.51}" y="${t*.32}" width="${s*.12}" height="${t*.56}" rx="0 2 2 0" fill="#a8acec"/>
+  <!-- Tower roofs: triangles in pink/magenta -->
+  <polygon points="${s*.14},${t*.44} ${s*.23},${t*.32} ${s*.32},${t*.44}" fill="#e040fb"/>
+  <polygon points="${s*.68},${t*.44} ${s*.77},${t*.32} ${s*.86},${t*.44}" fill="#e040fb"/>
+  <polygon points="${s*.37},${t*.32} ${s*.5},${t*.18}  ${s*.63},${t*.32}" fill="#ce93d8"/>
+  <!-- Flags on each tower -->
+  <line x1="${s*.23}" y1="${t*.32}" x2="${s*.23}" y2="${t*.24}" stroke="#8B6914" stroke-width="2"/>
+  <polygon points="${s*.23},${t*.24} ${s*.3},${t*.27} ${s*.23},${t*.3}" fill="#e53935"/>
+  <line x1="${s*.77}" y1="${t*.32}" x2="${s*.77}" y2="${t*.24}" stroke="#8B6914" stroke-width="2"/>
+  <polygon points="${s*.77},${t*.24} ${s*.84},${t*.27} ${s*.77},${t*.3}" fill="#1565c0"/>
+  <line x1="${s*.5}"  y1="${t*.18}" x2="${s*.5}"  y2="${t*.09}" stroke="#8B6914" stroke-width="2"/>
+  <polygon points="${s*.5},${t*.09} ${s*.58},${t*.13} ${s*.5},${t*.17}" fill="#f9a825"/>
+  <!-- Arched gate at base -->
+  <path d="M${s*.42},${t*.88} L${s*.42},${t*.72} Q${s*.5},${t*.66} ${s*.58},${t*.72} L${s*.58},${t*.88}Z" fill="#7b1fa2"/>
+  <!-- Lit windows (glowing yellow ellipses) -->
+  <ellipse cx="${s*.2}"  cy="${t*.56}" rx="${s*.028}" ry="${t*.035}" fill="url(#csWin)"/>
+  <ellipse cx="${s*.26}" cy="${t*.56}" rx="${s*.028}" ry="${t*.035}" fill="url(#csWin)"/>
+  <ellipse cx="${s*.72}" cy="${t*.56}" rx="${s*.028}" ry="${t*.035}" fill="url(#csWin)"/>
+  <ellipse cx="${s*.78}" cy="${t*.56}" rx="${s*.028}" ry="${t*.035}" fill="url(#csWin)"/>
+  <ellipse cx="${s*.44}" cy="${t*.44}" rx="${s*.025}" ry="${t*.03}"  fill="url(#csWin)"/>
+  <ellipse cx="${s*.56}" cy="${t*.44}" rx="${s*.025}" ry="${t*.03}"  fill="url(#csWin)"/>
+  <!-- Floating sparkles around castle -->
+  ${Array.from({length:12},(_,i)=>{
+    const sx=(s*(.1+Math.random()*.8)).toFixed(1), sy=(t*(.2+Math.random()*.5)).toFixed(1);
+    return `<circle cx="${sx}" cy="${sy}" r="${(1+Math.random()*2.5).toFixed(1)}" fill="#fffde0" opacity="${(.3+Math.random()*.7).toFixed(2)}" class="star-twinkle" style="animation-delay:${(Math.random()*3).toFixed(1)}s"/>`;
+  }).join('')}
+</svg>`;
+
+    case 'underwater': return `
+<svg viewBox="0 0 ${s} ${t}" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="uwBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0077b6"/><stop offset="100%" stop-color="#03045e"/>
+    </linearGradient>
+    <radialGradient id="uwBub" cx="35%" cy="30%" r="60%">
+      <stop offset="0%" stop-color="rgba(255,255,255,.85)"/><stop offset="100%" stop-color="rgba(180,230,255,.2)"/>
+    </radialGradient>
+  </defs>
+  <!-- Deep ocean background -->
+  <rect width="${s}" height="${t}" fill="url(#uwBg)"/>
+  <!-- Light rays from top -->
+  <path d="M${s*.3},0 L${s*.08},${t*.75}" stroke="rgba(100,200,255,.10)" stroke-width="38" fill="none" stroke-linecap="round"/>
+  <path d="M${s*.45},0 L${s*.3}, ${t*.8}"  stroke="rgba(100,200,255,.08)" stroke-width="28" fill="none" stroke-linecap="round"/>
+  <path d="M${s*.55},0 L${s*.6}, ${t*.8}"  stroke="rgba(100,200,255,.08)" stroke-width="28" fill="none" stroke-linecap="round"/>
+  <path d="M${s*.68},0 L${s*.88},${t*.72}" stroke="rgba(100,200,255,.09)" stroke-width="32" fill="none" stroke-linecap="round"/>
+  <path d="M${s*.5}, 0 L${s*.5}, ${t*.85}" stroke="rgba(100,200,255,.06)" stroke-width="20" fill="none" stroke-linecap="round"/>
+  <!-- Sandy floor -->
+  <rect x="0" y="${t*.75}" width="${s}" height="${t*.25}" fill="#c9a84c"/>
+  <ellipse cx="${s*.5}" cy="${t*.75}" rx="${s*.7}" ry="${t*.04}" fill="#b8922a"/>
+  <!-- Coral formations -->
+  <circle cx="${s*.08}" cy="${t*.72}" r="${s*.05}"  fill="#ff6b6b"/>
+  <circle cx="${s*.11}" cy="${t*.67}" r="${s*.04}"  fill="#ff8e53"/>
+  <circle cx="${s*.06}" cy="${t*.67}" r="${s*.032}" fill="#ff6b6b"/>
+  <circle cx="${s*.14}" cy="${t*.63}" r="${s*.028}" fill="#ff5252"/>
+  <line x1="${s*.08}" y1="${t*.75}" x2="${s*.08}" y2="${t*.67}" stroke="#ff6b6b" stroke-width="4"/>
+  <line x1="${s*.11}" y1="${t*.75}" x2="${s*.11}" y2="${t*.63}" stroke="#ff8e53" stroke-width="3"/>
+  <circle cx="${s*.84}" cy="${t*.73}" r="${s*.042}" fill="#f06292"/>
+  <circle cx="${s*.88}" cy="${t*.68}" r="${s*.034}" fill="#ff80ab"/>
+  <circle cx="${s*.81}" cy="${t*.68}" r="${s*.028}" fill="#f48fb1"/>
+  <line x1="${s*.84}" y1="${t*.75}" x2="${s*.84}" y2="${t*.69}" stroke="#f06292" stroke-width="4"/>
+  <line x1="${s*.88}" y1="${t*.75}" x2="${s*.88}" y2="${t*.65}" stroke="#ff80ab" stroke-width="3"/>
+  <!-- Seaweed stalks (wavy) -->
+  <path d="M${s*.25},${t*.75} Q${s*.22},${t*.64} ${s*.26},${t*.56} Q${s*.3},${t*.48} ${s*.27},${t*.4}" stroke="#2d6a4f" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M${s*.3}, ${t*.75} Q${s*.33},${t*.65} ${s*.29},${t*.57} Q${s*.25},${t*.5} ${s*.3},${t*.44}" stroke="#40916c" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+  <path d="M${s*.6}, ${t*.75} Q${s*.63},${t*.64} ${s*.59},${t*.55} Q${s*.55},${t*.47} ${s*.6},${t*.4}" stroke="#52b788" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M${s*.65},${t*.75} Q${s*.68},${t*.65} ${s*.64},${t*.56} Q${s*.6},${t*.49} ${s*.65},${t*.43}" stroke="#2d6a4f" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <!-- Fish 1 (orange/yellow) -->
+  <ellipse cx="${s*.45}" cy="${t*.3}" rx="${s*.075}" ry="${t*.045}" fill="#ff9f1c"/>
+  <polygon points="${s*.375},${t*.3} ${s*.34},${t*.26} ${s*.34},${t*.34}" fill="#ffbf69"/>
+  <circle cx="${s*.49}" cy="${t*.29}" r="${s*.012}" fill="#000"/>
+  <circle cx="${s*.492}" cy="${t*.288}" r="${s*.005}" fill="#fff" opacity=".7"/>
+  <line x1="${s*.42}" y1="${t*.3}" x2="${s*.47}" y2="${t*.3}" stroke="#e07b00" stroke-width="1.2" opacity=".5"/>
+  <!-- Fish 2 (blue/teal) -->
+  <ellipse cx="${s*.7}"  cy="${t*.45}" rx="${s*.065}" ry="${t*.04}"  fill="#00b4d8"/>
+  <polygon points="${s*.635},${t*.45} ${s*.605},${t*.41} ${s*.605},${t*.49}" fill="#90e0ef"/>
+  <circle cx="${s*.74}" cy="${t*.44}" r="${s*.011}" fill="#000"/>
+  <circle cx="${s*.742}" cy="${t*.438}" r="${s*.005}" fill="#fff" opacity=".7"/>
+  <!-- Fish 3 (pink/magenta) -->
+  <ellipse cx="${s*.2}"  cy="${t*.5}"  rx="${s*.06}"  ry="${t*.035}" fill="#f72585"/>
+  <polygon points="${s*.14},${t*.5} ${s*.11},${t*.47} ${s*.11},${t*.53}" fill="#ff85c2"/>
+  <circle cx="${s*.235}" cy="${t*.495}" r="${s*.01}" fill="#000"/>
+  <!-- Fish 4 (green) -->
+  <ellipse cx="${s*.55}" cy="${t*.62}" rx="${s*.055}" ry="${t*.032}" fill="#06d6a0"/>
+  <polygon points="${s*.495},${t*.62} ${s*.465},${t*.59} ${s*.465},${t*.65}" fill="#80ffdb"/>
+  <circle cx="${s*.585}" cy="${t*.615}" r="${s*.01}" fill="#000"/>
+  <!-- Starfish on sand -->
+  <polygon points="${starPoints(s*.48, t*.8, s*.045)}" fill="#e76f51"/>
+  <circle cx="${s*.48}" cy="${t*.8}" r="${s*.015}" fill="#f4a261"/>
+  <!-- Treasure chest -->
+  <rect x="${s*.72}" y="${t*.78}" width="${s*.12}" height="${t*.09}" rx="2" fill="#b8860b"/>
+  <rect x="${s*.72}" y="${t*.78}" width="${s*.12}" height="${t*.04}" rx="2 2 0 0" fill="#daa520"/>
+  <path d="M${s*.72},${t*.82} Q${s*.78},${t*.8} ${s*.84},${t*.82}" stroke="#ffd700" stroke-width="2" fill="none"/>
+  <rect x="${s*.775}" y="${t*.8}" width="${s*.025}" height="${t*.03}" rx="1" fill="#ffd700"/>
+  <!-- Bubbles rising -->
+  ${Array.from({length:14},(_,i)=>{
+    const bx=(s*(.12+Math.random()*.76)).toFixed(1), by=(t*(.1+Math.random()*.6)).toFixed(1);
+    const br=(2+Math.random()*5).toFixed(1), op=(.15+Math.random()*.55).toFixed(2);
+    const cls=i%3===0?' class="star-twinkle"':'';
+    return `<circle cx="${bx}" cy="${by}" r="${br}" fill="white" opacity="${op}"${cls}/>`;
+  }).join('')}
+</svg>`;
+
+    case 'library': return `
+<svg viewBox="0 0 ${s} ${t}" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="lbWall" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fdf3e3"/><stop offset="100%" stop-color="#f5deb3"/>
+    </linearGradient>
+    <radialGradient id="lbLamp" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffe57a" stop-opacity=".7"/>
+      <stop offset="100%" stop-color="#ff9800" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <!-- Warm cream wall -->
+  <rect width="${s}" height="${t}" fill="url(#lbWall)"/>
+  <!-- Warm wood floor -->
+  <rect x="0" y="${t*.7}" width="${s}" height="${t*.3}" fill="#8B6914"/>
+  <line x1="0" y1="${t*.72}" x2="${s}" y2="${t*.72}" stroke="#7a5c0f" stroke-width="1.5" opacity=".5"/>
+  <line x1="0" y1="${t*.79}" x2="${s}" y2="${t*.79}" stroke="#7a5c0f" stroke-width="1.5" opacity=".5"/>
+  <line x1="0" y1="${t*.86}" x2="${s}" y2="${t*.86}" stroke="#7a5c0f" stroke-width="1.5" opacity=".5"/>
+  <line x1="0" y1="${t*.93}" x2="${s}" y2="${t*.93}" stroke="#7a5c0f" stroke-width="1.5" opacity=".5"/>
+  <!-- Left bookshelf frame -->
+  <rect x="0" y="${t*.05}" width="${s*.2}" height="${t*.65}" fill="#5c3a1e"/>
+  <rect x="${s*.01}" y="${t*.07}" width="${s*.18}" height="${t*.61}" fill="#6d4c2a"/>
+  <!-- Shelf dividers -->
+  <rect x="0" y="${t*.28}" width="${s*.2}" height="${t*.03}" fill="#5c3a1e"/>
+  <rect x="0" y="${t*.49}" width="${s*.2}" height="${t*.03}" fill="#5c3a1e"/>
+  <!-- Books on left shelf top row -->
+  ${['#e53935','#1565c0','#2e7d32','#f57f17','#6a1b9a','#00838f','#ad1457','#558b2f'].map((c,i)=>`<rect x="${s*(.015+i*.022)}" y="${t*.1}" width="${s*.018}" height="${t*.16}" rx="1" fill="${c}"/>`).join('')}
+  <!-- Books on left shelf mid row -->
+  ${['#c62828','#283593','#1b5e20','#e65100','#4a148c','#006064','#880e4f'].map((c,i)=>`<rect x="${s*(.015+i*.025)}" y="${t*.31}" width="${s*.02}" height="${t*.15}" rx="1" fill="${c}"/>`).join('')}
+  <!-- Books on left shelf lower row -->
+  ${['#b71c1c','#0d47a1','#33691e','#bf360c','#311b92'].map((c,i)=>`<rect x="${s*(.015+i*.035)}" y="${t*.52}" width="${s*.028}" height="${t*.13}" rx="1" fill="${c}"/>`).join('')}
+  <!-- Right bookshelf frame -->
+  <rect x="${s*.8}"  y="${t*.05}" width="${s*.2}" height="${t*.65}" fill="#5c3a1e"/>
+  <rect x="${s*.81}" y="${t*.07}" width="${s*.18}" height="${t*.61}" fill="#6d4c2a"/>
+  <!-- Shelf dividers right -->
+  <rect x="${s*.8}" y="${t*.28}" width="${s*.2}" height="${t*.03}" fill="#5c3a1e"/>
+  <rect x="${s*.8}" y="${t*.49}" width="${s*.2}" height="${t*.03}" fill="#5c3a1e"/>
+  <!-- Books on right shelf top row -->
+  ${['#ff6f00','#00695c','#4527a0','#c62828','#1565c0','#2e7d32','#ad1457','#37474f'].map((c,i)=>`<rect x="${s*(.815+i*.022)}" y="${t*.1}" width="${s*.018}" height="${t*.16}" rx="1" fill="${c}"/>`).join('')}
+  <!-- Books on right shelf mid row -->
+  ${['#e91e63','#3949ab','#43a047','#fb8c00','#8e24aa','#0097a7','#e64a19'].map((c,i)=>`<rect x="${s*(.815+i*.025)}" y="${t*.31}" width="${s*.02}" height="${t*.15}" rx="1" fill="${c}"/>`).join('')}
+  <!-- Books on right shelf lower row -->
+  ${['#880e4f','#1a237e','#1b5e20','#e65100','#512da8'].map((c,i)=>`<rect x="${s*(.815+i*.035)}" y="${t*.52}" width="${s*.028}" height="${t*.13}" rx="1" fill="${c}"/>`).join('')}
+  <!-- Window with daylight -->
+  <rect x="${s*.37}" y="${t*.05}" width="${s*.26}" height="${t*.22}" rx="4" fill="#ddeeff" stroke="#b0c4de" stroke-width="2.5"/>
+  <line x1="${s*.5}"  y1="${t*.05}" x2="${s*.5}"  y2="${t*.27}" stroke="#b0c4de" stroke-width="1.5"/>
+  <line x1="${s*.37}" y1="${t*.16}" x2="${s*.63}" y2="${t*.16}" stroke="#b0c4de" stroke-width="1.5"/>
+  <!-- Soft daylight rays -->
+  <path d="M${s*.5},${t*.05} L${s*.3},${t*.4}" stroke="rgba(255,240,180,.15)" stroke-width="22" fill="none"/>
+  <path d="M${s*.5},${t*.05} L${s*.5},${t*.4}" stroke="rgba(255,240,180,.12)" stroke-width="16" fill="none"/>
+  <path d="M${s*.5},${t*.05} L${s*.7},${t*.4}" stroke="rgba(255,240,180,.13)" stroke-width="18" fill="none"/>
+  <!-- Framed picture on wall -->
+  <rect x="${s*.23}" y="${t*.1}" width="${s*.12}" height="${t*.14}" rx="2" fill="#fff" stroke="#a0522d" stroke-width="2.5"/>
+  <rect x="${s*.24}" y="${t*.11}" width="${s*.1}" height="${t*.12}" rx="1" fill="#e8f4fd"/>
+  <!-- Simple art inside frame -->
+  ${rainbowArc(s*.29, t*.23, s*.05)}
+  <!-- Round reading rug -->
+  <ellipse cx="${s*.5}"  cy="${t*.82}" rx="${s*.22}" ry="${t*.1}"  fill="#8b0000" opacity=".75"/>
+  <ellipse cx="${s*.5}"  cy="${t*.82}" rx="${s*.17}" ry="${t*.075}" fill="none" stroke="#c62828" stroke-width="3" opacity=".5"/>
+  <ellipse cx="${s*.5}"  cy="${t*.82}" rx="${s*.11}" ry="${t*.05}"  fill="none" stroke="#ef5350" stroke-width="2" opacity=".4"/>
+  <!-- Cozy armchair (mustard yellow) -->
+  <rect x="${s*.35}" y="${t*.63}" width="${s*.3}" height="${t*.2}" rx="6" fill="#f9a825"/>
+  <rect x="${s*.33}" y="${t*.56}" width="${s*.34}" height="${t*.1}" rx="5" fill="#f57f17"/>
+  <rect x="${s*.33}" y="${t*.63}" width="${s*.04}" height="${t*.2}" rx="3" fill="#e65100"/>
+  <rect x="${s*.63}" y="${t*.63}" width="${s*.04}" height="${t*.2}" rx="3" fill="#e65100"/>
+  <ellipse cx="${s*.5}"  cy="${t*.62}" rx="${s*.13}" ry="${t*.03}" fill="#fff" opacity=".18"/>
+  <!-- Reading lamp (left of chair) -->
+  <rect x="${s*.29}" y="${t*.45}" width="${s*.015}" height="${t*.25}" fill="#8d6e63"/>
+  <circle cx="${s*.297}" cy="${t*.7}"  r="${s*.02}" fill="#5d4037"/>
+  <!-- Lamp shade cone -->
+  <path d="M${s*.27},${t*.38} L${s*.32},${t*.46} L${s*.28},${t*.46}Z" fill="#ffe082"/>
+  <path d="M${s*.27},${t*.38} L${s*.24},${t*.38} L${s*.28},${t*.46}Z" fill="#ffd54f"/>
+  <!-- Lamp warm glow -->
+  <ellipse cx="${s*.3}" cy="${t*.47}" rx="${s*.1}" ry="${t*.08}" fill="url(#lbLamp)"/>
+  <!-- Dust motes -->
+  ${Array.from({length:7},()=>{
+    const mx=(s*(.25+Math.random()*.5)).toFixed(1), my=(t*(.1+Math.random()*.55)).toFixed(1);
+    return `<circle cx="${mx}" cy="${my}" r="${(1.2+Math.random()*2).toFixed(1)}" fill="#d4a017" opacity="${(.15+Math.random()*.3).toFixed(2)}" class="star-twinkle" style="animation-delay:${(Math.random()*4).toFixed(1)}s"/>`;
+  }).join('')}
+</svg>`;
+
+    case 'treehouse': return `
+<svg viewBox="0 0 ${s} ${t}" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="thSky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#87ceeb"/><stop offset="100%" stop-color="#c9e8f5"/>
+    </linearGradient>
+  </defs>
+  <!-- Daytime sky -->
+  <rect width="${s}" height="${t}" fill="url(#thSky)"/>
+  <!-- Soft clouds -->
+  <ellipse cx="${s*.14}" cy="${t*.12}" rx="${s*.13}" ry="${t*.06}"  fill="white" opacity=".88"/>
+  <ellipse cx="${s*.23}" cy="${t*.1}"  rx="${s*.09}" ry="${t*.05}"  fill="white" opacity=".88"/>
+  <ellipse cx="${s*.19}" cy="${t*.08}" rx="${s*.07}" ry="${t*.042}" fill="white" opacity=".93"/>
+  <ellipse cx="${s*.7}"  cy="${t*.16}" rx="${s*.12}" ry="${t*.055}" fill="white" opacity=".82"/>
+  <ellipse cx="${s*.79}" cy="${t*.14}" rx="${s*.09}" ry="${t*.05}"  fill="white" opacity=".82"/>
+  <ellipse cx="${s*.75}" cy="${t*.12}" rx="${s*.07}" ry="${t*.04}"  fill="white" opacity=".87"/>
+  <!-- Massive tree trunk -->
+  <rect x="${s*.42}" y="${t*.35}" width="${s*.16}" height="${t*.65}" rx="6" fill="#5d4037"/>
+  <rect x="${s*.45}" y="${t*.35}" width="${s*.04}" height="${t*.65}" rx="4" fill="#4e342e" opacity=".5"/>
+  <!-- Wide leafy canopy - back layers -->
+  <circle cx="${s*.5}"  cy="${t*.28}" r="${s*.32}" fill="#1b5e20"/>
+  <circle cx="${s*.32}" cy="${t*.35}" r="${s*.22}" fill="#2e7d32"/>
+  <circle cx="${s*.68}" cy="${t*.35}" r="${s*.22}" fill="#1b5e20"/>
+  <!-- Mid canopy layers -->
+  <circle cx="${s*.5}"  cy="${t*.2}"  r="${s*.26}" fill="#2e7d32"/>
+  <circle cx="${s*.36}" cy="${t*.26}" r="${s*.2}"  fill="#388e3c"/>
+  <circle cx="${s*.64}" cy="${t*.26}" r="${s*.19}" fill="#2e7d32"/>
+  <!-- Front canopy -->
+  <circle cx="${s*.5}"  cy="${t*.14}" r="${s*.2}"  fill="#43a047"/>
+  <circle cx="${s*.4}"  cy="${t*.2}"  r="${s*.15}" fill="#4caf50"/>
+  <circle cx="${s*.6}"  cy="${t*.19}" r="${s*.15}" fill="#388e3c"/>
+  <!-- Wooden platform -->
+  <rect x="${s*.24}" y="${t*.52}" width="${s*.52}" height="${t*.06}" rx="3" fill="#8d6e63"/>
+  <line x1="${s*.26}" y1="${t*.52}" x2="${s*.26}" y2="${t*.58}" stroke="#6d4c41" stroke-width="3"/>
+  <line x1="${s*.36}" y1="${t*.52}" x2="${s*.36}" y2="${t*.58}" stroke="#6d4c41" stroke-width="3"/>
+  <line x1="${s*.46}" y1="${t*.52}" x2="${s*.46}" y2="${t*.58}" stroke="#6d4c41" stroke-width="3"/>
+  <line x1="${s*.56}" y1="${t*.52}" x2="${s*.56}" y2="${t*.58}" stroke="#6d4c41" stroke-width="3"/>
+  <line x1="${s*.66}" y1="${t*.52}" x2="${s*.66}" y2="${t*.58}" stroke="#6d4c41" stroke-width="3"/>
+  <!-- Railing -->
+  <line x1="${s*.24}" y1="${t*.52}" x2="${s*.24}" y2="${t*.47}" stroke="#a1887f" stroke-width="2.5"/>
+  <line x1="${s*.76}" y1="${t*.52}" x2="${s*.76}" y2="${t*.47}" stroke="#a1887f" stroke-width="2.5"/>
+  <line x1="${s*.24}" y1="${t*.47}" x2="${s*.76}" y2="${t*.47}" stroke="#a1887f" stroke-width="2"/>
+  <!-- Cabin walls -->
+  <rect x="${s*.32}" y="${t*.38}" width="${s*.36}" height="${t*.14}" rx="2" fill="#a1887f"/>
+  <rect x="${s*.38}" y="${t*.38}" width="${s*.16}" height="${t*.14}" rx="0 0 0 0" fill="#8d7569" opacity=".5"/>
+  <!-- Cabin roof (triangle) -->
+  <polygon points="${s*.3},${t*.38} ${s*.5},${t*.28} ${s*.7},${t*.38}" fill="#6d4c41"/>
+  <polygon points="${s*.32},${t*.38} ${s*.5},${t*.29} ${s*.68},${t*.38}" fill="#795548"/>
+  <!-- Cabin door -->
+  <rect x="${s*.46}" y="${t*.44}" width="${s*.08}" height="${t*.08}" rx="2" fill="#4e342e"/>
+  <circle cx="${s*.536}" cy="${t*.48}" r="${s*.008}" fill="#ffd700"/>
+  <!-- Cabin window -->
+  <rect x="${s*.34}" y="${t*.41}" width="${s*.07}" height="${t*.06}" rx="2" fill="#b3e5fc" stroke="#78909c" stroke-width="1.5"/>
+  <line x1="${s*.375}" y1="${t*.41}" x2="${s*.375}" y2="${t*.47}" stroke="#78909c" stroke-width="1"/>
+  <line x1="${s*.34}"  y1="${t*.44}" x2="${s*.41}"  y2="${t*.44}" stroke="#78909c" stroke-width="1"/>
+  <!-- Rope ladder (right side) -->
+  <line x1="${s*.68}" y1="${t*.58}" x2="${s*.68}" y2="${t*.92}" stroke="#8d6e63" stroke-width="2.5"/>
+  <line x1="${s*.76}" y1="${t*.58}" x2="${s*.76}" y2="${t*.92}" stroke="#8d6e63" stroke-width="2.5"/>
+  <line x1="${s*.68}" y1="${t*.64}" x2="${s*.76}" y2="${t*.64}" stroke="#6d4c41" stroke-width="2.5"/>
+  <line x1="${s*.68}" y1="${t*.71}" x2="${s*.76}" y2="${t*.71}" stroke="#6d4c41" stroke-width="2.5"/>
+  <line x1="${s*.68}" y1="${t*.78}" x2="${s*.76}" y2="${t*.78}" stroke="#6d4c41" stroke-width="2.5"/>
+  <line x1="${s*.68}" y1="${t*.85}" x2="${s*.76}" y2="${t*.85}" stroke="#6d4c41" stroke-width="2.5"/>
+  <!-- String lights along roof edge -->
+  ${Array.from({length:10},(_,i)=>{
+    const lx=(s*(.3+i*.04)).toFixed(1), ly=(t*(.38+Math.sin(i*.8)*.015)).toFixed(1);
+    const col=['#ffeb3b','#ff7043','#42a5f5','#66bb6a','#ef5350','#ab47bc','#26c6da','#ff7043','#ffee58','#4caf50'][i];
+    return `<circle cx="${lx}" cy="${ly}" r="${s*.013}" fill="${col}" opacity=".9"/>`;
+  }).join('')}
+  <path d="M${s*.3},${t*.38} ${Array.from({length:9},(_,i)=>`L${(s*(.34+i*.04)).toFixed(1)},${(t*(.4+Math.sin(i*.8)*.018)).toFixed(1)}`).join(' ')} L${s*.7},${t*.38}" stroke="#555" stroke-width="1" fill="none" opacity=".4"/>
+  <!-- Flower boxes on railing -->
+  <rect x="${s*.24}" y="${t*.46}" width="${s*.09}" height="${t*.028}" rx="2" fill="#8d6e63"/>
+  <circle cx="${s*.26}" cy="${t*.455}" r="${s*.012}" fill="#ff80ab"/>
+  <circle cx="${s*.29}" cy="${t*.452}" r="${s*.012}" fill="#ff4081"/>
+  <circle cx="${s*.32}" cy="${t*.455}" r="${s*.012}" fill="#ffcc00"/>
+  <rect x="${s*.67}" y="${t*.46}" width="${s*.09}" height="${t*.028}" rx="2" fill="#8d6e63"/>
+  <circle cx="${s*.69}" cy="${t*.455}" r="${s*.012}" fill="#ff80ab"/>
+  <circle cx="${s*.72}" cy="${t*.452}" r="${s*.012}" fill="#b39ddb"/>
+  <circle cx="${s*.75}" cy="${t*.455}" r="${s*.012}" fill="#80cbc4"/>
+  <!-- Butterfly nearby -->
+  <ellipse cx="${s*.2}"  cy="${t*.36}" rx="${s*.045}" ry="${t*.028}" fill="#ce93d8" opacity=".9" transform="rotate(-20,${s*.2},${t*.36})"/>
+  <ellipse cx="${s*.26}" cy="${t*.36}" rx="${s*.045}" ry="${t*.028}" fill="#ce93d8" opacity=".9" transform="rotate(20,${s*.26},${t*.36})"/>
+  <ellipse cx="${s*.2}"  cy="${t*.375}" rx="${s*.028}" ry="${t*.018}" fill="#ab47bc" opacity=".7" transform="rotate(-20,${s*.2},${t*.375})"/>
+  <ellipse cx="${s*.26}" cy="${t*.375}" rx="${s*.028}" ry="${t*.018}" fill="#ab47bc" opacity=".7" transform="rotate(20,${s*.26},${t*.375})"/>
+  <line x1="${s*.23}" y1="${t*.35}" x2="${s*.23}" y2="${t*.395}" stroke="#555" stroke-width="1.5"/>
+</svg>`;
+
     default: return `<svg viewBox="0 0 ${s} ${t}" xmlns="http://www.w3.org/2000/svg">${Array.from({length:40},()=>`<circle cx="${(Math.random()*s).toFixed(1)}" cy="${(Math.random()*t*.7).toFixed(1)}" r="${(.8+Math.random()*2.5).toFixed(1)}" fill="#fff" opacity="${(.3+Math.random()*.7).toFixed(2)}" class="star-twinkle"/>`).join('')}</svg>`;
   }
 }
@@ -944,6 +1321,11 @@ const CARD_BG = {
   beach:        ['#29b6f6','#ffe082','#fdd835'],
   snow:         ['#b3e5fc','#e0f7fa','#fff'],
   bath:         ['#b3e5fc','#81d4fa','#4fc3f7'],
+  park:         ['#87ceeb','#5cb85c','#2d7d2d'],
+  castle:       ['#1a1a4e','#4a3d8f','#c5c8f5'],
+  underwater:   ['#03045e','#0077b6','#00b4d8'],
+  library:      ['#5c3a1e','#8B6914','#fff3cd'],
+  treehouse:    ['#87ceeb','#5d4037','#2e7d32'],
 };
 
 function cardThumbSVG(scene, chars) {
@@ -984,6 +1366,16 @@ function thumbScene(scene) {
       return `<rect x="0" y="56" width="120" height="64" fill="#E0F7FA"/><ellipse cx="60" cy="56" rx="70" ry="14" fill="#E1F5FE"/>${Array.from({length:10},()=>`<circle cx="${(Math.random()*120).toFixed(0)}" cy="${(Math.random()*50).toFixed(0)}" r="${(1+Math.random()*3).toFixed(1)}" fill="#fff" opacity=".75"/>`).join('')}`;
     case 'bath':
       return `<path d="M8,56 Q8,104 14,106 L106,106 Q112,104 112,56Z" fill="white" opacity=".9"/><ellipse cx="60" cy="80" rx="46" ry="20" fill="#B3E5FC" opacity=".8"/>`;
+    case 'park':
+      return `<rect x="0" y="54" width="120" height="66" fill="#5CB85C"/><ellipse cx="60" cy="54" rx="70" ry="9" fill="#388E3C"/><circle cx="96" cy="13" r="12" fill="#FFF176"/>${sunRays(96,13,12,20,8)}<ellipse cx="20" cy="22" rx="14" ry="7" fill="white" opacity=".88"/><rect x="18" y="32" width="4" height="22" rx="2" fill="#6d4c41"/><circle cx="20" cy="28" r="12" fill="#388E3C"/>`;
+    case 'castle':
+      return `${Array.from({length:10},()=>`<circle cx="${(Math.random()*120).toFixed(0)}" cy="${(Math.random()*55).toFixed(0)}" r="${(.4+Math.random()*1.8).toFixed(1)}" fill="#fff" opacity="${(.3+Math.random()*.7).toFixed(2)}"/>`).join('')}<rect x="28" y="50" width="64" height="44" rx="2" fill="#c5c8f5"/><rect x="20" y="42" width="20" height="52" rx="2" fill="#c5c8f5"/><rect x="80" y="42" width="20" height="52" rx="2" fill="#c5c8f5"/><rect x="44" y="32" width="32" height="62" rx="2" fill="#c5c8f5"/><polygon points="20,42 30,28 40,42" fill="#e040fb"/><polygon points="80,42 90,28 100,42" fill="#e040fb"/><polygon points="44,32 60,16 76,32" fill="#ce93d8"/><ellipse cx="56" cy="60" rx="5" ry="6" fill="#ffe082" opacity=".9"/><ellipse cx="68" cy="60" rx="5" ry="6" fill="#ffe082" opacity=".9"/>`;
+    case 'underwater':
+      return `<rect x="0" y="72" width="120" height="48" fill="#c9a84c"/><ellipse cx="60" cy="72" rx="70" ry="7" fill="#b8922a"/><ellipse cx="36" cy="45" rx="14" ry="9" fill="#00b4d8"/><polygon points="22,45 16,40 16,50" fill="#90e0ef"/><ellipse cx="84" cy="30" rx="12" ry="8" fill="#ff9f1c"/><polygon points="72,30 66,25 66,35" fill="#ffbf69"/><ellipse cx="60" cy="62" rx="10" ry="9" fill="#f72585"/><polygon points="50,62 44,57 44,67" fill="#ff85c2"/><path d="M24,72 Q22,57 25,46 Q28,38 24,30" stroke="#2d6a4f" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M96,72 Q98,57 95,46 Q92,38 96,30" stroke="#40916c" stroke-width="3" fill="none" stroke-linecap="round"/>`;
+    case 'library':
+      return `<rect x="0" y="0" width="24" height="86" fill="#5c3a1e"/>${['#e53935','#1565c0','#2e7d32','#f57f17','#6a1b9a','#00838f'].map((c,i)=>`<rect x="${2+i*3.5}" y="4" width="3" height="24" rx="1" fill="${c}"/>`).join('')}${['#c62828','#283593','#1b5e20','#e65100','#4a148c','#006064'].map((c,i)=>`<rect x="${2+i*3.5}" y="34" width="3" height="20" rx="1" fill="${c}"/>`).join('')}<rect x="96" y="0" width="24" height="86" fill="#5c3a1e"/>${['#ff6f00','#00695c','#4527a0','#c62828','#1565c0','#2e7d32'].map((c,i)=>`<rect x="${98+i*3.5}" y="4" width="3" height="24" rx="1" fill="${c}"/>`).join('')}<rect x="0" y="86" width="120" height="34" fill="#8B6914"/><rect x="26" y="64" width="68" height="30" rx="6" fill="#f9a825"/><rect x="24" y="56" width="72" height="12" rx="5" fill="#f57f17"/><ellipse cx="60" cy="94" rx="26" ry="12" fill="#8b0000" opacity=".7"/>`;
+    case 'treehouse':
+      return `<circle cx="60" cy="30" r="36" fill="#2e7d32"/><circle cx="42" cy="38" r="24" fill="#388e3c"/><circle cx="78" cy="38" r="24" fill="#1b5e20"/><rect x="50" y="42" width="20" height="58" rx="5" fill="#5d4037"/><rect x="28" y="62" width="64" height="8" rx="3" fill="#8d6e63"/><rect x="36" y="50" width="48" height="12" rx="2" fill="#a1887f"/><polygon points="34,50 60,38 86,50" fill="#6d4c41"/><line x1="80" y1="70" x2="80" y2="100" stroke="#8d6e63" stroke-width="2"/><line x1="88" y1="70" x2="88" y2="100" stroke="#8d6e63" stroke-width="2"/><line x1="80" y1="78" x2="88" y2="78" stroke="#6d4c41" stroke-width="2"/><line x1="80" y1="87" x2="88" y2="87" stroke="#6d4c41" stroke-width="2"/><line x1="80" y1="96" x2="88" y2="96" stroke="#6d4c41" stroke-width="2"/>`;
     default: return '';
   }
 }
