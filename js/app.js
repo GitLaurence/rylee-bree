@@ -1094,6 +1094,19 @@ function renderPage(animate,direction='right'){
       <div class="story-text">${pg.text}</div>
     </div>`;
   if(animate) pageEl.addEventListener('animationend',()=>pageEl.classList.remove(animClass),{once:true});
+
+  // Desktop aside text panel
+  const aside=document.getElementById('story-aside');
+  if(aside){
+    aside.innerHTML=`
+      <div class="aside-label">Page ${currentPage+1} of ${currentStory.pages.length}</div>
+      <h2 class="aside-chapter">${currentStory.title}</h2>
+      <p class="aside-text">${pg.text}</p>
+      <div class="aside-chars">
+        ${(pg.chars||currentStory.chars||[]).map(c=>`<span class="aside-char-dot" style="background:${CHARS[c]?.color||'#ccc'}" title="${CHARS[c]?.label||c}"></span><span class="aside-char-name">${CHARS[c]?.label||c}</span>`).join('')}
+      </div>`;
+  }
+
   document.getElementById('prev-btn').disabled=currentPage===0;
   document.getElementById('next-btn').disabled=currentPage===currentStory.pages.length-1;
   if(currentPage===currentStory.pages.length-1){

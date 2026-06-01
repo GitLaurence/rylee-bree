@@ -588,3 +588,152 @@ body {
 @media (min-width: 860px) {
   .story-grid { grid-template-columns: repeat(4, 1fr); }
 }
+
+/* ════════════════════════════════════════════════════
+   DESKTOP READER — Two-column layout
+   Left: portrait book illustration
+   Right: large readable story text aside
+   ════════════════════════════════════════════════════ */
+
+/* Mobile: reader-layout is just a column (same as before) */
+.reader-layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+/* Desktop aside is hidden on mobile */
+.story-aside { display: none; }
+
+@media (min-width: 768px) {
+  /* Reader becomes a centred flex column with room for the layout */
+  .reader {
+    padding: 20px 32px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* Layout becomes a row */
+  .reader-layout {
+    flex-direction: row;
+    gap: 36px;
+    width: 100%;
+    max-width: 1080px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Book: taller aspect, capped so it never overflows viewport */
+  .book-wrap {
+    max-width: 380px;
+    flex-shrink: 0;
+    width: 38vw;
+  }
+  .book {
+    max-height: 80svh;
+  }
+
+  /* Hide the in-book text panel on desktop — aside handles it */
+  .story-panel { display: none !important; }
+
+  /* ── Story Aside (desktop text panel) ── */
+  .story-aside {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
+    min-width: 0;
+    background: var(--cream);
+    border-radius: 28px;
+    border: 3px solid rgba(255,255,255,.5);
+    padding: 44px 48px;
+    box-shadow:
+      inset -2px -2px 10px rgba(0,0,0,.08),
+      inset 2px 2px 8px rgba(255,255,255,.7),
+      6px 10px 32px rgba(0,0,0,.55);
+    /* Match book height */
+    align-self: stretch;
+    animation: asideIn .38s .1s cubic-bezier(0.34,1.56,0.64,1) both;
+  }
+
+  .aside-label {
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-mid);
+    opacity: .55;
+    margin-bottom: 14px;
+  }
+
+  .aside-chapter {
+    font-family: 'Baloo 2', cursive;
+    font-weight: 800;
+    font-size: clamp(1.6rem, 2.8vw, 2.2rem);
+    color: var(--text-dark);
+    line-height: 1.2;
+    margin-bottom: 22px;
+  }
+
+  .aside-text {
+    font-family: 'Nunito', sans-serif;
+    font-size: clamp(1.05rem, 1.6vw, 1.22rem);
+    color: var(--text-mid);
+    line-height: 1.78;
+    font-weight: 600;
+    flex: 1;
+  }
+
+  .aside-chars {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 2px solid rgba(0,0,0,.07);
+  }
+
+  .aside-char-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+    border: 2px solid rgba(255,255,255,.6);
+    box-shadow: 0 1px 4px rgba(0,0,0,.2);
+    flex-shrink: 0;
+  }
+
+  .aside-char-name {
+    font-family: 'Baloo 2', cursive;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--text-mid);
+    margin-right: 12px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .book-wrap { max-width: 440px; width: 36vw; }
+
+  .reader-layout { gap: 48px; max-width: 1160px; }
+
+  .aside-chapter { font-size: clamp(1.8rem, 2.4vw, 2.4rem); }
+  .aside-text    { font-size: clamp(1.12rem, 1.5vw, 1.3rem); }
+
+  .story-aside { padding: 52px 56px; }
+}
+
+@media (min-width: 1280px) {
+  .book-wrap { max-width: 480px; }
+  .aside-chapter { font-size: 2.6rem; }
+  .aside-text    { font-size: 1.35rem; line-height: 1.82; }
+}
+
+/* ── Aside entrance animation ── */
+@keyframes asideIn {
+  from { opacity: 0; transform: translateX(20px) scale(.97); }
+  to   { opacity: 1; transform: translateX(0) scale(1); }
+}
