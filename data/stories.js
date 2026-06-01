@@ -287,7 +287,7 @@ const STORIES = [
       "brielle",
       "rylee"
     ],
-    "scene": "bedroom",
+    "scene": "library",
     "pages": [
       {
         "scene": "library",
@@ -312,7 +312,7 @@ const STORIES = [
       "mary-joy",
       "astley"
     ],
-    "scene": "bedroom",
+    "scene": "library",
     "pages": [
       {
         "scene": "library",
@@ -385,7 +385,7 @@ const STORIES = [
       "mary-joy",
       "astley"
     ],
-    "scene": "bedroom",
+    "scene": "library",
     "pages": [
       {
         "scene": "library",
@@ -408,7 +408,7 @@ const STORIES = [
       "mary-joy",
       "brielle"
     ],
-    "scene": "bedroom",
+    "scene": "library",
     "pages": [
       {
         "scene": "library",
@@ -431,7 +431,7 @@ const STORIES = [
       "astley",
       "brielle"
     ],
-    "scene": "bedroom",
+    "scene": "library",
     "pages": [
       {
         "scene": "library",
@@ -442,7 +442,7 @@ const STORIES = [
         "text": "\"Me too, sometimes,\" Astley said. He plugged in the tiny star-shaped light. It glowed gold and steady."
       },
       {
-        "scene": "bedroom",
+        "scene": "library",
         "text": "\"Now neither of us has to be,\" he said. Brielle decided Astley was, without question, the very best."
       }
     ]
@@ -465,7 +465,7 @@ const STORIES = [
         "text": "She filled the cup anyway. Brielle drank it in one long, dramatic gulp. \"Thank you. I was dying,\" she said."
       },
       {
-        "scene": "bedroom",
+        "scene": "library",
         "text": "Rylee tucked her back in and climbed into her own bed, smiling to herself. Annoying sisters are the best sisters."
       }
     ]
@@ -1045,7 +1045,7 @@ const STORIES = [
       "mary-joy",
       "astley"
     ],
-    "scene": "bedroom",
+    "scene": "garden",
     "pages": [
       {
         "scene": "garden",
@@ -1211,7 +1211,7 @@ const STORIES = [
       "mary-joy",
       "brielle"
     ],
-    "scene": "bedroom",
+    "scene": "living-room",
     "pages": [
       {
         "scene": "park",
@@ -1474,7 +1474,7 @@ const STORIES = [
       "rylee",
       "brielle"
     ],
-    "scene": "bedroom",
+    "scene": "treehouse",
     "pages": [
       {
         "scene": "treehouse",
@@ -1521,7 +1521,7 @@ const STORIES = [
     "chars": [
       "brielle"
     ],
-    "scene": "bedroom",
+    "scene": "castle",
     "pages": [
       {
         "scene": "treehouse",
@@ -1567,7 +1567,7 @@ const STORIES = [
       "astley",
       "rylee"
     ],
-    "scene": "bedroom",
+    "scene": "castle",
     "pages": [
       {
         "scene": "treehouse",
@@ -1802,7 +1802,7 @@ const STORIES = [
     "chars": [
       "brielle"
     ],
-    "scene": "bedroom",
+    "scene": "dream",
     "pages": [
       {
         "scene": "dream",
@@ -1905,7 +1905,7 @@ const STORIES = [
         "text": "Mary Joy said that somewhere, right now, the Dream Delivery was happening — someone sorting all the good dreams and sending them out."
       },
       {
-        "scene": "dream",
+        "scene": "bedroom",
         "text": "\"How do they know which dream to send?\" Brielle asked. \"They know,\" said Astley, in a way that meant it was true."
       },
       {
@@ -1928,7 +1928,7 @@ const STORIES = [
         "text": "Brielle said goodnight to everything: the lamp, the ceiling, the floor, the moon through the curtain."
       },
       {
-        "scene": "dream",
+        "scene": "bedroom",
         "text": "\"Goodnight, socks,\" she said, very seriously, looking at her feet. Mary Joy watched from the door without laughing. Barely."
       },
       {
@@ -1949,7 +1949,7 @@ const STORIES = [
     "scene": "bedroom",
     "pages": [
       {
-        "scene": "stars",
+        "scene": "bedroom",
         "text": "The dreamcatcher above Brielle's bed had been there so long it had caught approximately ten thousand dreams."
       },
       {
@@ -1957,7 +1957,7 @@ const STORIES = [
         "text": "\"The bad ones get stuck,\" said Mary Joy. \"The good ones slide through,\" said Astley. Rylee touched it carefully."
       },
       {
-        "scene": "dream",
+        "scene": "bedroom",
         "text": "Brielle fell asleep trusting the web above her — and all the good dreams came through, right on schedule."
       }
     ]
@@ -1976,7 +1976,7 @@ const STORIES = [
         "text": "They were trying to stay awake but the yawns kept coming: one, two, three — each bigger than the last."
       },
       {
-        "scene": "stars",
+        "scene": "bedroom",
         "text": "By yawn seven, their eyes were mostly shut. By yawn nine, they'd forgotten what they were trying to stay awake for."
       },
       {
@@ -1995,7 +1995,7 @@ const STORIES = [
     "scene": "bedroom",
     "pages": [
       {
-        "scene": "dream",
+        "scene": "bedroom",
         "text": "There's a spot in a bed that is exactly the right temperature — not too warm, not too cool — and it's always just been slept in."
       },
       {
@@ -2003,7 +2003,7 @@ const STORIES = [
         "text": "Mary Joy always warmed Brielle's spot before carrying her in — a small thing, done every night, without mention."
       },
       {
-        "scene": "stars",
+        "scene": "bedroom",
         "text": "Brielle didn't know why her bed always felt like a hug. She just knew it did. That was enough."
       }
     ]
@@ -2042,18 +2042,18 @@ const STORIES = [
       "mary-joy",
       "astley"
     ],
-    "scene": "dream",
+    "scene": "bedroom",
     "pages": [
       {
-        "scene": "dream",
+        "scene": "bedroom",
         "text": "The counting-clouds method: you picture one cloud, then two, then three — each one a little softer than the last."
       },
       {
-        "scene": "dream",
+        "scene": "bedroom",
         "text": "Astley taught it to Rylee who taught it to Brielle who taught it to Mr. Bear who, frankly, was already asleep."
       },
       {
-        "scene": "stars",
+        "scene": "bedroom",
         "text": "By cloud five, nobody was counting anymore — they were just floating, quiet and soft, in a very good place."
       }
     ]
@@ -2073,7 +2073,7 @@ const STORIES = [
         "text": "Mary Joy had a song she only sang at bedtime — low and slow, with the same words every time."
       },
       {
-        "scene": "stars",
+        "scene": "bedroom",
         "text": "Rylee and Brielle knew every word and sometimes sang along in tiny, sleepy voices."
       },
       {
@@ -2091,7 +2091,7 @@ const STORIES = [
     "scene": "bedroom",
     "pages": [
       {
-        "scene": "dream",
+        "scene": "bedroom",
         "text": "Brielle had a theory about her pillow: it was the softest thing in the entire world, and she was the luckiest person for having it."
       },
       {
@@ -2099,7 +2099,7 @@ const STORIES = [
         "text": "She did a pillow test once: her pillow, the couch pillow, and Rylee's pillow. Hers won easily."
       },
       {
-        "scene": "stars",
+        "scene": "bedroom",
         "text": "She fell asleep every night feeling like the luckiest, and she was right, and the pillow agreed."
       }
     ]
@@ -2120,7 +2120,7 @@ const STORIES = [
         "text": "\"Tomorrow we can do it all again,\" Brielle said, right before sleep. She didn't say what \"it\" was. She didn't need to."
       },
       {
-        "scene": "stars",
+        "scene": "bedroom",
         "text": "Mary Joy squeezed her hand. Astley smiled from the door. Rylee was already mostly asleep."
       },
       {
@@ -2207,7 +2207,7 @@ const STORIES = [
       "rylee",
       "astley"
     ],
-    "scene": "bedroom",
+    "scene": "castle",
     "pages": [
       {
         "scene": "castle",
