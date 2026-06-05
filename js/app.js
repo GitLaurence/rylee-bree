@@ -1328,9 +1328,19 @@ const CARD_BG = {
   treehouse:    ['#87ceeb','#5d4037','#2e7d32'],
 };
 
+/* seeded pseudo-random: stable thumbnails across re-renders */
+function seededRand(seed) {
+  let s = seed;
+  return function() {
+    s = (s * 1664525 + 1013904223) & 0xffffffff;
+    return (s >>> 0) / 0xffffffff;
+  };
+}
+
 function cardThumbSVG(scene, chars) {
   const g=CARD_BG[scene]||CARD_BG.stars;
-  const gid=`g${Math.random().toString(36).slice(2,6)}`;
+  const key=scene+(chars||[]).join('');
+  const gid=`g${key.split('').reduce((a,c)=>((a<<5)-a+c.charCodeAt(0))|0,0).toString(36).replace('-','n')}`;
   return `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <linearGradient id="${gid}" x1="0" y1="0" x2="0" y2="1">
@@ -1340,15 +1350,16 @@ function cardThumbSVG(scene, chars) {
     </linearGradient>
   </defs>
   <rect width="120" height="120" fill="url(#${gid})"/>
-  ${thumbScene(scene)}
-  ${thumbChars(chars)}
+  ${thumbScene(scene, key)}
+  ${thumbChars(chars, key)}
 </svg>`;
 }
 
-function thumbScene(scene) {
+function thumbScene(scene, seed) {
+  const rng = seededRand((seed||scene).split('').reduce((a,c)=>a+c.charCodeAt(0),0));
   switch(scene){
     case 'stars': case 'dream':
-      return Array.from({length:14},()=>`<circle cx="${(Math.random()*120).toFixed(0)}" cy="${(Math.random()*70).toFixed(0)}" r="${(.5+Math.random()*2.2).toFixed(1)}" fill="#fff" opacity="${(.3+Math.random()*.7).toFixed(2)}"/>`).join('')
+      return Array.from({length:14},()=>`<circle cx="${(rng()*120).toFixed(0)}" cy="${(rng()*70).toFixed(0)}" r="${(.5+rng()*2.2).toFixed(1)}" fill="#fff" opacity="${(.3+rng()*.7).toFixed(2)}"/>`).join('')
         +`<circle cx="88" cy="18" r="16" fill="#fff7c2" opacity=".9"/><circle cx="94" cy="14" r="14" fill="${scene==='dream'?'#0a0020':'#080f30'}"/><circle cx="88" cy="18" r="24" fill="rgba(255,255,200,.1)"/>`;
     case 'bedroom':
       return `<rect x="20" y="58" width="80" height="42" rx="8" fill="#9b59b6"/><rect x="20" y="56" width="80" height="9" rx="5" fill="#7d3c98"/><rect x="24" y="60" width="30" height="14" rx="5" fill="#f8c8e0"/><rect x="66" y="60" width="30" height="14" rx="5" fill="#d4a0f0"/><rect x="20" y="68" width="80" height="32" rx="0 0 8 8" fill="#e8b4f8"/>`;
@@ -1359,17 +1370,17 @@ function thumbScene(scene) {
     case 'living-room':
       return `<rect x="6" y="56" width="108" height="44" rx="10" fill="#7C4DFF"/><rect x="6" y="54" width="108" height="9" rx="8" fill="#651FFF"/><rect x="12" y="58" width="32" height="28" rx="7" fill="#E040FB"/><rect x="76" y="58" width="32" height="28" rx="7" fill="#40C4FF"/>`;
     case 'forest':
-      return `<rect x="0" y="52" width="120" height="68" fill="#0d2200"/><ellipse cx="60" cy="52" rx="70" ry="14" fill="#1a3d00"/>${Array.from({length:8},()=>`<circle cx="${(Math.random()*120).toFixed(0)}" cy="${(30+Math.random()*30).toFixed(0)}" r="2.5" fill="#CCFF00" opacity="${(.3+Math.random()*.7).toFixed(2)}"/>`).join('')}`;
+      return `<rect x="0" y="52" width="120" height="68" fill="#0d2200"/><ellipse cx="60" cy="52" rx="70" ry="14" fill="#1a3d00"/>${Array.from({length:8},()=>`<circle cx="${(rng()*120).toFixed(0)}" cy="${(30+rng()*30).toFixed(0)}" r="2.5" fill="#CCFF00" opacity="${(.3+rng()*.7).toFixed(2)}"/>`).join('')}`;
     case 'beach':
       return `<rect x="0" y="52" width="120" height="68" fill="#FDD835"/><path d="M0,50 Q30,44 60,50 Q90,56 120,50 L120,58 L0,58Z" fill="#29B6F6" opacity=".9"/><circle cx="96" cy="14" r="14" fill="#FFF176"/>${sunRays(96,14,14,22,8)}`;
     case 'snow':
-      return `<rect x="0" y="56" width="120" height="64" fill="#E0F7FA"/><ellipse cx="60" cy="56" rx="70" ry="14" fill="#E1F5FE"/>${Array.from({length:10},()=>`<circle cx="${(Math.random()*120).toFixed(0)}" cy="${(Math.random()*50).toFixed(0)}" r="${(1+Math.random()*3).toFixed(1)}" fill="#fff" opacity=".75"/>`).join('')}`;
+      return `<rect x="0" y="56" width="120" height="64" fill="#E0F7FA"/><ellipse cx="60" cy="56" rx="70" ry="14" fill="#E1F5FE"/>${Array.from({length:10},()=>`<circle cx="${(rng()*120).toFixed(0)}" cy="${(rng()*50).toFixed(0)}" r="${(1+rng()*3).toFixed(1)}" fill="#fff" opacity=".75"/>`).join('')}`;
     case 'bath':
       return `<path d="M8,56 Q8,104 14,106 L106,106 Q112,104 112,56Z" fill="white" opacity=".9"/><ellipse cx="60" cy="80" rx="46" ry="20" fill="#B3E5FC" opacity=".8"/>`;
     case 'park':
       return `<rect x="0" y="54" width="120" height="66" fill="#5CB85C"/><ellipse cx="60" cy="54" rx="70" ry="9" fill="#388E3C"/><circle cx="96" cy="13" r="12" fill="#FFF176"/>${sunRays(96,13,12,20,8)}<ellipse cx="20" cy="22" rx="14" ry="7" fill="white" opacity=".88"/><rect x="18" y="32" width="4" height="22" rx="2" fill="#6d4c41"/><circle cx="20" cy="28" r="12" fill="#388E3C"/>`;
     case 'castle':
-      return `${Array.from({length:10},()=>`<circle cx="${(Math.random()*120).toFixed(0)}" cy="${(Math.random()*55).toFixed(0)}" r="${(.4+Math.random()*1.8).toFixed(1)}" fill="#fff" opacity="${(.3+Math.random()*.7).toFixed(2)}"/>`).join('')}<rect x="28" y="50" width="64" height="44" rx="2" fill="#c5c8f5"/><rect x="20" y="42" width="20" height="52" rx="2" fill="#c5c8f5"/><rect x="80" y="42" width="20" height="52" rx="2" fill="#c5c8f5"/><rect x="44" y="32" width="32" height="62" rx="2" fill="#c5c8f5"/><polygon points="20,42 30,28 40,42" fill="#e040fb"/><polygon points="80,42 90,28 100,42" fill="#e040fb"/><polygon points="44,32 60,16 76,32" fill="#ce93d8"/><ellipse cx="56" cy="60" rx="5" ry="6" fill="#ffe082" opacity=".9"/><ellipse cx="68" cy="60" rx="5" ry="6" fill="#ffe082" opacity=".9"/>`;
+      return `${Array.from({length:10},()=>`<circle cx="${(rng()*120).toFixed(0)}" cy="${(rng()*55).toFixed(0)}" r="${(.4+rng()*1.8).toFixed(1)}" fill="#fff" opacity="${(.3+rng()*.7).toFixed(2)}"/>`).join('')}<rect x="28" y="50" width="64" height="44" rx="2" fill="#c5c8f5"/><rect x="20" y="42" width="20" height="52" rx="2" fill="#c5c8f5"/><rect x="80" y="42" width="20" height="52" rx="2" fill="#c5c8f5"/><rect x="44" y="32" width="32" height="62" rx="2" fill="#c5c8f5"/><polygon points="20,42 30,28 40,42" fill="#e040fb"/><polygon points="80,42 90,28 100,42" fill="#e040fb"/><polygon points="44,32 60,16 76,32" fill="#ce93d8"/><ellipse cx="56" cy="60" rx="5" ry="6" fill="#ffe082" opacity=".9"/><ellipse cx="68" cy="60" rx="5" ry="6" fill="#ffe082" opacity=".9"/>`;
     case 'underwater':
       return `<rect x="0" y="72" width="120" height="48" fill="#c9a84c"/><ellipse cx="60" cy="72" rx="70" ry="7" fill="#b8922a"/><ellipse cx="36" cy="45" rx="14" ry="9" fill="#00b4d8"/><polygon points="22,45 16,40 16,50" fill="#90e0ef"/><ellipse cx="84" cy="30" rx="12" ry="8" fill="#ff9f1c"/><polygon points="72,30 66,25 66,35" fill="#ffbf69"/><ellipse cx="60" cy="62" rx="10" ry="9" fill="#f72585"/><polygon points="50,62 44,57 44,67" fill="#ff85c2"/><path d="M24,72 Q22,57 25,46 Q28,38 24,30" stroke="#2d6a4f" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M96,72 Q98,57 95,46 Q92,38 96,30" stroke="#40916c" stroke-width="3" fill="none" stroke-linecap="round"/>`;
     case 'library':
@@ -1380,10 +1391,10 @@ function thumbScene(scene) {
   }
 }
 
-function thumbChars(chars) {
+function thumbChars(chars, seed) {
   if(!chars||!chars.length) return '';
   const total=chars.length;
-  const uid=`th${Math.random().toString(36).slice(2,5)}`;
+  const uid=`th${(seed||chars.join('')).split('').reduce((a,c)=>a+c.charCodeAt(0),0).toString(36)}`;
   return chars.slice(0,3).map((c,i)=>{
     const x=total===1?60:total===2?[35,85][i]:[28,60,92][i]||60;
     const sc=total===1?.46:total===2?.4:.34;

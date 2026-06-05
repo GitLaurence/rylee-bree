@@ -72,7 +72,8 @@ const STORIES = [
     "id": "S004",
     "title": "The Star Collector",
     "chars": [
-      "brielle"
+      "brielle",
+      "astley"
     ],
     "scene": "stars",
     "pages": [
@@ -616,7 +617,8 @@ const STORIES = [
     "id": "S027",
     "title": "The Teddy Bear Kingdom",
     "chars": [
-      "brielle"
+      "brielle",
+      "astley"
     ],
     "scene": "dream",
     "pages": [
@@ -805,7 +807,8 @@ const STORIES = [
     "id": "S035",
     "title": "The Moon Cat",
     "chars": [
-      "brielle"
+      "brielle",
+      "astley"
     ],
     "scene": "stars",
     "pages": [
@@ -841,7 +844,7 @@ const STORIES = [
         "text": "\"What is he singing about?\" Brielle asked. \"Home,\" said Rylee. \"He's singing about home.\""
       },
       {
-        "scene": "park",
+        "scene": "underwater",
         "text": "Brielle listened to Gerald all the way to sleep. It was, she decided, the best lullaby she'd ever heard."
       }
     ]
@@ -1023,7 +1026,7 @@ const STORIES = [
     "scene": "garden",
     "pages": [
       {
-        "scene": "garden",
+        "scene": "underwater",
         "text": "The first flower of spring appeared in the corner of the garden, small and brave and a little wobbly."
       },
       {
@@ -1071,7 +1074,7 @@ const STORIES = [
     "scene": "garden",
     "pages": [
       {
-        "scene": "garden",
+        "scene": "snow",
         "text": "The storm passed and left the whole garden dripping and clean. Then: a rainbow, low and wide and impossibly bright."
       },
       {
@@ -1449,7 +1452,8 @@ const STORIES = [
     "id": "S062",
     "title": "The Tiny Explorer",
     "chars": [
-      "brielle"
+      "brielle",
+      "astley"
     ],
     "scene": "garden",
     "pages": [
@@ -1519,7 +1523,8 @@ const STORIES = [
     "id": "S065",
     "title": "The Invisible Crown",
     "chars": [
-      "brielle"
+      "brielle",
+      "astley"
     ],
     "scene": "castle",
     "pages": [
@@ -1683,7 +1688,8 @@ const STORIES = [
     "id": "S072",
     "title": "The Tiny World",
     "chars": [
-      "brielle"
+      "brielle",
+      "astley"
     ],
     "scene": "garden",
     "pages": [
@@ -1800,7 +1806,8 @@ const STORIES = [
     "id": "S077",
     "title": "If Toys Could Talk",
     "chars": [
-      "brielle"
+      "brielle",
+      "astley"
     ],
     "scene": "dream",
     "pages": [
@@ -1853,7 +1860,7 @@ const STORIES = [
     "scene": "dream",
     "pages": [
       {
-        "scene": "dream",
+        "scene": "underwater",
         "text": "There was a door at the back of the garden that had always been there but no one had tried to open."
       },
       {
@@ -2086,7 +2093,8 @@ const STORIES = [
     "id": "S089",
     "title": "The Softest Pillow",
     "chars": [
-      "brielle"
+      "brielle",
+      "astley"
     ],
     "scene": "bedroom",
     "pages": [
@@ -2164,7 +2172,7 @@ const STORIES = [
     "scene": "bedroom",
     "pages": [
       {
-        "scene": "castle",
+        "scene": "treehouse",
         "text": "There's a first night in every home — the night the new bed stops feeling strange and starts feeling like yours."
       },
       {
@@ -2266,7 +2274,7 @@ const STORIES = [
         "text": "\"No matter what?\" asked Brielle. \"No matter what,\" said Rylee, and she meant all of it."
       },
       {
-        "scene": "castle",
+        "scene": "treehouse",
         "text": "They went to sleep holding the promise like something small and warm between them — the kind of thing that doesn't break."
       }
     ]

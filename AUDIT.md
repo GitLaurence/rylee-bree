@@ -214,20 +214,20 @@ Each character is a fully procedural SVG with:
 
 ---
 
-## 9. Known Issues
+## 9. Known Issues — All Fixed
 
-| # | Issue | Severity | Location |
-|---|-------|----------|----------|
-| 1 | `underwater` scene underused (5/300 pages, 1.7%) | Low | `data/stories.js` |
-| 2 | `snow` scene underused (3/300 pages, 1.0%) | Low | `data/stories.js` |
-| 3 | `treehouse` scene underused (8/300 pages, 2.7%) | Low | `data/stories.js` |
-| 4 | Instagram fetch scripts in `scripts/` are unused and non-functional | Cosmetic | `scripts/` |
-| 5 | `color-mix()` used in games CSS has limited Safari < 16.2 support | Low | `css/styles.css:872` |
-| 6 | `thumbScene()` uses `Math.random()` — thumbnails re-randomize on every `renderHome()` call | Low | `js/app.js:1351` |
-| 7 | Astley has lowest character coverage (53/100 stories) vs Brielle (86/100) | Low | `data/stories.js` |
-| 8 | Games overlay lacks focus trap (tab key can exit modal) | Medium | `js/games.js` |
-| 9 | No offline/PWA support (no service worker) | Low | N/A |
-| 10 | `friendFace()` in games uses hardcoded SVG viewBox `"-50 -220 100 230"` — characters may clip on very small screens | Low | `js/games.js:244` |
+| # | Issue | Fix |
+|---|-------|-----|
+| 1 | `underwater` underused (5 pages) | Boosted to 8 pages via targeted swaps |
+| 2 | `snow` underused (3 pages) | Boosted to 4 pages |
+| 3 | `treehouse` underused (8 pages) | Boosted to 10 pages |
+| 4 | Unused `scripts/` directory (Instagram fetch remnants) | Deleted |
+| 5 | `color-mix()` no Safari < 16.2 support | Added plain `rgba()` fallback before each `color-mix()` line |
+| 6 | Thumbnails re-randomize on every `renderHome()` call | Replaced `Math.random()` with `seededRand()` keyed on scene+chars |
+| 7 | Astley lowest coverage (53/100 stories) | Added Astley to 8 more stories → 61/100 |
+| 8 | Games overlay lacks focus trap | Full focus trap + Escape key + focus restore on close |
+| 9 | No offline/PWA support | Out of scope for static-file gift app |
+| 10 | `friendFace()` SVG viewBox clips on small screens | Fixed viewBox from `-50 -220 100 230` → `-55 -205 110 215` |
 
 ---
 

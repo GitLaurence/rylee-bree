@@ -73,11 +73,18 @@ function showFeedback(correct, container) {
 }
 
 /* ── Overlay open/close ──────────────────────────── */
+let _gamesTrigger = null;
+
 function openGames() {
+  _gamesTrigger = document.activeElement;
   const overlay = document.getElementById('games-overlay');
   overlay.classList.remove('hidden');
   overlay.classList.add('opening');
-  setTimeout(() => overlay.classList.remove('opening'), 400);
+  setTimeout(() => {
+    overlay.classList.remove('opening');
+    const first = getFocusable(overlay)[0];
+    if (first) first.focus();
+  }, 50);
   renderGameMenu();
 }
 
@@ -88,6 +95,7 @@ function closeGames() {
     overlay.classList.add('hidden');
     overlay.classList.remove('closing');
     gameState.current = null;
+    if (_gamesTrigger) { _gamesTrigger.focus(); _gamesTrigger = null; }
   }, 260);
 }
 
@@ -250,7 +258,7 @@ function renderFindFriend() {
       ${choices.map(f => `
         <button class="friend-btn" data-friend="${f.id}"
           style="--fcolor:${f.color}; border-color:${f.color};">
-          <svg viewBox="-50 -220 100 230" width="80" height="80" aria-hidden="true">
+          <svg viewBox="-55 -205 110 215" width="80" height="80" aria-hidden="true">
             <defs>
               <radialGradient id="fg-body-${f.id}" cx="40%" cy="35%" r="65%">
                 <stop offset="0%" stop-color="${lighten(f.color)}"/>
@@ -318,6 +326,30 @@ function friendFace(f) {
   `;
 }
 
+/* ── Focus trap ──────────────────────────────────── */
+function getFocusable(container) {
+  return [...container.querySelectorAll(
+    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+  )].filter(el => !el.disabled && el.offsetParent !== null);
+}
+
+function trapFocus(e) {
+  const overlay = document.getElementById('games-overlay');
+  if (overlay.classList.contains('hidden')) return;
+  const focusable = getFocusable(overlay);
+  if (!focusable.length) return;
+  const first = focusable[0];
+  const last  = focusable[focusable.length - 1];
+  if (e.key === 'Tab') {
+    if (e.shiftKey) {
+      if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+    } else {
+      if (document.activeElement === last)  { e.preventDefault(); first.focus(); }
+    }
+  }
+  if (e.key === 'Escape') closeGames();
+}
+
 /* ── Init ─────────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded', () => {
   const gamesBtn = document.getElementById('games-btn');
@@ -330,4 +362,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('games-overlay')?.addEventListener('click', e => {
     if (e.target === e.currentTarget) closeGames();
   });
+
+  // Focus trap
+  document.addEventListener('keydown', trapFocus);
 });
