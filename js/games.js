@@ -64,6 +64,7 @@ function spawnConfetti(container) {
 }
 
 function showFeedback(correct, container) {
+  if (typeof SFX !== 'undefined') correct ? SFX.correct() : SFX.wrong();
   const fb = document.getElementById('game-feedback');
   fb.textContent = correct ? cheer() : pick(OOPS);
   fb.className = 'game-feedback ' + (correct ? 'correct' : 'wrong');
@@ -76,6 +77,7 @@ function showFeedback(correct, container) {
 let _gamesTrigger = null;
 
 function openGames() {
+  if (typeof SFX !== 'undefined') SFX.gamesOpen();
   _gamesTrigger = document.activeElement;
   const overlay = document.getElementById('games-overlay');
   overlay.classList.remove('hidden');

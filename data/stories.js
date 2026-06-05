@@ -711,6 +711,7 @@ const STORIES = [
     "id": "S031",
     "title": "The Sleepy Bunny",
     "chars": [
+      "astley",
       "brielle",
       "rylee"
     ],
@@ -830,6 +831,7 @@ const STORIES = [
     "id": "S036",
     "title": "The Cricket's Song",
     "chars": [
+      "astley",
       "rylee",
       "brielle"
     ],
@@ -878,6 +880,7 @@ const STORIES = [
     "id": "S038",
     "title": "The Dreaming Dog",
     "chars": [
+      "astley",
       "brielle",
       "mary-joy"
     ],
@@ -901,6 +904,7 @@ const STORIES = [
     "id": "S039",
     "title": "The Nightingale",
     "chars": [
+      "astley",
       "mary-joy",
       "rylee"
     ],
@@ -972,6 +976,7 @@ const STORIES = [
     "id": "S042",
     "title": "Autumn Leaves",
     "chars": [
+      "astley",
       "rylee",
       "brielle"
     ],
@@ -1011,7 +1016,7 @@ const STORIES = [
         "text": "They stayed out past bedtime, just this once, because the sky was so beautiful it felt rude to go inside."
       },
       {
-        "scene": "park",
+        "scene": "beach",
         "text": "Mary Joy finally called them in at nine. They went without complaining — you can't argue with a sky like that."
       }
     ]
@@ -1020,6 +1025,7 @@ const STORIES = [
     "id": "S044",
     "title": "Spring Flowers",
     "chars": [
+      "astley",
       "mary-joy",
       "brielle"
     ],
@@ -1059,7 +1065,7 @@ const STORIES = [
         "text": "They turned off all the lights and just listened, all four of them, until someone yawned first (Astley) and then everyone yawned."
       },
       {
-        "scene": "garden",
+        "scene": "beach",
         "text": "They went to bed to the sound of rain and woke up to sunshine — and for a moment, everything was perfect."
       }
     ]
@@ -1068,6 +1074,7 @@ const STORIES = [
     "id": "S046",
     "title": "Rainbow After Rain",
     "chars": [
+      "astley",
       "rylee",
       "brielle"
     ],
@@ -1122,7 +1129,7 @@ const STORIES = [
     "scene": "garden",
     "pages": [
       {
-        "scene": "garden",
+        "scene": "beach",
         "text": "\"Do you think the wind is trying to say something?\" Rylee asked, watching the trees bend and sway."
       },
       {
@@ -1151,7 +1158,7 @@ const STORIES = [
         "text": "The harvest moon hung low and orange, the biggest and warmest moon any of them could remember."
       },
       {
-        "scene": "garden",
+        "scene": "beach",
         "text": "They ate apple pie on the porch and watched it rise, each of them quiet in their own good way."
       },
       {
@@ -1170,7 +1177,7 @@ const STORIES = [
     "scene": "garden",
     "pages": [
       {
-        "scene": "garden",
+        "scene": "beach",
         "text": "Brielle woke up in the middle of the night and looked out her window. The garden was silver and still."
       },
       {
@@ -1202,7 +1209,7 @@ const STORIES = [
         "text": "\"Is this a real hug or a practice hug?\" Rylee asked. \"All my hugs are real,\" he said."
       },
       {
-        "scene": "park",
+        "scene": "beach",
         "text": "Brielle got one just before bed and went to sleep wrapped in warmth that had nothing to do with blankets."
       }
     ]
@@ -1217,7 +1224,7 @@ const STORIES = [
     "scene": "living-room",
     "pages": [
       {
-        "scene": "park",
+        "scene": "beach",
         "text": "Brielle couldn't quite fall asleep. Her brain kept running even though her body had stopped."
       },
       {
@@ -1250,7 +1257,7 @@ const STORIES = [
         "text": "No one moved. The show ended. Another one started. Nobody said anything about bedtime."
       },
       {
-        "scene": "park",
+        "scene": "beach",
         "text": "Eventually they migrated like one warm, sleepy creature to the beds — and slept the deep sleep of the perfectly happy."
       }
     ]
@@ -1292,7 +1299,7 @@ const STORIES = [
     "scene": "garden",
     "pages": [
       {
-        "scene": "garden",
+        "scene": "beach",
         "text": "\"Remember the picnic?\" Rylee said. Nobody asked which one. They all knew — the one with the ants and the accidental sandcastle."
       },
       {
@@ -1395,7 +1402,7 @@ const STORIES = [
         "text": "\"The squish,\" Brielle decided. And now that's what it was called. Official. Forever."
       },
       {
-        "scene": "park",
+        "scene": "beach",
         "text": "They all went to bed that night squished-shaped, in the very best way."
       }
     ]
@@ -1475,6 +1482,7 @@ const STORIES = [
     "id": "S063",
     "title": "Pillow Castle",
     "chars": [
+      "astley",
       "rylee",
       "brielle"
     ],
@@ -1546,6 +1554,7 @@ const STORIES = [
     "id": "S066",
     "title": "The Giant Sunflower",
     "chars": [
+      "astley",
       "rylee",
       "mary-joy"
     ],
@@ -1617,6 +1626,7 @@ const STORIES = [
     "id": "S069",
     "title": "The Magical Backpack",
     "chars": [
+      "astley",
       "rylee",
       "brielle"
     ],

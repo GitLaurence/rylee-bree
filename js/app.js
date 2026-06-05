@@ -1450,9 +1450,45 @@ function renderStars(){
   }
 }
 
+/* ── Text-to-Speech ───────────────────────────────── */
+let ttsEnabled = false;
+
+function ttsSpeak(text) {
+  if (!ttsEnabled || !('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.rate  = 0.82;
+  utter.pitch = 1.1;
+  utter.volume = 1;
+  // prefer a gentle female voice if available
+  const voices = window.speechSynthesis.getVoices();
+  const gentle = voices.find(v => /female|girl|samantha|karen|moira|tessa|victoria|fiona/i.test(v.name));
+  if (gentle) utter.voice = gentle;
+  window.speechSynthesis.speak(utter);
+}
+
+function ttsStop() {
+  if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+}
+
+function ttsToggle() {
+  ttsEnabled = !ttsEnabled;
+  const btn = document.getElementById('tts-btn');
+  if (btn) {
+    btn.textContent = ttsEnabled ? '🔇 Stop Reading' : '🔊 Read Aloud';
+    btn.classList.toggle('tts-active', ttsEnabled);
+  }
+  if (ttsEnabled && currentStory) {
+    ttsSpeak(currentStory.pages[currentPage].text);
+  } else {
+    ttsStop();
+  }
+}
+
 /* ── Reader ───────────────────────────────────────── */
 function openStory(story){
   currentStory=story; currentPage=0;
+  if(typeof SFX !== 'undefined') SFX.open();
   const reader=document.getElementById('reader');
   reader.classList.remove('hidden','closing');
   reader.classList.add('opening');
@@ -1462,6 +1498,11 @@ function openStory(story){
 }
 
 function closeReader(){
+  ttsStop();
+  ttsEnabled = false;
+  const ttsBtn = document.getElementById('tts-btn');
+  if (ttsBtn) { ttsBtn.textContent = '🔊 Read Aloud'; ttsBtn.classList.remove('tts-active'); }
+  if(typeof SFX !== 'undefined') SFX.close();
   const reader=document.getElementById('reader');
   reader.classList.add('closing');
   reader.classList.remove('opening');
@@ -1507,8 +1548,14 @@ function renderPage(animate,direction='right'){
       <p class="aside-text">${pg.text}</p>
       <div class="aside-chars">
         ${(pg.chars||currentStory.chars||[]).map(c=>`<span class="aside-char-dot" style="background:${CHARS[c]?.color||'#ccc'}" title="${CHARS[c]?.label||c}"></span><span class="aside-char-name">${CHARS[c]?.label||c}</span>`).join('')}
-      </div>`;
+      </div>
+      <button class="tts-btn${ttsEnabled?' tts-active':''}" id="tts-btn" aria-label="Read page aloud">
+        ${ttsEnabled?'🔇 Stop Reading':'🔊 Read Aloud'}
+      </button>`;
+    aside.querySelector('#tts-btn').addEventListener('click', ttsToggle);
   }
+  // Auto-read aloud if TTS is on
+  if(ttsEnabled) ttsSpeak(pg.text);
 
   document.getElementById('prev-btn').disabled=currentPage===0;
   document.getElementById('next-btn').disabled=currentPage===currentStory.pages.length-1;
@@ -1533,6 +1580,7 @@ function goToPage(n){
   if(!currentStory||n<0||n>=currentStory.pages.length||n===currentPage) return;
   const dir=n>currentPage?'right':'left';
   currentPage=n;
+  if(typeof SFX !== 'undefined') SFX.pageTurn(dir);
   renderPage(true,dir);
   renderDots();
 }

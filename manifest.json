@@ -1,0 +1,25 @@
+{
+  "name": "Bedtime Stories — Rylee, Bree, Mary Joy & Astley",
+  "short_name": "Bedtime Stories",
+  "description": "100 magical bedtime stories for Rylee, Bree, Mary Joy and Astley",
+  "start_url": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0a0118",
+  "theme_color": "#8B44F0",
+  "categories": ["kids", "education", "entertainment"],
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='36' fill='%230a0118'/%3E%3Ccircle cx='96' cy='80' r='52' fill='%238B44F0'/%3E%3Ccircle cx='96' cy='80' r='44' fill='%23FFD700' opacity='.15'/%3E%3Ctext x='96' y='98' text-anchor='middle' font-size='54' font-family='serif'%3E📖%3C/text%3E%3Ccircle cx='52' cy='148' r='16' fill='%23FF3E9D'/%3E%3Ccircle cx='96' cy='160' r='16' fill='%238B44F0'/%3E%3Ccircle cx='140' cy='148' r='16' fill='%2300B4D8'/%3E%3C/svg%3E",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='96' fill='%230a0118'/%3E%3Ccircle cx='256' cy='210' r='140' fill='%238B44F0'/%3E%3Ccircle cx='256' cy='210' r='118' fill='%23FFD700' opacity='.15'/%3E%3Ctext x='256' y='264' text-anchor='middle' font-size='144' font-family='serif'%3E📖%3C/text%3E%3Ccircle cx='138' cy='396' r='42' fill='%23FF3E9D'/%3E%3Ccircle cx='256' cy='428' r='42' fill='%238B44F0'/%3E%3Ccircle cx='374' cy='396' r='42' fill='%2300B4D8'/%3E%3C/svg%3E",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

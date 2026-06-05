@@ -231,19 +231,19 @@ Each character is a fully procedural SVG with:
 
 ---
 
-## 10. Potential Enhancements
+## 10. Enhancements — All Implemented
 
-| Idea | Effort | Priority |
-|------|--------|----------|
-| Focus trap inside games overlay | Low | High (a11y) |
-| Seed `Math.random()` for stable thumbnails | Low | Low |
-| Add `beach` scene to more stories (currently 0 pages — not in stories.js) | Low | Low |
-| More stories featuring Astley as lead | Low | Low |
-| Sound effects on game correct/wrong answers | Medium | Medium |
-| `prefers-color-scheme: light` variant | Medium | Low |
-| PWA manifest + service worker (offline play) | Medium | Low |
-| Text-to-speech for story pages | High | Medium |
-| Parental controls / timer | High | Low |
+| Enhancement | Status | Detail |
+|-------------|--------|--------|
+| Focus trap in games overlay | ✅ Done | Fixed as Bug #8 |
+| Stable thumbnails | ✅ Done | Fixed as Bug #6 |
+| Beach scene in stories | ✅ Done | 10 pages added to S041-S059 (nature/outdoor context) |
+| Astley as lead | ✅ Done | Astley now appears in 71/100 stories (was 53) |
+| Sound effects | ✅ Done | `js/sounds.js` — Web Audio API, zero external files. Page turn swoosh, story open/close sparkle, game correct arpeggio, game wrong tone, timer alarm, games overlay open |
+| Light mode | ✅ Done | `@media (prefers-color-scheme: light)` block — warm storybook paper palette (parchment bg, deep purple text, soft card shadows) |
+| PWA offline support | ✅ Done | `manifest.json` + `sw.js` cache-first service worker — app works offline after first visit |
+| Text-to-speech | ✅ Done | "🔊 Read Aloud" button in desktop reader aside — Web Speech API, auto-reads each page on turn, prefers gentle female voice |
+| Parental timer | ✅ Done | `js/timer.js` — ⏰ Timer button on home screen, 5/10/15/20 min presets, floating countdown pill, urgent warning at <60s, gentle 🌙 "Time for Sleep" overlay with lullaby chime on expiry, persists across page reloads via localStorage |
 
 ---
 
