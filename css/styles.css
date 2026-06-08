@@ -336,6 +336,30 @@ body {
   line-height: 1;
 }
 
+.watch-badge {
+  position: absolute;
+  top: 9px;
+  left: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(139,68,240,.55);
+  border: 2px solid rgba(255,255,255,.45);
+  color: #fff;
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: .2px;
+  border-radius: var(--radius-btn);
+  padding: 4px 10px;
+  cursor: pointer;
+  line-height: 1.2;
+  box-shadow: 0 4px 12px rgba(0,0,0,.3);
+  transition: transform var(--dur-fast) var(--ease-bounce), background var(--dur-fast);
+}
+.watch-badge:hover  { background: rgba(139,68,240,.8); transform: scale(1.06); }
+.watch-badge:active { transform: scale(.94); }
+
 /* ── READER OVERLAY ─────────────────────────────── */
 .reader {
   position: fixed;
@@ -822,6 +846,76 @@ body {
   position: relative;
 }
 
+/* ══════════════════════════════════════════════════
+   Story Video overlay — animated video player
+   ══════════════════════════════════════════════════ */
+.video-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10,1,24,.85);
+  backdrop-filter: blur(6px);
+  z-index: 210;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.video-overlay.hidden  { display: none; }
+.video-overlay.opening { animation: readerIn .32s var(--ease-bounce) both; }
+.video-overlay.closing { animation: readerOut .22s ease both; display:flex !important; }
+
+.video-panel {
+  background: linear-gradient(155deg, #1e0c40, #0d0824);
+  border: var(--border-clay);
+  border-radius: 28px;
+  box-shadow: 0 24px 64px rgba(0,0,0,.7), inset 0 1px 0 rgba(255,255,255,.08);
+  width: 100%;
+  max-width: 480px;
+  padding: 24px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.video-title {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 44px 0 0;
+  text-align: center;
+}
+
+.video-player {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  border-radius: 20px;
+  background: #050010;
+  box-shadow: inset 0 0 0 2px rgba(255,255,255,.1);
+}
+
+.video-close-btn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.1);
+  border: 2px solid rgba(255,255,255,.15);
+  color: #fff;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background var(--dur-fast);
+  flex-shrink: 0;
+  z-index: 1;
+}
+.video-close-btn:hover { background: rgba(255,255,255,.2); }
+
 /* ── Common game text ────────────────────────────── */
 .game-title {
   font-family: 'Baloo 2', sans-serif;
@@ -1305,6 +1399,13 @@ body {
    Text-to-Speech button (reader aside)
    ══════════════════════════════════════════════════ */
 
+.aside-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 6px;
+}
+
 .tts-btn {
   display: inline-flex;
   align-items: center;
@@ -1330,6 +1431,27 @@ body {
   border-color: rgba(139,68,240,.6);
   color: #fff;
 }
+
+.watch-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  margin-top: 18px;
+  background: rgba(255,62,157,.18);
+  color: #fff;
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: 2px solid rgba(255,62,157,.45);
+  border-radius: var(--radius-btn);
+  cursor: pointer;
+  transition: background var(--dur-fast), transform var(--dur-fast) var(--ease-bounce);
+  min-height: 44px;
+  align-self: flex-start;
+}
+.watch-btn:hover  { background: rgba(255,62,157,.32); transform: scale(1.04); }
+.watch-btn:active { transform: scale(.95); }
 
 /* ══════════════════════════════════════════════════
    Light Mode — prefers-color-scheme: light
@@ -1479,6 +1601,30 @@ body {
   }
   .tts-btn:hover  { background: rgba(0,0,0,.1); color: var(--text-dark); }
   .tts-btn.tts-active { background: rgba(139,68,240,.15); border-color: #8B44F0; color: #5B14C0; }
+
+  .watch-btn {
+    background: rgba(255,62,157,.12);
+    color: #C0226F;
+    border-color: rgba(255,62,157,.4);
+  }
+  .watch-btn:hover { background: rgba(255,62,157,.2); }
+
+  .watch-badge {
+    background: rgba(139,68,240,.85);
+    border-color: rgba(255,255,255,.7);
+  }
+
+  .video-panel {
+    background: linear-gradient(155deg, #f0e8ff, #e8f0ff);
+    border-color: rgba(0,0,0,.1);
+    box-shadow: 0 16px 48px rgba(80,40,120,.2);
+  }
+  .video-title { color: var(--text-dark); }
+  .video-close-btn {
+    background: rgba(0,0,0,.07);
+    border-color: rgba(0,0,0,.12);
+    color: var(--text-dark);
+  }
 
   .star-dot { background: #8B44F0; }
   .home-stars .star-dot { background: rgba(100,50,200,.4); }

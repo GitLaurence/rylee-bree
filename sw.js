@@ -2,7 +2,7 @@
    Service Worker — Cache-first offline support
    ══════════════════════════════════════════════════ */
 
-const CACHE = 'bedtime-v1';
+const CACHE = 'bedtime-v2';
 const PRECACHE = [
   './',
   './index.html',
@@ -32,6 +32,10 @@ self.addEventListener('activate', e => {
 
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
+  // Video elements issue Range requests for streaming/seeking — caching
+  // and replaying partial (206) responses can corrupt playback, so let
+  // those go straight to the network.
+  if (e.request.headers.has('range')) return;
   e.respondWith(
     caches.match(e.request).then(cached => {
       if (cached) return cached;

@@ -1424,16 +1424,22 @@ function renderHome(){
     card.className='story-card';
     card.style.setProperty('--card-i',idx);
     const isRead=readStories.has(story.id);
+    const hasVideo = typeof hasStoryVideo==='function' && hasStoryVideo(story.id);
     card.innerHTML=`
       <div class="card-art">${cardThumbSVG(story.scene,story.chars)}</div>
       <div class="card-body">
         ${isRead?'<span class="read-badge">⭐</span>':''}
+        ${hasVideo?'<button class="watch-badge" aria-label="Watch the animated video for '+story.title+'">🎬 Watch</button>':''}
         <div class="card-title">${story.title}</div>
         <div class="card-chars">
           ${story.chars.map(c=>`<span class="char-dot" style="background:${CHARS[c]?.color||'#ccc'}" title="${CHARS[c]?.label||c}"></span>`).join('')}
         </div>
       </div>`;
     card.addEventListener('click',()=>openStory(story));
+    if(hasVideo){
+      const watchBtn=card.querySelector('.watch-badge');
+      watchBtn.addEventListener('click',e=>{ e.stopPropagation(); openStoryVideo(story); });
+    }
     grid.appendChild(card);
   });
 }
@@ -1542,6 +1548,7 @@ function renderPage(animate,direction='right'){
   // Desktop aside text panel
   const aside=document.getElementById('story-aside');
   if(aside){
+    const hasVideo = typeof hasStoryVideo==='function' && hasStoryVideo(currentStory.id);
     aside.innerHTML=`
       <div class="aside-label">Page ${currentPage+1} of ${currentStory.pages.length}</div>
       <h2 class="aside-chapter">${currentStory.title}</h2>
@@ -1549,10 +1556,14 @@ function renderPage(animate,direction='right'){
       <div class="aside-chars">
         ${(pg.chars||currentStory.chars||[]).map(c=>`<span class="aside-char-dot" style="background:${CHARS[c]?.color||'#ccc'}" title="${CHARS[c]?.label||c}"></span><span class="aside-char-name">${CHARS[c]?.label||c}</span>`).join('')}
       </div>
-      <button class="tts-btn${ttsEnabled?' tts-active':''}" id="tts-btn" aria-label="Read page aloud">
-        ${ttsEnabled?'🔇 Stop Reading':'🔊 Read Aloud'}
-      </button>`;
+      <div class="aside-actions">
+        <button class="tts-btn${ttsEnabled?' tts-active':''}" id="tts-btn" aria-label="Read page aloud">
+          ${ttsEnabled?'🔇 Stop Reading':'🔊 Read Aloud'}
+        </button>
+        ${hasVideo?'<button class="watch-btn" id="watch-btn" aria-label="Watch the animated video for '+currentStory.title+'">🎬 Watch Animated Video</button>':''}
+      </div>`;
     aside.querySelector('#tts-btn').addEventListener('click', ttsToggle);
+    if(hasVideo) aside.querySelector('#watch-btn').addEventListener('click', () => openStoryVideo(currentStory));
   }
   // Auto-read aloud if TTS is on
   if(ttsEnabled) ttsSpeak(pg.text);
