@@ -44,81 +44,90 @@ function ryleeArt(cx, cy, sc, id) {
   </radialGradient>
 </defs>
 <g transform="translate(${cx},${cy}) scale(${sc})">
-  <ellipse cx="0" cy="4" rx="30" ry="7" fill="#000" opacity=".16"/>
-  <!-- Legs -->
-  <rect x="-14" y="-72" width="12" height="74" rx="6" fill="url(#${id}sk)"/>
-  <rect x="2"   y="-72" width="12" height="74" rx="6" fill="url(#${id}sk)"/>
-  <!-- Shoes -->
-  <ellipse cx="-9" cy="0" rx="13" ry="6" fill="#7030D0"/>
-  <ellipse cx=" 9" cy="0" rx="13" ry="6" fill="#7030D0"/>
-  <ellipse cx="-9" cy="-2" rx="9" ry="3" fill="#A060FF" opacity=".35"/>
-  <ellipse cx=" 9" cy="-2" rx="9" ry="3" fill="#A060FF" opacity=".35"/>
-  <!-- Dress -->
-  <path d="M-28,-78 Q-36,-38 -28,4 L28,4 Q36,-38 28,-78Z" fill="url(#${id}dr)"/>
-  <path d="M-28,-78 Q-34,-48 -28,4" stroke="#fff" stroke-width="2" fill="none" opacity=".14"/>
+  <ellipse cx="0" cy="4" rx="34" ry="7" fill="#000" opacity=".16"/>
+  <!-- Legs (tapered) -->
+  <path d="M-14,-72 Q-15,-32 -13,0 L-3,0 Q-2,-32 -2,-72Z" fill="url(#${id}sk)"/>
+  <path d="M 2,-72  Q 2,-32  3,0  L 13,0  Q 15,-32 14,-72Z" fill="url(#${id}sk)"/>
+  <!-- Shoes (rounded) -->
+  <path d="M-19,-3 Q-19,-9 -9,-9 Q1,-9 2,-3 Q1,2 -9,2 Q-18,2 -19,-3Z" fill="#7030D0"/>
+  <path d="M 19,-3 Q 19,-9  9,-9 Q-1,-9 -2,-3 Q-1,2  9,2 Q 18,2 19,-3Z" fill="#7030D0"/>
+  <path d="M-19,-3 Q-19,-9 -9,-9 Q1,-9 2,-3" fill="none" stroke="#A060FF" stroke-width="1.6" opacity=".5"/>
+  <path d="M 19,-3 Q 19,-9  9,-9 Q-1,-9 -2,-3" fill="none" stroke="#A060FF" stroke-width="1.6" opacity=".5"/>
+  <!-- Neck bridge (chin to collar, removes seam) -->
+  <path d="M-9,-127 Q0,-122 9,-127 L9,-110 Q0,-106 -9,-110 Z" fill="url(#${id}sk)"/>
+  <!-- A-line dress -->
+  <path d="M-17,-117 C-24,-90 -33,-34 -38,1 L 38,1 C 33,-34 24,-90 17,-117
+           C 10,-121 -10,-121 -17,-117 Z" fill="url(#${id}dr)"/>
+  <!-- Fabric fold highlight + shadow -->
+  <path d="M-12,-110 C-19,-80 -28,-30 -32,0" stroke="#fff" stroke-width="2.2" fill="none" opacity=".16" stroke-linecap="round"/>
+  <path d="M 14,-108 C 20,-78  27,-28  31,0" stroke="#3A0A80" stroke-width="2.4" fill="none" opacity=".16" stroke-linecap="round"/>
+  <!-- Hem ribbon -->
+  <path d="M-36,-6 Q0,2 36,-6" stroke="#FFD700" stroke-width="2.4" fill="none" opacity=".4" stroke-linecap="round"/>
   <!-- Sparkles on dress -->
-  <circle cx="-10" cy="-44" r="2.2" fill="#FFD700" opacity=".75"/>
-  <circle cx="8"   cy="-30" r="1.6" fill="#FFD700" opacity=".65"/>
-  <circle cx="14"  cy="-58" r="1.9" fill="#FFD700" opacity=".7"/>
-  <!-- Collar -->
-  <path d="M-10,-124 Q0,-119 10,-124 Q7,-111 0,-109 Q-7,-111 -10,-124Z" fill="url(#${id}dr)"/>
+  <circle cx="-12" cy="-58" r="2.2" fill="#FFD700" opacity=".75"/>
+  <circle cx="9"   cy="-38" r="1.6" fill="#FFD700" opacity=".65"/>
+  <circle cx="16"  cy="-72" r="1.9" fill="#FFD700" opacity=".7"/>
+  <!-- Shoulder puffs -->
+  <ellipse cx="-19" cy="-112" rx="10" ry="12" fill="url(#${id}dr)"/>
+  <ellipse cx=" 19" cy="-112" rx="10" ry="12" fill="url(#${id}dr)"/>
+  <ellipse cx="-19" cy="-116" rx="6.5" ry="6" fill="#fff" opacity=".18"/>
+  <ellipse cx=" 19" cy="-116" rx="6.5" ry="6" fill="#fff" opacity=".18"/>
   <!-- Arms -->
-  <path d="M-28,-105 Q-44,-93 -42,-74" stroke="url(#${id}sk)" stroke-width="13" fill="none" stroke-linecap="round"/>
-  <path d="M 28,-105 Q 44,-93  42,-74" stroke="url(#${id}sk)" stroke-width="13" fill="none" stroke-linecap="round"/>
-  <circle cx="-42" cy="-72" r="8" fill="#F8C8A8"/>
-  <circle cx=" 42" cy="-72" r="8" fill="#F8C8A8"/>
-  <!-- Neck -->
-  <rect x="-8" y="-133" width="16" height="16" rx="7" fill="#FFCDB8"/>
-  <ellipse cx="0" cy="-126" rx="6" ry="3" fill="#D09070" opacity=".35"/>
+  <path d="M-21,-109 Q-39,-94 -38,-72" stroke="url(#${id}sk)" stroke-width="12" fill="none" stroke-linecap="round"/>
+  <path d="M 21,-109 Q  39,-94  38,-72" stroke="url(#${id}sk)" stroke-width="12" fill="none" stroke-linecap="round"/>
+  <circle cx="-38" cy="-70" r="8" fill="#F8C8A8"/>
+  <circle cx=" 38" cy="-70" r="8" fill="#F8C8A8"/>
+  <circle cx="-40" cy="-72" r="3" fill="#fff" opacity=".3"/>
+  <circle cx=" 36" cy="-72" r="3" fill="#fff" opacity=".3"/>
   <!-- Hair back -->
-  <ellipse cx="0" cy="-155" rx="34" ry="34" fill="url(#${id}hr)"/>
-  <ellipse cx="-30" cy="-148" rx="10" ry="22" fill="#2E1600"/>
-  <ellipse cx=" 30" cy="-148" rx="10" ry="22" fill="#2E1600"/>
+  <ellipse cx="0" cy="-156" rx="34" ry="34" fill="url(#${id}hr)"/>
+  <ellipse cx="-30" cy="-149" rx="10" ry="22" fill="#2E1600"/>
+  <ellipse cx=" 30" cy="-149" rx="10" ry="22" fill="#2E1600"/>
   <!-- Head -->
-  <circle cx="0" cy="-155" r="33" fill="url(#${id}fc)"/>
-  <ellipse cx="-4" cy="-170" rx="13" ry="9" fill="#fff" opacity=".17"/>
-  <ellipse cx="0" cy="-128" rx="13" ry="5" fill="#C88060" opacity=".22"/>
+  <circle cx="0" cy="-156" r="33" fill="url(#${id}fc)"/>
+  <ellipse cx="-4" cy="-171" rx="13" ry="9" fill="#fff" opacity=".17"/>
+  <ellipse cx="0" cy="-130" rx="13" ry="5" fill="#C88060" opacity=".22"/>
   <!-- Hair front -->
-  <path d="M-32,-155 Q-26,-182 0,-186 Q26,-182 32,-155" fill="#3A1E00"/>
-  <ellipse cx="0" cy="-182" rx="26" ry="10" fill="#3A1E00"/>
-  <path d="M-33,-148 Q-38,-134 -32,-122" stroke="#2E1600" stroke-width="8" fill="none" stroke-linecap="round"/>
-  <path d="M 33,-148 Q  38,-134  32,-122" stroke="#2E1600" stroke-width="8" fill="none" stroke-linecap="round"/>
-  <path d="M-6,-184 Q4,-192 14,-180" stroke="#7B4A00" stroke-width="3" fill="none" stroke-linecap="round" opacity=".5"/>
+  <path d="M-32,-156 Q-26,-183 0,-187 Q26,-183 32,-156" fill="#3A1E00"/>
+  <ellipse cx="0" cy="-183" rx="26" ry="10" fill="#3A1E00"/>
+  <path d="M-33,-149 Q-38,-135 -32,-123" stroke="#2E1600" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <path d="M 33,-149 Q  38,-135  32,-123" stroke="#2E1600" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <path d="M-6,-185 Q4,-193 14,-181" stroke="#7B4A00" stroke-width="3" fill="none" stroke-linecap="round" opacity=".5"/>
   <!-- Ponytail -->
-  <path d="M24,-172 Q38,-188 32,-202 Q26,-214 20,-200 Q26,-186 20,-172" fill="#3A1E00"/>
-  <circle cx="24" cy="-172" r="5" fill="#FF3E9D"/>
-  <circle cx="24" cy="-172" r="3" fill="#FF80C0"/>
+  <path d="M24,-173 Q38,-189 32,-203 Q26,-215 20,-201 Q26,-187 20,-173" fill="#3A1E00"/>
+  <circle cx="24" cy="-173" r="5" fill="#FF3E9D"/>
+  <circle cx="24" cy="-173" r="3" fill="#FF80C0"/>
   <!-- Left eye -->
-  <ellipse cx="-11" cy="-156" rx="11" ry="10" fill="#C07050" opacity=".18"/>
-  <ellipse cx="-11" cy="-157"  rx="9.5" ry="9" fill="white"/>
-  <path d="M-20.5,-157 Q-11,-167 -1.5,-157" fill="#2A1800" opacity=".88"/>
-  <circle cx="-11" cy="-156" r="6.5" fill="url(#${id}ir)"/>
-  <circle cx="-11" cy="-156" r="6.5" fill="none" stroke="#C090FF" stroke-width="1" opacity=".4"/>
-  <circle cx="-11" cy="-156" r="3.2" fill="#080015"/>
-  <circle cx="-8.5" cy="-159" r="2.2" fill="white"/>
-  <circle cx="-13.5" cy="-153" r="1"   fill="white" opacity=".6"/>
-  <path d="M-20.5,-157 Q-11,-149 -1.5,-157" fill="none" stroke="#C08060" stroke-width=".8" opacity=".4"/>
+  <ellipse cx="-11" cy="-157" rx="11" ry="10" fill="#C07050" opacity=".18"/>
+  <ellipse cx="-11" cy="-158"  rx="9.5" ry="9" fill="white"/>
+  <path d="M-20.5,-158 Q-11,-168 -1.5,-158" fill="#2A1800" opacity=".88"/>
+  <circle cx="-11" cy="-157" r="6.5" fill="url(#${id}ir)"/>
+  <circle cx="-11" cy="-157" r="6.5" fill="none" stroke="#C090FF" stroke-width="1" opacity=".4"/>
+  <circle cx="-11" cy="-157" r="3.2" fill="#080015"/>
+  <circle cx="-8.5" cy="-160" r="2.2" fill="white"/>
+  <circle cx="-13.5" cy="-154" r="1"   fill="white" opacity=".6"/>
+  <path d="M-20.5,-158 Q-11,-150 -1.5,-158" fill="none" stroke="#C08060" stroke-width=".8" opacity=".4"/>
   <!-- Right eye -->
-  <ellipse cx="11" cy="-156" rx="11" ry="10" fill="#C07050" opacity=".18"/>
-  <ellipse cx="11" cy="-157"  rx="9.5" ry="9" fill="white"/>
-  <path d="M1.5,-157 Q11,-167 20.5,-157" fill="#2A1800" opacity=".88"/>
-  <circle cx="11" cy="-156" r="6.5" fill="url(#${id}ir)"/>
-  <circle cx="11" cy="-156" r="6.5" fill="none" stroke="#C090FF" stroke-width="1" opacity=".4"/>
-  <circle cx="11" cy="-156" r="3.2" fill="#080015"/>
-  <circle cx="13.5" cy="-159" r="2.2" fill="white"/>
-  <circle cx=" 8.5" cy="-153" r="1"   fill="white" opacity=".6"/>
-  <path d="M1.5,-157 Q11,-149 20.5,-157" fill="none" stroke="#C08060" stroke-width=".8" opacity=".4"/>
+  <ellipse cx="11" cy="-157" rx="11" ry="10" fill="#C07050" opacity=".18"/>
+  <ellipse cx="11" cy="-158"  rx="9.5" ry="9" fill="white"/>
+  <path d="M1.5,-158 Q11,-168 20.5,-158" fill="#2A1800" opacity=".88"/>
+  <circle cx="11" cy="-157" r="6.5" fill="url(#${id}ir)"/>
+  <circle cx="11" cy="-157" r="6.5" fill="none" stroke="#C090FF" stroke-width="1" opacity=".4"/>
+  <circle cx="11" cy="-157" r="3.2" fill="#080015"/>
+  <circle cx="13.5" cy="-160" r="2.2" fill="white"/>
+  <circle cx=" 8.5" cy="-154" r="1"   fill="white" opacity=".6"/>
+  <path d="M1.5,-158 Q11,-150 20.5,-158" fill="none" stroke="#C08060" stroke-width=".8" opacity=".4"/>
   <!-- Eyebrows -->
-  <path d="M-21,-168 Q-11,-173 -2,-168" stroke="#2A1800" stroke-width="2.8" fill="none" stroke-linecap="round"/>
-  <path d="M 2,-168 Q  11,-173 21,-168" stroke="#2A1800" stroke-width="2.8" fill="none" stroke-linecap="round"/>
+  <path d="M-21,-169 Q-11,-174 -2,-169" stroke="#2A1800" stroke-width="2.8" fill="none" stroke-linecap="round"/>
+  <path d="M 2,-169 Q  11,-174 21,-169" stroke="#2A1800" stroke-width="2.8" fill="none" stroke-linecap="round"/>
   <!-- Nose -->
-  <path d="M-3,-140 Q0,-136 3,-140" stroke="#C88060" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+  <path d="M-3,-141 Q0,-137 3,-141" stroke="#C88060" stroke-width="1.8" fill="none" stroke-linecap="round"/>
   <!-- Cheeks -->
-  <ellipse cx="-21" cy="-146" rx="7.5" ry="4.5" fill="#FF8080" opacity=".3"/>
-  <ellipse cx=" 21" cy="-146" rx="7.5" ry="4.5" fill="#FF8080" opacity=".3"/>
+  <ellipse cx="-21" cy="-147" rx="7.5" ry="4.5" fill="#FF8080" opacity=".3"/>
+  <ellipse cx=" 21" cy="-147" rx="7.5" ry="4.5" fill="#FF8080" opacity=".3"/>
   <!-- Mouth – big confident smile -->
-  <path d="M-9,-130 Q0,-121 9,-130" stroke="#C05040" stroke-width="2.6" fill="none" stroke-linecap="round"/>
-  <path d="M-9,-130 Q0,-121 9,-130 Q5,-126 0,-124 Q-5,-126 -9,-130Z" fill="#E07060" opacity=".55"/>
+  <path d="M-9,-131 Q0,-122 9,-131" stroke="#C05040" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+  <path d="M-9,-131 Q0,-122 9,-131 Q5,-127 0,-125 Q-5,-127 -9,-131Z" fill="#E07060" opacity=".55"/>
 </g>`;
 }
 
@@ -131,8 +140,8 @@ function brielleArt(cx, cy, sc, id) {
   <radialGradient id="${id}fc" cx="48%" cy="38%" r="56%">
     <stop offset="0%" stop-color="#FFEDD8"/><stop offset="100%" stop-color="#F5C09A"/>
   </radialGradient>
-  <linearGradient id="${id}dr" x1="0" y1="0" x2="0.2" y2="1">
-    <stop offset="0%" stop-color="#FF70BC"/><stop offset="100%" stop-color="#C00075"/>
+  <linearGradient id="${id}dr" x1="0.15" y1="0" x2="0.5" y2="1">
+    <stop offset="0%" stop-color="#FF9DD0"/><stop offset="45%" stop-color="#FF5DAA"/><stop offset="100%" stop-color="#C2006E"/>
   </linearGradient>
   <linearGradient id="${id}hr" x1="0" y1="0" x2="0.15" y2="1">
     <stop offset="0%" stop-color="#7A4500"/><stop offset="60%" stop-color="#4A2800"/><stop offset="100%" stop-color="#2A1400"/>
@@ -143,27 +152,34 @@ function brielleArt(cx, cy, sc, id) {
 </defs>
 <g transform="translate(${cx},${cy}) scale(${sc * 0.88})">
   <ellipse cx="0" cy="4" rx="26" ry="6" fill="#000" opacity=".15"/>
-  <!-- Legs (shorter – little sister) -->
-  <rect x="-12" y="-62" width="10" height="64" rx="5" fill="url(#${id}sk)"/>
-  <rect x=" 2"  y="-62" width="10" height="64" rx="5" fill="url(#${id}sk)"/>
-  <!-- Shoes -->
-  <ellipse cx="-8" cy="0" rx="12" ry="5.5" fill="#E0007A"/>
-  <ellipse cx=" 8" cy="0" rx="12" ry="5.5" fill="#E0007A"/>
-  <ellipse cx="-8" cy="-2" rx="8" ry="3" fill="#FF60B0" opacity=".4"/>
-  <ellipse cx=" 8" cy="-2" rx="8" ry="3" fill="#FF60B0" opacity=".4"/>
-  <!-- Dress with ruffles -->
-  <path d="M-24,-68 Q-30,-32 -22,4 L22,4 Q30,-32 24,-68Z" fill="url(#${id}dr)"/>
+  <!-- Legs (path-based, tapered) -->
+  <path d="M-12,-60 Q-13,-28 -11,0 L-3,0 Q-2,-28 -2,-60Z" fill="url(#${id}sk)"/>
+  <path d="M 2,-60  Q 2,-28  3,0  L 11,0  Q 13,-28 12,-60Z" fill="url(#${id}sk)"/>
+  <!-- Shoes (path-based, rounded) -->
+  <path d="M-15,-3 Q-15,-8 -7,-8 Q1,-8 2,-3 Q1,1 -7,1 Q-14,1 -15,-3Z" fill="#E0007A"/>
+  <path d="M 15,-3 Q 15,-8  7,-8 Q-1,-8 -2,-3 Q-1,1  7,1 Q 14,1 15,-3Z" fill="#E0007A"/>
+  <path d="M-15,-3 Q-15,-8 -7,-8 Q1,-8 2,-3" fill="none" stroke="#FF80C8" stroke-width="1.4" opacity=".5"/>
+  <path d="M 15,-3 Q 15,-8  7,-8 Q-1,-8 -2,-3" fill="none" stroke="#FF80C8" stroke-width="1.4" opacity=".5"/>
+  <!-- Neck bridges chin to collar -->
+  <path d="M-7,-113 Q0,-109 7,-113 L7,-96 Q0,-93 -7,-96 Z" fill="url(#${id}sk)"/>
+  <!-- A-line ruffled dress -->
+  <path d="M-14,-99 C-18,-74 -23,-28 -21,3 L 21,3 C 23,-28 18,-74 14,-99
+           C 8,-103 -8,-103 -14,-99 Z" fill="url(#${id}dr)"/>
   <!-- Ruffle hem -->
-  <path d="M-22,0 Q-14,8 -6,0 Q2,8 10,0 Q18,8 22,0" stroke="#FF80C8" stroke-width="5" fill="none" stroke-linecap="round"/>
-  <!-- Dress heart -->
-  <path d="M-4,-44 Q0,-50 4,-44 Q6,-40 0,-36 Q-6,-40 -4,-44Z" fill="#fff" opacity=".25"/>
+  <path d="M-21,-1 Q-13,7 -5,-1 Q3,7 11,-1 Q19,7 21,-1" stroke="#FFC0E0" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+  <!-- Fabric fold + heart -->
+  <path d="M-10,-90 C-14,-64 -17,-28 -16,-2" stroke="#fff" stroke-width="2" fill="none" opacity=".18" stroke-linecap="round"/>
+  <path d="M-4,-46 Q0,-52 4,-46 Q6,-42 0,-38 Q-6,-42 -4,-46Z" fill="#fff" opacity=".28"/>
+  <!-- Shoulder puffs -->
+  <ellipse cx="-15" cy="-94" rx="8" ry="9.5" fill="url(#${id}dr)"/>
+  <ellipse cx=" 15" cy="-94" rx="8" ry="9.5" fill="url(#${id}dr)"/>
+  <ellipse cx="-15" cy="-97" rx="5.5" ry="5" fill="#fff" opacity=".18"/>
+  <ellipse cx=" 15" cy="-97" rx="5.5" ry="5" fill="#fff" opacity=".18"/>
   <!-- Arms -->
-  <path d="M-24,-92 Q-36,-82 -34,-66" stroke="url(#${id}sk)" stroke-width="11" fill="none" stroke-linecap="round"/>
-  <path d="M 24,-92 Q  36,-82  34,-66" stroke="url(#${id}sk)" stroke-width="11" fill="none" stroke-linecap="round"/>
-  <circle cx="-34" cy="-64" r="7" fill="#F5C898"/>
-  <circle cx=" 34" cy="-64" r="7" fill="#F5C898"/>
-  <!-- Neck -->
-  <rect x="-7" y="-116" width="14" height="14" rx="6" fill="#FFD8B8"/>
+  <path d="M-17,-91 Q-29,-81 -28,-64" stroke="url(#${id}sk)" stroke-width="11" fill="none" stroke-linecap="round"/>
+  <path d="M 17,-91 Q  29,-81  28,-64" stroke="url(#${id}sk)" stroke-width="11" fill="none" stroke-linecap="round"/>
+  <circle cx="-28" cy="-62" r="7" fill="#F5C898"/>
+  <circle cx=" 28" cy="-62" r="7" fill="#F5C898"/>
   <!-- Hair back -->
   <ellipse cx="0" cy="-140" rx="32" ry="30" fill="url(#${id}hr)"/>
   <ellipse cx="-28" cy="-132" rx="10" ry="20" fill="#4A2800"/>
@@ -171,6 +187,7 @@ function brielleArt(cx, cy, sc, id) {
   <!-- Head -->
   <circle cx="0" cy="-140" r="31" fill="url(#${id}fc)"/>
   <ellipse cx="-4" cy="-153" rx="12" ry="8" fill="#fff" opacity=".18"/>
+  <ellipse cx="0" cy="-114" rx="13" ry="5" fill="#C88060" opacity=".2"/>
   <!-- Hair front -->
   <path d="M-30,-140 Q-24,-166 0,-170 Q24,-166 30,-140" fill="#5A3400"/>
   <ellipse cx="0" cy="-166" rx="24" ry="10" fill="#5A3400"/>
@@ -219,8 +236,8 @@ function maryJoyArt(cx, cy, sc, id) {
   <radialGradient id="${id}fc" cx="48%" cy="38%" r="56%">
     <stop offset="0%" stop-color="#FEE2C2"/><stop offset="100%" stop-color="#EAA878"/>
   </radialGradient>
-  <linearGradient id="${id}dr" x1="0" y1="0" x2="0.2" y2="1">
-    <stop offset="0%" stop-color="#FF8850"/><stop offset="100%" stop-color="#C03800"/>
+  <linearGradient id="${id}dr" x1="0.15" y1="0" x2="0.5" y2="1">
+    <stop offset="0%" stop-color="#FFAA76"/><stop offset="45%" stop-color="#FF7430"/><stop offset="100%" stop-color="#C03800"/>
   </linearGradient>
   <linearGradient id="${id}hr" x1="0" y1="0" x2="0.12" y2="1">
     <stop offset="0%" stop-color="#2E1600"/><stop offset="60%" stop-color="#180A00"/><stop offset="100%" stop-color="#0A0400"/>
@@ -231,29 +248,38 @@ function maryJoyArt(cx, cy, sc, id) {
 </defs>
 <g transform="translate(${cx},${cy}) scale(${sc})">
   <ellipse cx="0" cy="4" rx="32" ry="7" fill="#000" opacity=".16"/>
-  <!-- Legs -->
-  <rect x="-14" y="-82" width="12" height="84" rx="6" fill="url(#${id}sk)"/>
-  <rect x=" 2"  y="-82" width="12" height="84" rx="6" fill="url(#${id}sk)"/>
-  <!-- Shoes – elegant flats -->
-  <ellipse cx="-9" cy="0" rx="13" ry="5.5" fill="#C04010"/>
-  <ellipse cx=" 9" cy="0" rx="13" ry="5.5" fill="#C04010"/>
-  <ellipse cx="-9" cy="-2" rx="9" ry="3" fill="#FF6030" opacity=".35"/>
-  <ellipse cx=" 9" cy="-2" rx="9" ry="3" fill="#FF6030" opacity=".35"/>
-  <!-- Dress (slightly more adult, a-line) -->
-  <path d="M-26,-86 Q-32,-44 -24,4 L24,4 Q32,-44 26,-86Z" fill="url(#${id}dr)"/>
+  <!-- Legs (path-based) -->
+  <path d="M-13,-80 Q-14,-36 -12,0 L-3,0 Q-2,-36 -2,-80Z" fill="url(#${id}sk)"/>
+  <path d="M 2,-80  Q 2,-36  3,0  L 12,0  Q 14,-36 13,-80Z" fill="url(#${id}sk)"/>
+  <!-- Shoes (path-based) -->
+  <path d="M-18,-3 Q-18,-8 -9,-8 Q1,-8 2,-3 Q1,1 -9,1 Q-17,1 -18,-3Z" fill="#C04010"/>
+  <path d="M 18,-3 Q 18,-8  9,-8 Q-1,-8 -2,-3 Q-1,1  9,1 Q 17,1 18,-3Z" fill="#C04010"/>
+  <path d="M-18,-3 Q-18,-8 -9,-8 Q1,-8 2,-3" fill="none" stroke="#FF6030" stroke-width="1.6" opacity=".5"/>
+  <path d="M 18,-3 Q 18,-8  9,-8 Q-1,-8 -2,-3" fill="none" stroke="#FF6030" stroke-width="1.6" opacity=".5"/>
+  <!-- Neck bridges chin to collar -->
+  <path d="M-9,-137 Q0,-132 9,-137 L9,-119 Q0,-116 -9,-119 Z" fill="url(#${id}sk)"/>
+  <!-- A-line dress -->
+  <path d="M-16,-119 C-24,-90 -34,-30 -27,4 L 27,4 C 34,-30 24,-90 16,-119
+           C 10,-123 -10,-123 -16,-119 Z" fill="url(#${id}dr)"/>
   <!-- Floral detail -->
-  <circle cx="6"  cy="-40" r="5"  fill="#FFD54F" opacity=".55"/>
-  <circle cx="-8" cy="-55" r="4"  fill="#FFD54F" opacity=".5"/>
-  <circle cx="12" cy="-65" r="3.5" fill="#FFD54F" opacity=".45"/>
-  <!-- Belt -->
-  <rect x="-26" y="-92" width="52" height="7" rx="3" fill="#9A2800" opacity=".6"/>
+  <circle cx="7"  cy="-50" r="5"  fill="#FFD54F" opacity=".55"/>
+  <circle cx="-9" cy="-66" r="4"  fill="#FFD54F" opacity=".5"/>
+  <circle cx="13" cy="-78" r="3.5" fill="#FFD54F" opacity=".45"/>
+  <!-- Soft curved sash belt -->
+  <path d="M-22,-99 Q0,-104 22,-99 L22,-94 Q0,-99 -22,-94 Z" fill="#9A2800" opacity=".4"/>
+  <path d="M-22,-99 Q0,-104 22,-99" stroke="#FFB070" stroke-width="1.2" fill="none" opacity=".35"/>
+  <!-- Fabric fold highlight -->
+  <path d="M-11,-110 C-17,-78 -24,-30 -19,2" stroke="#fff" stroke-width="2.4" fill="none" opacity=".15" stroke-linecap="round"/>
+  <!-- Shoulder anchors -->
+  <ellipse cx="-17" cy="-117" rx="9.5" ry="11.5" fill="url(#${id}dr)"/>
+  <ellipse cx=" 17" cy="-117" rx="9.5" ry="11.5" fill="url(#${id}dr)"/>
+  <ellipse cx="-17" cy="-121" rx="6" ry="5.5" fill="#fff" opacity=".15"/>
+  <ellipse cx=" 17" cy="-121" rx="6" ry="5.5" fill="#fff" opacity=".15"/>
   <!-- Arms -->
-  <path d="M-26,-114 Q-42,-102 -40,-82" stroke="url(#${id}sk)" stroke-width="13" fill="none" stroke-linecap="round"/>
-  <path d="M 26,-114 Q  42,-102  40,-82" stroke="url(#${id}sk)" stroke-width="13" fill="none" stroke-linecap="round"/>
-  <circle cx="-40" cy="-80" r="9" fill="#EDB898"/>
-  <circle cx=" 40" cy="-80" r="9" fill="#EDB898"/>
-  <!-- Neck -->
-  <rect x="-9" y="-144" width="18" height="18" rx="8" fill="#F8C8A0"/>
+  <path d="M-21,-114 Q-38,-101 -36,-80" stroke="url(#${id}sk)" stroke-width="13" fill="none" stroke-linecap="round"/>
+  <path d="M 21,-114 Q  38,-101  36,-80" stroke="url(#${id}sk)" stroke-width="13" fill="none" stroke-linecap="round"/>
+  <circle cx="-36" cy="-78" r="9" fill="#EDB898"/>
+  <circle cx=" 36" cy="-78" r="9" fill="#EDB898"/>
   <!-- Hair back + long waves -->
   <ellipse cx="0" cy="-168" rx="36" ry="36" fill="url(#${id}hr)"/>
   <path d="M-36,-158 Q-44,-120 -34,-90" stroke="#180A00" stroke-width="14" fill="none" stroke-linecap="round"/>
@@ -261,6 +287,7 @@ function maryJoyArt(cx, cy, sc, id) {
   <!-- Head -->
   <circle cx="0" cy="-168" r="35" fill="url(#${id}fc)"/>
   <ellipse cx="-4" cy="-183" rx="14" ry="9" fill="#fff" opacity=".17"/>
+  <ellipse cx="0" cy="-135" rx="15" ry="5" fill="#C88060" opacity=".2"/>
   <!-- Hair front -->
   <path d="M-34,-168 Q-28,-196 0,-200 Q28,-196 34,-168" fill="#200E00"/>
   <ellipse cx="0" cy="-196" rx="28" ry="10" fill="#200E00"/>
@@ -314,8 +341,8 @@ function astleyArt(cx, cy, sc, id) {
   <radialGradient id="${id}fc" cx="48%" cy="38%" r="56%">
     <stop offset="0%" stop-color="#FFECD8"/><stop offset="100%" stop-color="#F2B888"/>
   </radialGradient>
-  <linearGradient id="${id}sh" x1="0" y1="0" x2="0.2" y2="1">
-    <stop offset="0%" stop-color="#20CCEE"/><stop offset="100%" stop-color="#007898"/>
+  <linearGradient id="${id}sh" x1="0.15" y1="0" x2="0.5" y2="1">
+    <stop offset="0%" stop-color="#5BDCFA"/><stop offset="45%" stop-color="#1AB8E0"/><stop offset="100%" stop-color="#007898"/>
   </linearGradient>
   <linearGradient id="${id}hr" x1="0" y1="0" x2="0.15" y2="1">
     <stop offset="0%" stop-color="#3E2200"/><stop offset="60%" stop-color="#201000"/><stop offset="100%" stop-color="#100800"/>
@@ -327,31 +354,41 @@ function astleyArt(cx, cy, sc, id) {
 <g transform="translate(${cx},${cy}) scale(${sc})">
   <ellipse cx="0" cy="4" rx="30" ry="7" fill="#000" opacity=".16"/>
   <!-- Legs -->
-  <rect x="-14" y="-72" width="12" height="72" rx="6" fill="url(#${id}sk)"/>
-  <rect x=" 2"  y="-72" width="12" height="72" rx="6" fill="url(#${id}sk)"/>
+  <path d="M-13,-72 Q-14,-32 -12,0 L-3,0 Q-2,-32 -2,-72Z" fill="url(#${id}sk)"/>
+  <path d="M 2,-72  Q 2,-32  3,0  L 12,0  Q 14,-32 13,-72Z" fill="url(#${id}sk)"/>
+  <!-- Sneakers (path-based) -->
+  <path d="M-17,-3 Q-17,-8 -8,-8 Q1,-8 2,-3 Q1,1 -8,1 Q-16,1 -17,-3Z" fill="#00B4D8"/>
+  <path d="M 17,-3 Q 17,-8  8,-8 Q-1,-8 -2,-3 Q-1,1  8,1 Q 16,1 17,-3Z" fill="#00B4D8"/>
+  <path d="M-17,-3 Q-17,-8 -8,-8 Q1,-8 2,-3" fill="none" stroke="#fff" stroke-width="1.6" opacity=".4"/>
+  <path d="M 17,-3 Q 17,-8  8,-8 Q-1,-8 -2,-3" fill="none" stroke="#fff" stroke-width="1.6" opacity=".4"/>
   <!-- Shorts -->
-  <rect x="-26" y="-82" width="52" height="16" rx="6" fill="#006090"/>
-  <!-- Sneakers -->
-  <ellipse cx="-9" cy="0" rx="13" ry="5.5" fill="#00B4D8"/>
-  <ellipse cx=" 9" cy="0" rx="13" ry="5.5" fill="#00B4D8"/>
-  <ellipse cx="-9" cy="-2" rx="9" ry="3" fill="#fff" opacity=".32"/>
-  <ellipse cx=" 9" cy="-2" rx="9" ry="3" fill="#fff" opacity=".32"/>
-  <!-- Shirt -->
-  <path d="M-26,-84 Q-30,-56 -26,-10 L26,-10 Q30,-56 26,-84Z" fill="url(#${id}sh)"/>
-  <!-- Shirt stripe -->
-  <rect x="-26" y="-70" width="52" height="5" rx="2" fill="#40E0FF" opacity=".3"/>
+  <path d="M-19,-80 Q-19,-86 -13,-86 L13,-86 Q19,-86 19,-80 L19,-60 Q19,-56 14,-56
+           L 4,-56 Q 0,-60  0,-64  Q 0,-60 -4,-56 L-14,-56 Q-19,-56 -19,-60 Z" fill="#006090"/>
+  <path d="M-19,-80 Q-19,-86 -13,-86 L13,-86 Q19,-86 19,-80" fill="none" stroke="#40C0E8" stroke-width="1.6" opacity=".4"/>
+  <!-- Neck bridges chin to collar -->
+  <path d="M-8,-126 Q0,-122 8,-126 L8,-111 Q0,-108 -8,-111 Z" fill="url(#${id}sk)"/>
+  <!-- T-shirt -->
+  <path d="M-17,-114 C-21,-101 -23,-89 -19,-78 L 19,-78 C 23,-89 21,-101 17,-114
+           C 10,-118 -10,-118 -17,-114 Z" fill="url(#${id}sh)"/>
+  <!-- Shirt stripe + fold highlight -->
+  <path d="M-18,-98 Q0,-94 18,-98" stroke="#BFF3FF" stroke-width="3.4" fill="none" opacity=".4"/>
+  <path d="M-11,-110 C-14,-100 -15,-90 -12,-80" stroke="#fff" stroke-width="2" fill="none" opacity=".18" stroke-linecap="round"/>
+  <!-- Shoulder anchors -->
+  <ellipse cx="-17" cy="-110" rx="8.5" ry="10" fill="url(#${id}sh)"/>
+  <ellipse cx=" 17" cy="-110" rx="8.5" ry="10" fill="url(#${id}sh)"/>
+  <ellipse cx="-17" cy="-113" rx="5.5" ry="5" fill="#fff" opacity=".22"/>
+  <ellipse cx=" 17" cy="-113" rx="5.5" ry="5" fill="#fff" opacity=".22"/>
   <!-- Arms -->
-  <path d="M-26,-104 Q-42,-92 -40,-72" stroke="url(#${id}sk)" stroke-width="13" fill="none" stroke-linecap="round"/>
-  <path d="M 26,-104 Q  42,-92  40,-72" stroke="url(#${id}sk)" stroke-width="13" fill="none" stroke-linecap="round"/>
-  <circle cx="-40" cy="-70" r="8" fill="#EEC898"/>
-  <circle cx=" 40" cy="-70" r="8" fill="#EEC898"/>
-  <!-- Neck -->
-  <rect x="-8" y="-132" width="16" height="16" rx="7" fill="#F8C898"/>
+  <path d="M-19,-107 Q-34,-95 -33,-76" stroke="url(#${id}sk)" stroke-width="13" fill="none" stroke-linecap="round"/>
+  <path d="M 19,-107 Q  34,-95  33,-76" stroke="url(#${id}sk)" stroke-width="13" fill="none" stroke-linecap="round"/>
+  <circle cx="-33" cy="-74" r="8" fill="#EEC898"/>
+  <circle cx=" 33" cy="-74" r="8" fill="#EEC898"/>
   <!-- Hair back (short, boy-cut) -->
   <ellipse cx="0" cy="-155" rx="34" ry="30" fill="url(#${id}hr)"/>
   <!-- Head -->
   <circle cx="0" cy="-155" r="33" fill="url(#${id}fc)"/>
   <ellipse cx="-4" cy="-170" rx="13" ry="8" fill="#fff" opacity=".17"/>
+  <ellipse cx="0" cy="-124" rx="14" ry="5" fill="#C88060" opacity=".2"/>
   <!-- Hair front (textured short hair) -->
   <path d="M-32,-155 Q-26,-180 0,-183 Q26,-180 32,-155" fill="#2E1800"/>
   <ellipse cx="0" cy="-179" rx="25" ry="8" fill="#2E1800"/>
