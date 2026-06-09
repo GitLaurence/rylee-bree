@@ -488,6 +488,10 @@ function sceneArt(scene, w, h) {
       <stop offset="0%" stop-color="#fffde0"/><stop offset="100%" stop-color="#f0d060"/>
     </radialGradient>
   </defs>
+  <!-- Night-sky wall + warm wood floor -->
+  <rect width="${s}" height="${t}" fill="#14102a"/>
+  <rect x="0" y="${t*.78}" width="${s}" height="${t*.22}" fill="#2d1a0e"/>
+  <rect x="0" y="${t*.78}" width="${s}" height="${t*.025}" fill="#4a2c14"/>
   <!-- Lamp glow on wall -->
   <ellipse cx="${s*.85}" cy="${t*.3}" rx="${s*.5}" ry="${t*.35}" fill="url(#bdLamp)"/>
   <!-- Window -->
@@ -803,9 +807,14 @@ function sceneArt(scene, w, h) {
   <polygon points="${s*.64},${t*.54} ${s*.67},${t*.49} ${s*.7},${t*.54}" fill="#FFD54F"/>
   <polygon points="${s*.76},${t*.54} ${s*.79},${t*.49} ${s*.82},${t*.54}" fill="#FFD54F"/>
   <!-- Beach umbrella -->
-  <line x1="${s*.46}" y1="${t*.54}" x2="${s*.46}" y2="${t*.82}" stroke="#795548" stroke-width="3"/>
-  <ellipse cx="${s*.46}" cy="${t*.54}" rx="${s*.12}" ry="${t*.06}" fill="#E53935" opacity=".9"/>
-  <path d="M${s*.34},${t*.54} Q${s*.46},${t*.58} ${s*.58},${t*.54}" stroke="#FFEB3B" stroke-width="2" fill="none"/>
+  <line x1="${s*.46}" y1="${t*.42}" x2="${s*.48}" y2="${t*.82}" stroke="#795548" stroke-width="3"/>
+  <!-- Dome canopy -->
+  <path d="M${s*.34},${t*.54} Q${s*.34},${t*.36} ${s*.46},${t*.34} Q${s*.58},${t*.36} ${s*.58},${t*.54} Z" fill="#E53935" opacity=".92"/>
+  <!-- Coloured stripe panels -->
+  <path d="M${s*.46},${t*.34} Q${s*.49},${t*.36} ${s*.52},${t*.42} L${s*.46},${t*.54} Z" fill="#FFEB3B" opacity=".85"/>
+  <path d="M${s*.46},${t*.34} Q${s*.43},${t*.36} ${s*.40},${t*.42} L${s*.46},${t*.54} Z" fill="#FFEB3B" opacity=".85"/>
+  <!-- Scalloped canopy edge -->
+  <path d="M${s*.34},${t*.54} Q${s*.37},${t*.57} ${s*.40},${t*.54} Q${s*.43},${t*.57} ${s*.46},${t*.54} Q${s*.49},${t*.57} ${s*.52},${t*.54} Q${s*.55},${t*.57} ${s*.58},${t*.54}" stroke="#C62828" stroke-width="2" fill="none" opacity=".9"/>
 </svg>`;
 
     case 'snow': return `
@@ -831,7 +840,7 @@ function sceneArt(scene, w, h) {
   <!-- Snow-laden pine trees -->
   <polygon points="${s*.72},${t*.28} ${s*.62},${t*.52} ${s*.82},${t*.52}" fill="#2E7D32"/>
   <polygon points="${s*.72},${t*.18} ${s*.63},${t*.38} ${s*.81},${t*.38}" fill="#388E3C"/>
-  <polygon points="${s*.72},${t*.1}"  fill="#43A047"/>
+  <polygon points="${s*.72},${t*.1} ${s*.65},${t*.26} ${s*.79},${t*.26}" fill="#43A047"/>
   <path d="M${s*.63},${t*.52} Q${s*.72},${t*.48} ${s*.81},${t*.52}" stroke="white" stroke-width="5" fill="none" opacity=".8"/>
   <path d="M${s*.64},${t*.38} Q${s*.72},${t*.34} ${s*.8},${t*.38}"  stroke="white" stroke-width="4" fill="none" opacity=".75"/>
   <rect x="${s*.7}" y="${t*.52}" width="${s*.04}" height="${t*.08}" fill="#5D4037"/>
@@ -1307,11 +1316,13 @@ function flowers(w, h) {
   const colors=['#FF80AB','#FF4081','#FFCC00','#B39DDB','#80CBC4','#FF6090'];
   return positions.map(([px,py],i)=>{
     const x=w*px, y=h*py, r=w*.024;
+    const stemBot = h*Math.min(py+0.1, 0.97);
+    const stem = `<line x1="${x.toFixed(1)}" y1="${(y+r).toFixed(1)}" x2="${x.toFixed(1)}" y2="${stemBot.toFixed(1)}" stroke="#66BB6A" stroke-width="2.5"/>`;
     const petals=Array.from({length:6},(_,j)=>{
       const a=(j/6)*Math.PI*2, ex=x+Math.cos(a)*r*1.6, ey=y+Math.sin(a)*r*1.6;
       return `<ellipse cx="${ex.toFixed(1)}" cy="${ey.toFixed(1)}" rx="${(r*.9).toFixed(1)}" ry="${(r*.5).toFixed(1)}" fill="${colors[i]}" transform="rotate(${(j/6*360).toFixed(0)},${ex.toFixed(1)},${ey.toFixed(1)})"/>`;
     }).join('');
-    return petals+`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r.toFixed(1)}" fill="#FFF176"/>`;
+    return stem+petals+`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r.toFixed(1)}" fill="#FFF176"/>`;
   }).join('');
 }
 
@@ -1325,9 +1336,11 @@ function rainbow(x, y, w, h) {
 
 function rainbowArc(cx, cy, r) {
   const colors=['#f44336','#ff9800','#ffeb3b','#4caf50','#2196f3','#9c27b0'];
+  const step = r / (colors.length + 0.5);
   return colors.map((c,i)=>{
-    const ri=r-i*10;
-    return `<path d="M${cx-ri},${cy} Q${cx},${cy-ri} ${cx+ri},${cy}" stroke="${c}" stroke-width="7" fill="none" opacity=".55"/>`;
+    const ri = r - i * step;
+    const sw = (step * 1.2).toFixed(1);
+    return `<path d="M${cx-ri},${cy} Q${cx},${cy-ri} ${cx+ri},${cy}" stroke="${c}" stroke-width="${sw}" fill="none" opacity=".6"/>`;
   }).join('');
 }
 
