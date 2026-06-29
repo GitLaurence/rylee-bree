@@ -113,6 +113,13 @@
   50%       { transform: rotate(4deg); }
 }
 
+/* ── Heart pop (favorites) ─────────────────────── */
+@keyframes heartPop {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.4); }
+  100% { transform: scale(1); }
+}
+
 /* ── prefers-reduced-motion override ───────────── */
 @media (prefers-reduced-motion: reduce) {
   .story-card,

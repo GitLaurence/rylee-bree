@@ -102,5 +102,12 @@ const SFX = (() => {
     gamesOpen() {
       [523, 784, 1047].forEach((f, i) => tone(f, 0.16, 'triangle', 0.22, i * 0.08));
     },
+
+    // Animal sound — playful bleat for animal-sounds game
+    animalSound() {
+      tone(440, 0.12, 'sawtooth', 0.15, 0);
+      tone(520, 0.15, 'sawtooth', 0.12, 0.08);
+      tone(440, 0.1, 'sawtooth', 0.1, 0.18);
+    },
   };
 })();

@@ -1457,11 +1457,30 @@ let currentFilter='all';
 let currentStory=null;
 let currentPage=0;
 let readStories=new Set(JSON.parse(localStorage.getItem('readStories')||'[]'));
+let favoriteStories=new Set(JSON.parse(localStorage.getItem('favoriteStories')||'[]'));
+let searchQuery='';
+let lastRead=JSON.parse(localStorage.getItem('lastRead')||'null');
 
 /* ── Home Screen ──────────────────────────────────── */
+function toggleFavorite(id){
+  if(favoriteStories.has(id)) favoriteStories.delete(id);
+  else favoriteStories.add(id);
+  localStorage.setItem('favoriteStories',JSON.stringify([...favoriteStories]));
+  renderHome();
+}
+
 function getFilteredStories(){
-  if(currentFilter==='all') return STORIES;
-  return STORIES.filter(s=>s.chars.includes(currentFilter));
+  let stories=STORIES;
+  if(currentFilter==='favorites') stories=stories.filter(s=>favoriteStories.has(s.id));
+  else if(currentFilter!=='all') stories=stories.filter(s=>s.chars.includes(currentFilter));
+  if(searchQuery) stories=stories.filter(s=>s.title.toLowerCase().includes(searchQuery));
+  return stories;
+}
+
+function getStoryOfDay(){
+  const today=new Date();
+  const dayIndex=(today.getFullYear()*366+today.getMonth()*31+today.getDate())%STORIES.length;
+  return STORIES[dayIndex];
 }
 
 function renderHome(){
@@ -1469,23 +1488,69 @@ function renderHome(){
   document.getElementById('story-count-label').textContent=`${filtered.length} stories`;
   const grid=document.getElementById('story-grid');
   grid.innerHTML='';
+
+  // Story of the Day (only on "All" filter with no search)
+  if(currentFilter==='all'&&(typeof searchQuery==='undefined'||!searchQuery)){
+    const sotd=getStoryOfDay();
+    const sotdCard=document.createElement('div');
+    sotdCard.className='sotd-banner';
+    sotdCard.innerHTML=`
+      <div class="sotd-art">${cardThumbSVG(sotd.scene,sotd.chars)}</div>
+      <div class="sotd-info">
+        <span class="sotd-label">Story of the Day</span>
+        <span class="sotd-title">${sotd.title}</span>
+        <span class="sotd-chars">${sotd.chars.map(c=>CHARS[c]?.label||c).join(' & ')}</span>
+      </div>`;
+    sotdCard.addEventListener('click',()=>openStory(sotd));
+    grid.appendChild(sotdCard);
+  }
+
+  // Continue Reading banner
+  if(lastRead&&(typeof searchQuery==='undefined'||!searchQuery)){
+    const contStory=STORIES.find(s=>s.id===lastRead.id);
+    if(contStory&&lastRead.page<contStory.pages.length-1){
+      const banner=document.createElement('div');
+      banner.className='continue-banner';
+      banner.innerHTML=`
+        <div class="continue-info">
+          <span class="continue-label">Continue Reading</span>
+          <span class="continue-title">${contStory.title}</span>
+          <span class="continue-page">Page ${lastRead.page+1} of ${contStory.pages.length}</span>
+        </div>
+        <button class="continue-btn">Resume</button>`;
+      banner.querySelector('.continue-btn').addEventListener('click',()=>{
+        openStory(contStory,lastRead.page);
+      });
+      grid.appendChild(banner);
+    }
+  }
+
   filtered.forEach((story,idx)=>{
     const card=document.createElement('div');
     card.className='story-card';
     card.style.setProperty('--card-i',idx);
     const isRead=readStories.has(story.id);
+    const isFav=favoriteStories.has(story.id);
     const hasVideo = typeof hasStoryVideo==='function' && hasStoryVideo(story.id);
     card.innerHTML=`
       <div class="card-art">${cardThumbSVG(story.scene,story.chars)}</div>
       <div class="card-body">
         ${isRead?'<span class="read-badge">⭐</span>':''}
         ${hasVideo?'<button class="watch-badge" aria-label="Watch the animated video for '+story.title+'">🎬 Watch</button>':''}
+        <button class="fav-btn${isFav?' fav-active':''}" data-id="${story.id}" aria-label="Favorite">${isFav?'❤️':'🤍'}</button>
         <div class="card-title">${story.title}</div>
         <div class="card-chars">
           ${story.chars.map(c=>`<span class="char-dot" style="background:${CHARS[c]?.color||'#ccc'}" title="${CHARS[c]?.label||c}"></span>`).join('')}
         </div>
       </div>`;
     card.addEventListener('click',()=>openStory(story));
+    const favBtn=card.querySelector('.fav-btn');
+    if(favBtn){
+      favBtn.addEventListener('click',e=>{
+        e.stopPropagation();
+        toggleFavorite(story.id);
+      });
+    }
     if(hasVideo){
       const watchBtn=card.querySelector('.watch-badge');
       watchBtn.addEventListener('click',e=>{ e.stopPropagation(); openStoryVideo(story); });
@@ -1542,8 +1607,8 @@ function ttsToggle() {
 }
 
 /* ── Reader ───────────────────────────────────────── */
-function openStory(story){
-  currentStory=story; currentPage=0;
+function openStory(story,startPage){
+  currentStory=story; currentPage=startPage||0;
   if(typeof SFX !== 'undefined') SFX.open();
   const reader=document.getElementById('reader');
   reader.classList.remove('hidden','closing');
@@ -1620,9 +1685,13 @@ function renderPage(animate,direction='right'){
 
   document.getElementById('prev-btn').disabled=currentPage===0;
   document.getElementById('next-btn').disabled=currentPage===currentStory.pages.length-1;
+  lastRead={id:currentStory.id,page:currentPage};
+  localStorage.setItem('lastRead',JSON.stringify(lastRead));
   if(currentPage===currentStory.pages.length-1){
     readStories.add(currentStory.id);
     localStorage.setItem('readStories',JSON.stringify([...readStories]));
+    lastRead=null;
+    localStorage.removeItem('lastRead');
   }
 }
 
@@ -1681,6 +1750,15 @@ document.getElementById('random-btn').addEventListener('click',()=>{
   const pool=getFilteredStories();
   openStory(pool[Math.floor(Math.random()*pool.length)]);
 });
+
+/* ── Search ───────────────────────────────────────── */
+const searchInput=document.getElementById('search-input');
+if(searchInput){
+  searchInput.addEventListener('input',e=>{
+    searchQuery=e.target.value.toLowerCase().trim();
+    renderHome();
+  });
+}
 
 /* ── Init ─────────────────────────────────────────── */
 renderStars();

@@ -1,9 +1,10 @@
 /* ══════════════════════════════════════════════════
    Toddler Games — Rylee & Bree Bedtime Stories
-   Three mini-games for ages 1-3:
-   1. Color Pop  — tap the matching color bubble
-   2. Star Count — count 1-3 stars and tap the number
-   3. Find Friend — tap the right character face
+   Four mini-games for ages 1-3:
+   1. Color Pop     — tap the matching color bubble
+   2. Star Count    — count 1-3 stars and tap the number
+   3. Find Friend   — tap the right character face
+   4. Animal Sounds — match the sound to the animal
    ══════════════════════════════════════════════════ */
 
 /* ── Constants ──────────────────────────────────── */
@@ -22,6 +23,17 @@ const FRIENDS = [
   { id: 'brielle', name: 'Bree',     color: '#FF3E9D', emoji: '🩷' },
   { id: 'mary-joy',name: 'Mary Joy', color: '#FF6B35', emoji: '🌸' },
   { id: 'astley',  name: 'Astley',   color: '#00B4D8', emoji: '💙' },
+];
+
+const ANIMALS = [
+  { name: 'Cat',   emoji: '🐱', sound: 'Meow!',   color: '#FF9800' },
+  { name: 'Dog',   emoji: '🐶', sound: 'Woof!',   color: '#8D6E63' },
+  { name: 'Cow',   emoji: '🐮', sound: 'Moo!',    color: '#795548' },
+  { name: 'Duck',  emoji: '🦆', sound: 'Quack!',  color: '#FDD835' },
+  { name: 'Pig',   emoji: '🐷', sound: 'Oink!',   color: '#F48FB1' },
+  { name: 'Sheep', emoji: '🐑', sound: 'Baa!',    color: '#B0BEC5' },
+  { name: 'Frog',  emoji: '🐸', sound: 'Ribbit!', color: '#66BB6A' },
+  { name: 'Lion',  emoji: '🦁', sound: 'Roar!',   color: '#FF8F00' },
 ];
 
 const CHEERS = ['Yay! 🎉', 'Great job! ⭐', 'Woohoo! 🎊', 'Amazing! 🌟', 'So smart! 💕', 'You did it! 🎈'];
@@ -119,6 +131,10 @@ function renderGameMenu() {
         <span class="game-menu-icon">👧</span>
         <span class="game-menu-name">Friends!</span>
       </button>
+      <button class="game-menu-btn" data-game="animal-sounds" style="--gc:#66BB6A">
+        <span class="game-menu-icon">🐾</span>
+        <span class="game-menu-name">Animals!</span>
+      </button>
     </div>
   `;
   content.querySelectorAll('.game-menu-btn').forEach(btn => {
@@ -145,7 +161,8 @@ function nextRound() {
   switch (gameState.current) {
     case 'color-pop':   renderColorPop();   break;
     case 'star-count':  renderStarCount();  break;
-    case 'find-friend': renderFindFriend(); break;
+    case 'find-friend':   renderFindFriend();   break;
+    case 'animal-sounds': renderAnimalSounds(); break;
   }
 }
 
@@ -281,6 +298,43 @@ function renderFindFriend() {
       if (gameState.answering) return;
       gameState.answering = true;
       const correct = btn.dataset.friend === gameState.target;
+      if (correct) { gameState.score++; celebrateEffect(btn); }
+      showFeedback(correct, content);
+      setTimeout(nextRound, 1100);
+    });
+  });
+}
+
+/* ── Game 4: Animal Sounds ─────────────────────── */
+function renderAnimalSounds() {
+  const target = pick(ANIMALS);
+  gameState.target = target.name;
+  const choices = shuffle([target, ...shuffle(ANIMALS.filter(a => a.name !== target.name)).slice(0, 3)]);
+
+  const content = document.getElementById('games-content');
+  content.innerHTML = `
+    <div class="game-round-bar">
+      <span class="game-round">Round ${gameState.round}/${gameState.maxRounds}</span>
+      <span class="game-score">⭐ ${gameState.score}</span>
+    </div>
+    <h2 class="game-prompt">Who says <strong>"${target.sound}"</strong>?</h2>
+    <div class="animal-grid" id="animal-grid">
+      ${choices.map(a => `
+        <button class="animal-btn" data-animal="${a.name}"
+          style="--acolor:${a.color}; border-color:${a.color};">
+          <span class="animal-emoji">${a.emoji}</span>
+          <span class="animal-name">${a.name}</span>
+        </button>
+      `).join('')}
+    </div>
+    <div class="game-feedback" id="game-feedback"></div>
+  `;
+
+  content.querySelectorAll('.animal-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (gameState.answering) return;
+      gameState.answering = true;
+      const correct = btn.dataset.animal === gameState.target;
       if (correct) { gameState.score++; celebrateEffect(btn); }
       showFeedback(correct, content);
       setTimeout(nextRound, 1100);
