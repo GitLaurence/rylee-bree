@@ -336,6 +336,27 @@ body {
   line-height: 1;
 }
 
+/* Card bottom row: char dots + favourite button */
+.card-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0;
+}
+
+.fav-btn {
+  background: none;
+  border: none;
+  font-size: 1.05rem;
+  cursor: pointer;
+  padding: 2px 0 0;
+  line-height: 1;
+  flex-shrink: 0;
+  transition: transform var(--dur-fast) var(--ease-bounce);
+}
+.fav-btn:hover  { transform: scale(1.35); }
+.fav-btn:active { transform: scale(.75); }
+
 .watch-badge {
   position: absolute;
   top: 9px;
@@ -359,6 +380,82 @@ body {
 }
 .watch-badge:hover  { background: rgba(139,68,240,.8); transform: scale(1.06); }
 .watch-badge:active { transform: scale(.94); }
+
+/* ── Reading Progress Bar ───────────────────────── */
+.reading-progress {
+  width: 100%;
+  max-width: 860px;
+  padding: 0 20px 14px;
+}
+
+.progress-track {
+  height: 5px;
+  background: rgba(255,255,255,.1);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 5px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #8B44F0 0%, #FF3E9D 100%);
+  border-radius: 999px;
+  width: 0%;
+  transition: width .6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.progress-label {
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.73rem;
+  color: rgba(255,255,255,.36);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Empty state for Favourites filter */
+.empty-favourites {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 56px 20px;
+}
+.empty-favourites p {
+  font-family: 'Nunito', sans-serif;
+  font-size: 1rem;
+  color: rgba(255,255,255,.52);
+  line-height: 1.6;
+  max-width: 280px;
+  margin: 0 auto;
+}
+
+/* ── Story-completion toast ─────────────────────── */
+.story-complete-toast {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #8B44F0, #FF3E9D);
+  color: #fff;
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  padding: 13px 26px;
+  border-radius: var(--radius-btn);
+  box-shadow: 0 8px 28px rgba(139,68,240,.5);
+  z-index: 500;
+  pointer-events: none;
+  white-space: nowrap;
+  animation: toastIn .4s var(--ease-bounce) both;
+}
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(18px) scale(.9); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+}
+@keyframes toastOut {
+  from { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+  to   { opacity: 0; transform: translateX(-50%) translateY(-10px) scale(.94); }
+}
+.story-complete-toast.hiding { animation: toastOut .28s ease both; }
 
 /* ── READER OVERLAY ─────────────────────────────── */
 .reader {
@@ -1017,6 +1114,13 @@ body {
   pointer-events: none;
 }
 
+/* ── Shapes bubble (extends .color-bubble) ──────── */
+.shape-bubble {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* ── Game 2: Star Count ──────────────────────────── */
 .star-display {
   display: flex;
@@ -1628,6 +1732,10 @@ body {
 
   .star-dot { background: #8B44F0; }
   .home-stars .star-dot { background: rgba(100,50,200,.4); }
+
+  .progress-track  { background: rgba(0,0,0,.08); }
+  .progress-label  { color: rgba(45,26,74,.38); }
+  .empty-favourites p { color: rgba(45,26,74,.5); }
 
   .games-close-btn {
     background: rgba(0,0,0,.07);

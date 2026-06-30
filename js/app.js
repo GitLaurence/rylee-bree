@@ -1457,23 +1457,68 @@ let currentFilter='all';
 let currentStory=null;
 let currentPage=0;
 let readStories=new Set(JSON.parse(localStorage.getItem('readStories')||'[]'));
+let favouriteStories=new Set(JSON.parse(localStorage.getItem('favouriteStories')||'[]'));
+
+/* ── Favourites ───────────────────────────────────── */
+function toggleFavourite(storyId, e) {
+  e && e.stopPropagation();
+  if (favouriteStories.has(storyId)) {
+    favouriteStories.delete(storyId);
+  } else {
+    favouriteStories.add(storyId);
+  }
+  localStorage.setItem('favouriteStories', JSON.stringify([...favouriteStories]));
+  renderHome();
+}
 
 /* ── Home Screen ──────────────────────────────────── */
 function getFilteredStories(){
   if(currentFilter==='all') return STORIES;
+  if(currentFilter==='favorites') return STORIES.filter(s=>favouriteStories.has(s.id));
   return STORIES.filter(s=>s.chars.includes(currentFilter));
+}
+
+function renderProgress() {
+  const fill  = document.getElementById('progress-fill');
+  const label = document.getElementById('progress-label');
+  if (!fill || !label) return;
+  const total = STORIES.length;
+  const done  = readStories.size;
+  fill.style.width = total > 0 ? (done / total * 100).toFixed(1) + '%' : '0%';
+  label.textContent = `${done} of ${total} stories read`;
+}
+
+function showCompletionToast() {
+  const existing = document.querySelector('.story-complete-toast');
+  if (existing) existing.remove();
+  const toast = document.createElement('div');
+  toast.className = 'story-complete-toast';
+  toast.textContent = '🎉 Story complete!';
+  document.body.appendChild(toast);
+  setTimeout(() => {
+    toast.classList.add('hiding');
+    toast.addEventListener('animationend', () => toast.remove(), { once: true });
+  }, 2200);
 }
 
 function renderHome(){
   const filtered=getFilteredStories();
-  document.getElementById('story-count-label').textContent=`${filtered.length} stories`;
+  document.getElementById('story-count-label').textContent=`${filtered.length} ${filtered.length===1?'story':'stories'}`;
+  renderProgress();
   const grid=document.getElementById('story-grid');
   grid.innerHTML='';
+
+  if(filtered.length===0 && currentFilter==='favorites'){
+    grid.innerHTML=`<div class="empty-favourites"><div style="font-size:3rem;margin-bottom:12px">❤️</div><p>Tap the ❤️ on any story to save your favourites here!</p></div>`;
+    return;
+  }
+
   filtered.forEach((story,idx)=>{
     const card=document.createElement('div');
     card.className='story-card';
     card.style.setProperty('--card-i',idx);
     const isRead=readStories.has(story.id);
+    const isFav=favouriteStories.has(story.id);
     const hasVideo = typeof hasStoryVideo==='function' && hasStoryVideo(story.id);
     card.innerHTML=`
       <div class="card-art">${cardThumbSVG(story.scene,story.chars)}</div>
@@ -1481,8 +1526,11 @@ function renderHome(){
         ${isRead?'<span class="read-badge">⭐</span>':''}
         ${hasVideo?'<button class="watch-badge" aria-label="Watch the animated video for '+story.title+'">🎬 Watch</button>':''}
         <div class="card-title">${story.title}</div>
-        <div class="card-chars">
-          ${story.chars.map(c=>`<span class="char-dot" style="background:${CHARS[c]?.color||'#ccc'}" title="${CHARS[c]?.label||c}"></span>`).join('')}
+        <div class="card-bottom">
+          <div class="card-chars">
+            ${story.chars.map(c=>`<span class="char-dot" style="background:${CHARS[c]?.color||'#ccc'}" title="${CHARS[c]?.label||c}"></span>`).join('')}
+          </div>
+          <button class="fav-btn" aria-label="${isFav?'Remove from favourites':'Add to favourites'}" data-id="${story.id}">${isFav?'❤️':'🤍'}</button>
         </div>
       </div>`;
     card.addEventListener('click',()=>openStory(story));
@@ -1490,6 +1538,7 @@ function renderHome(){
       const watchBtn=card.querySelector('.watch-badge');
       watchBtn.addEventListener('click',e=>{ e.stopPropagation(); openStoryVideo(story); });
     }
+    card.querySelector('.fav-btn').addEventListener('click',e=>toggleFavourite(story.id,e));
     grid.appendChild(card);
   });
 }
@@ -1621,8 +1670,10 @@ function renderPage(animate,direction='right'){
   document.getElementById('prev-btn').disabled=currentPage===0;
   document.getElementById('next-btn').disabled=currentPage===currentStory.pages.length-1;
   if(currentPage===currentStory.pages.length-1){
+    const alreadyRead = readStories.has(currentStory.id);
     readStories.add(currentStory.id);
     localStorage.setItem('readStories',JSON.stringify([...readStories]));
+    if(!alreadyRead) showCompletionToast();
   }
 }
 
@@ -1685,3 +1736,4 @@ document.getElementById('random-btn').addEventListener('click',()=>{
 /* ── Init ─────────────────────────────────────────── */
 renderStars();
 renderHome();
+renderProgress();

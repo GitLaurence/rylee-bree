@@ -7,6 +7,14 @@
    ══════════════════════════════════════════════════ */
 
 /* ── Constants ──────────────────────────────────── */
+const GAME_SHAPES = [
+  { name: 'Circle',   color: '#FF4757', svg: '<circle cx="40" cy="40" r="34" fill="white" opacity=".92"/>' },
+  { name: 'Square',   color: '#FFD700', svg: '<rect x="8" y="8" width="64" height="64" rx="10" fill="white" opacity=".92"/>' },
+  { name: 'Triangle', color: '#4CAF50', svg: '<polygon points="40,8 72,72 8,72" fill="white" opacity=".92"/>' },
+  { name: 'Star',     color: '#8B44F0', svg: '<polygon points="40,4 47,29 75,29 53,46 61,72 40,54 19,72 27,46 5,29 33,29" fill="white" opacity=".92"/>' },
+  { name: 'Heart',    color: '#FF3E9D', svg: '<path d="M40,68 C40,68 8,48 8,26 A16,16 0 0,1 40,20 A16,16 0 0,1 72,26 C72,48 40,68 40,68Z" fill="white" opacity=".92"/>' },
+];
+
 const GAME_COLORS = [
   { name: 'Red',    value: '#FF4757', emoji: '❤️' },
   { name: 'Yellow', value: '#FFD700', emoji: '⭐' },
@@ -119,6 +127,10 @@ function renderGameMenu() {
         <span class="game-menu-icon">👧</span>
         <span class="game-menu-name">Friends!</span>
       </button>
+      <button class="game-menu-btn" data-game="shape-match" style="--gc:#FF3E9D">
+        <span class="game-menu-icon">🔷</span>
+        <span class="game-menu-name">Shapes!</span>
+      </button>
     </div>
   `;
   content.querySelectorAll('.game-menu-btn').forEach(btn => {
@@ -146,6 +158,7 @@ function nextRound() {
     case 'color-pop':   renderColorPop();   break;
     case 'star-count':  renderStarCount();  break;
     case 'find-friend': renderFindFriend(); break;
+    case 'shape-match': renderShapeMatch(); break;
   }
 }
 
@@ -281,6 +294,42 @@ function renderFindFriend() {
       if (gameState.answering) return;
       gameState.answering = true;
       const correct = btn.dataset.friend === gameState.target;
+      if (correct) { gameState.score++; celebrateEffect(btn); }
+      showFeedback(correct, content);
+      setTimeout(nextRound, 1100);
+    });
+  });
+}
+
+/* ── Game 4: Shape Match ─────────────────────────── */
+function renderShapeMatch() {
+  const target  = pick(GAME_SHAPES);
+  gameState.target = target.name;
+  const choices = shuffle([target, ...shuffle(GAME_SHAPES.filter(s => s.name !== target.name)).slice(0, 3)]);
+
+  const content = document.getElementById('games-content');
+  content.innerHTML = `
+    <div class="game-round-bar">
+      <span class="game-round">Round ${gameState.round}/${gameState.maxRounds}</span>
+      <span class="game-score">⭐ ${gameState.score}</span>
+    </div>
+    <h2 class="game-prompt">Tap the <strong style="color:${target.color}">${target.name}</strong>!</h2>
+    <div class="color-pop-grid" id="shape-grid">
+      ${choices.map(s => `
+        <button class="color-bubble shape-bubble" data-shape="${s.name}"
+          style="background:${s.color}; box-shadow: inset -3px -4px 10px rgba(0,0,0,.2), 0 8px 20px ${s.color}88;">
+          <svg viewBox="0 0 80 80" width="62" height="62" aria-hidden="true">${s.svg}</svg>
+        </button>
+      `).join('')}
+    </div>
+    <div class="game-feedback" id="game-feedback"></div>
+  `;
+
+  content.querySelectorAll('.shape-bubble').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (gameState.answering) return;
+      gameState.answering = true;
+      const correct = btn.dataset.shape === gameState.target;
       if (correct) { gameState.score++; celebrateEffect(btn); }
       showFeedback(correct, content);
       setTimeout(nextRound, 1100);
