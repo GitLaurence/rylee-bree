@@ -1457,16 +1457,35 @@ let currentFilter='all';
 let currentStory=null;
 let currentPage=0;
 let readStories=new Set(JSON.parse(localStorage.getItem('readStories')||'[]'));
+let favoriteStories=new Set(JSON.parse(localStorage.getItem('favoriteStories')||'[]'));
+let searchQuery='';
 
 /* ── Home Screen ──────────────────────────────────── */
 function getFilteredStories(){
-  if(currentFilter==='all') return STORIES;
-  return STORIES.filter(s=>s.chars.includes(currentFilter));
+  let stories=STORIES;
+  if(currentFilter==='favorites') stories=stories.filter(s=>favoriteStories.has(s.id));
+  else if(currentFilter!=='all') stories=stories.filter(s=>s.chars.includes(currentFilter));
+  if(searchQuery){
+    const q=searchQuery.toLowerCase();
+    stories=stories.filter(s=>s.title.toLowerCase().includes(q));
+  }
+  return stories;
+}
+
+function toggleFavorite(storyId,e){
+  e.stopPropagation();
+  if(favoriteStories.has(storyId)) favoriteStories.delete(storyId);
+  else favoriteStories.add(storyId);
+  localStorage.setItem('favoriteStories',JSON.stringify([...favoriteStories]));
+  renderHome();
 }
 
 function renderHome(){
   const filtered=getFilteredStories();
-  document.getElementById('story-count-label').textContent=`${filtered.length} stories`;
+  const readCount=readStories.size;
+  const progress=readCount>0?` · ⭐ ${readCount}/${STORIES.length}`:'';
+  document.getElementById('story-count-label').textContent=
+    `${filtered.length} ${filtered.length===1?'story':'stories'}${progress}`;
   const grid=document.getElementById('story-grid');
   grid.innerHTML='';
   filtered.forEach((story,idx)=>{
@@ -1474,6 +1493,7 @@ function renderHome(){
     card.className='story-card';
     card.style.setProperty('--card-i',idx);
     const isRead=readStories.has(story.id);
+    const isFav=favoriteStories.has(story.id);
     const hasVideo = typeof hasStoryVideo==='function' && hasStoryVideo(story.id);
     card.innerHTML=`
       <div class="card-art">${cardThumbSVG(story.scene,story.chars)}</div>
@@ -1481,11 +1501,15 @@ function renderHome(){
         ${isRead?'<span class="read-badge">⭐</span>':''}
         ${hasVideo?'<button class="watch-badge" aria-label="Watch the animated video for '+story.title+'">🎬 Watch</button>':''}
         <div class="card-title">${story.title}</div>
-        <div class="card-chars">
-          ${story.chars.map(c=>`<span class="char-dot" style="background:${CHARS[c]?.color||'#ccc'}" title="${CHARS[c]?.label||c}"></span>`).join('')}
+        <div class="card-footer">
+          <div class="card-chars">
+            ${story.chars.map(c=>`<span class="char-dot" style="background:${CHARS[c]?.color||'#ccc'}" title="${CHARS[c]?.label||c}"></span>`).join('')}
+          </div>
+          <button class="fav-btn${isFav?' fav-active':''}" aria-label="${isFav?'Remove from':'Add to'} favorites" aria-pressed="${isFav}" data-id="${story.id}">♥</button>
         </div>
       </div>`;
     card.addEventListener('click',()=>openStory(story));
+    card.querySelector('.fav-btn').addEventListener('click',e=>toggleFavorite(story.id,e));
     if(hasVideo){
       const watchBtn=card.querySelector('.watch-badge');
       watchBtn.addEventListener('click',e=>{ e.stopPropagation(); openStoryVideo(story); });
@@ -1681,6 +1705,14 @@ document.getElementById('random-btn').addEventListener('click',()=>{
   const pool=getFilteredStories();
   openStory(pool[Math.floor(Math.random()*pool.length)]);
 });
+
+const _searchInput=document.getElementById('story-search');
+if(_searchInput){
+  _searchInput.addEventListener('input',()=>{
+    searchQuery=_searchInput.value.trim();
+    renderHome();
+  });
+}
 
 /* ── Init ─────────────────────────────────────────── */
 renderStars();
