@@ -1412,7 +1412,7 @@ function thumbScene(scene, seed) {
       return Array.from({length:14},()=>`<circle cx="${(rng()*120).toFixed(0)}" cy="${(rng()*70).toFixed(0)}" r="${(.5+rng()*2.2).toFixed(1)}" fill="#fff" opacity="${(.3+rng()*.7).toFixed(2)}"/>`).join('')
         +`<circle cx="88" cy="18" r="16" fill="#fff7c2" opacity=".9"/><circle cx="94" cy="14" r="14" fill="${scene==='dream'?'#0a0020':'#080f30'}"/><circle cx="88" cy="18" r="24" fill="rgba(255,255,200,.1)"/>`;
     case 'bedroom':
-      return `<rect x="20" y="58" width="80" height="42" rx="8" fill="#9b59b6"/><rect x="20" y="56" width="80" height="9" rx="5" fill="#7d3c98"/><rect x="24" y="60" width="30" height="14" rx="5" fill="#f8c8e0"/><rect x="66" y="60" width="30" height="14" rx="5" fill="#d4a0f0"/><rect x="20" y="68" width="80" height="32" rx="0 0 8 8" fill="#e8b4f8"/>`;
+      return `<rect x="20" y="58" width="80" height="42" rx="8" fill="#9b59b6"/><rect x="20" y="56" width="80" height="9" rx="5" fill="#7d3c98"/><rect x="24" y="60" width="30" height="14" rx="5" fill="#f8c8e0"/><rect x="66" y="60" width="30" height="14" rx="5" fill="#d4a0f0"/><rect x="20" y="68" width="80" height="32" rx="8" fill="#e8b4f8"/>`;
     case 'garden':
       return `<rect x="0" y="54" width="120" height="66" fill="#5CB85C"/><ellipse cx="60" cy="54" rx="70" ry="10" fill="#388E3C"/><circle cx="96" cy="14" r="13" fill="#FFF176"/>${sunRays(96,14,13,22,8)}<ellipse cx="20" cy="20" rx="15" ry="8" fill="white" opacity=".85"/>`;
     case 'kitchen':
@@ -1453,11 +1453,19 @@ function thumbChars(chars, seed) {
 }
 
 /* ── State ────────────────────────────────────────── */
+function readStorageSet(key) {
+  try { return new Set(JSON.parse(localStorage.getItem(key) || '[]')); }
+  catch { return new Set(); }
+}
+function writeStorageSet(key, set) {
+  try { localStorage.setItem(key, JSON.stringify([...set])); } catch {}
+}
+
 let currentFilter='all';
 let currentStory=null;
 let currentPage=0;
-let readStories=new Set(JSON.parse(localStorage.getItem('readStories')||'[]'));
-let favouriteStories=new Set(JSON.parse(localStorage.getItem('favouriteStories')||'[]'));
+let readStories=readStorageSet('readStories');
+let favouriteStories=readStorageSet('favouriteStories');
 
 /* ── Favourites ───────────────────────────────────── */
 function toggleFavourite(storyId, e) {
@@ -1467,7 +1475,7 @@ function toggleFavourite(storyId, e) {
   } else {
     favouriteStories.add(storyId);
   }
-  localStorage.setItem('favouriteStories', JSON.stringify([...favouriteStories]));
+  writeStorageSet('favouriteStories', favouriteStories);
   renderHome();
 }
 
@@ -1672,7 +1680,7 @@ function renderPage(animate,direction='right'){
   if(currentPage===currentStory.pages.length-1){
     const alreadyRead = readStories.has(currentStory.id);
     readStories.add(currentStory.id);
-    localStorage.setItem('readStories',JSON.stringify([...readStories]));
+    writeStorageSet('readStories', readStories);
     if(!alreadyRead) showCompletionToast();
   }
 }

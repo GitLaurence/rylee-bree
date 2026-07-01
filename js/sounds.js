@@ -5,7 +5,8 @@
 
 const SFX = (() => {
   let ctx = null;
-  let muted = JSON.parse(localStorage.getItem('sfx-muted') || 'false');
+  let muted = false;
+  try { muted = JSON.parse(localStorage.getItem('sfx-muted') || 'false'); } catch {}
 
   function getCtx() {
     if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -55,7 +56,7 @@ const SFX = (() => {
 
     toggleMute() {
       muted = !muted;
-      localStorage.setItem('sfx-muted', JSON.stringify(muted));
+      try { localStorage.setItem('sfx-muted', JSON.stringify(muted)); } catch {}
       return muted;
     },
 

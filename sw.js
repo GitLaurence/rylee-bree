@@ -2,15 +2,17 @@
    Service Worker — Cache-first offline support
    ══════════════════════════════════════════════════ */
 
-const CACHE = 'bedtime-v2';
+const CACHE = 'bedtime-v3';
 const PRECACHE = [
   './',
   './index.html',
+  './manifest.json',
   './css/styles.css',
   './css/animations.css',
+  './js/sounds.js',
+  './js/storyVideo.js',
   './js/app.js',
   './js/games.js',
-  './js/sounds.js',
   './js/timer.js',
   './data/stories.js',
   'https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap',

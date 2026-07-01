@@ -10,7 +10,7 @@ const TIMER = (() => {
 
   /* ── Persist across page reloads ────────────────── */
   function save() {
-    localStorage.setItem('timer-state', JSON.stringify({ remaining, state, savedAt: Date.now() }));
+    try { localStorage.setItem('timer-state', JSON.stringify({ remaining, state, savedAt: Date.now() })); } catch {}
   }
 
   function restore() {
@@ -107,7 +107,7 @@ const TIMER = (() => {
       clearInterval(interval);
       remaining = 0;
       state     = 'idle';
-      localStorage.removeItem('timer-state');
+      try { localStorage.removeItem('timer-state'); } catch {}
       _render();
     },
 
