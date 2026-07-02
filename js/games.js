@@ -197,7 +197,7 @@ function renderColorPop() {
     <h2 class="game-prompt">Tap the <strong style="color:${target.value}">${target.name}</strong> bubble!</h2>
     <div class="color-pop-grid" id="color-pop-grid">
       ${choices.map(c => `
-        <button class="color-bubble" data-color="${c.value}"
+        <button class="color-bubble" data-color="${c.value}" aria-label="${c.name}"
           style="background:${c.value}; box-shadow: inset -3px -4px 10px rgba(0,0,0,.2), 0 8px 20px ${c.value}88;">
           <span class="color-bubble-shine"></span>
         </button>
@@ -316,7 +316,7 @@ function renderShapeMatch() {
     <h2 class="game-prompt">Tap the <strong style="color:${target.color}">${target.name}</strong>!</h2>
     <div class="color-pop-grid" id="shape-grid">
       ${choices.map(s => `
-        <button class="color-bubble shape-bubble" data-shape="${s.name}"
+        <button class="color-bubble shape-bubble" data-shape="${s.name}" aria-label="${s.name}"
           style="background:${s.color}; box-shadow: inset -3px -4px 10px rgba(0,0,0,.2), 0 8px 20px ${s.color}88;">
           <svg viewBox="0 0 80 80" width="62" height="62" aria-hidden="true">${s.svg}</svg>
         </button>
