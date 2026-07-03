@@ -1476,7 +1476,17 @@ function toggleFavourite(storyId, e) {
     favouriteStories.add(storyId);
   }
   writeStorageSet('favouriteStories', favouriteStories);
-  renderHome();
+  if (currentFilter === 'favorites') {
+    // Card membership in this filtered grid just changed — needs a full rebuild.
+    renderHome();
+    return;
+  }
+  const btn = document.querySelector(`.fav-btn[data-id="${storyId}"]`);
+  if (btn) {
+    const isFav = favouriteStories.has(storyId);
+    btn.textContent = isFav ? '❤️' : '🤍';
+    btn.setAttribute('aria-label', isFav ? 'Remove from favourites' : 'Add to favourites');
+  }
 }
 
 /* ── Home Screen ──────────────────────────────────── */
@@ -1565,6 +1575,20 @@ function renderStars(){
 
 /* ── Text-to-Speech ───────────────────────────────── */
 let ttsEnabled = false;
+let _gentleVoice = null;
+
+function _pickGentleVoice(voices) {
+  return voices.find(v => /female|girl|samantha|karen|moira|tessa|victoria|fiona/i.test(v.name)) || null;
+}
+
+if ('speechSynthesis' in window) {
+  // Most browsers load voices asynchronously — getVoices() returns [] until
+  // this fires once, so an immediate lookup on first read-aloud usually misses.
+  _gentleVoice = _pickGentleVoice(window.speechSynthesis.getVoices());
+  window.speechSynthesis.addEventListener('voiceschanged', () => {
+    _gentleVoice = _pickGentleVoice(window.speechSynthesis.getVoices());
+  });
+}
 
 function ttsSpeak(text) {
   if (!ttsEnabled || !('speechSynthesis' in window)) return;
@@ -1573,10 +1597,7 @@ function ttsSpeak(text) {
   utter.rate  = 0.82;
   utter.pitch = 1.1;
   utter.volume = 1;
-  // prefer a gentle female voice if available
-  const voices = window.speechSynthesis.getVoices();
-  const gentle = voices.find(v => /female|girl|samantha|karen|moira|tessa|victoria|fiona/i.test(v.name));
-  if (gentle) utter.voice = gentle;
+  if (_gentleVoice) utter.voice = _gentleVoice;
   window.speechSynthesis.speak(utter);
 }
 
@@ -1599,9 +1620,13 @@ function ttsToggle() {
 }
 
 /* ── Reader ───────────────────────────────────────── */
+let _readerTrigger=null;
+
 function openStory(story){
+  if(!story) return;
   currentStory=story; currentPage=0;
   if(typeof SFX !== 'undefined') SFX.open();
+  _readerTrigger=document.activeElement;
   const reader=document.getElementById('reader');
   reader.classList.remove('hidden','closing');
   reader.classList.add('opening');
@@ -1624,6 +1649,7 @@ function closeReader(){
     reader.classList.remove('closing');
     document.getElementById('home-screen').style.display='';
     renderHome();
+    if(_readerTrigger){ _readerTrigger.focus(); _readerTrigger=null; }
   },220);
 }
 
@@ -1738,6 +1764,7 @@ document.querySelectorAll('.filter-btn').forEach(btn=>{
 
 document.getElementById('random-btn').addEventListener('click',()=>{
   const pool=getFilteredStories();
+  if(!pool.length) return;
   openStory(pool[Math.floor(Math.random()*pool.length)]);
 });
 

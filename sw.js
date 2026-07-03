@@ -2,7 +2,7 @@
    Service Worker — Cache-first offline support
    ══════════════════════════════════════════════════ */
 
-const CACHE = 'bedtime-v3';
+const CACHE = 'bedtime-v4';
 const PRECACHE = [
   './',
   './index.html',
@@ -15,12 +15,21 @@ const PRECACHE = [
   './js/games.js',
   './js/timer.js',
   './data/stories.js',
+];
+const PRECACHE_OPTIONAL = [
   'https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap',
 ];
 
 self.addEventListener('install', e => {
   e.waitUntil(
-    caches.open(CACHE).then(c => c.addAll(PRECACHE)).then(() => self.skipWaiting())
+    caches.open(CACHE).then(async c => {
+      // A single failed request (blocked, offline, transient) makes addAll()
+      // reject and abort caching the whole app shell — so the same-origin
+      // shell files are cached as a unit...
+      await c.addAll(PRECACHE);
+      // ...and the cross-origin font CSS is best-effort on top of that.
+      await Promise.all(PRECACHE_OPTIONAL.map(url => c.add(url).catch(() => {})));
+    }).then(() => self.skipWaiting())
   );
 });
 
