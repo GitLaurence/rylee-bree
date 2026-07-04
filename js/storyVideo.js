@@ -27,8 +27,15 @@ function openStoryVideo(story) {
   const overlay = document.getElementById('video-overlay');
   const player  = document.getElementById('video-player');
   const title   = document.getElementById('video-title');
+  const errorEl = document.getElementById('video-error');
 
   title.textContent = `🎬 ${story.title}`;
+  if (errorEl) errorEl.classList.add('hidden');
+  player.classList.remove('hidden');
+  player.onerror = () => {
+    player.classList.add('hidden');
+    if (errorEl) errorEl.classList.remove('hidden');
+  };
   // Lazy: only point the <video> at its file once the overlay is opened.
   if (player.getAttribute('src') !== src) {
     player.setAttribute('src', src);

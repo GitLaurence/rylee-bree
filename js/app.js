@@ -1534,6 +1534,9 @@ function renderHome(){
   filtered.forEach((story,idx)=>{
     const card=document.createElement('div');
     card.className='story-card';
+    card.setAttribute('tabindex','0');
+    card.setAttribute('role','button');
+    card.setAttribute('aria-label',`Open story: ${story.title}`);
     card.style.setProperty('--card-i',idx);
     const isRead=readStories.has(story.id);
     const isFav=favouriteStories.has(story.id);
@@ -1552,6 +1555,9 @@ function renderHome(){
         </div>
       </div>`;
     card.addEventListener('click',()=>openStory(story));
+    card.addEventListener('keydown',e=>{
+      if((e.key==='Enter'||e.key===' ')&&e.target===card){ e.preventDefault(); openStory(story); }
+    });
     if(hasVideo){
       const watchBtn=card.querySelector('.watch-badge');
       watchBtn.addEventListener('click',e=>{ e.stopPropagation(); openStoryVideo(story); });
@@ -1633,6 +1639,7 @@ function openStory(story){
   renderPage(false);
   renderDots();
   document.getElementById('home-screen').style.display='none';
+  setTimeout(()=>{ document.getElementById('reader-back')?.focus(); },50);
 }
 
 function closeReader(){
@@ -1735,11 +1742,29 @@ function nextPage(){ goToPage(currentPage+1); }
 function prevPage(){ goToPage(currentPage-1); }
 
 /* ── Keyboard ─────────────────────────────────────── */
+function _readerFocusable(container) {
+  return [...container.querySelectorAll(
+    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+  )].filter(el => !el.disabled && el.offsetParent !== null);
+}
+
 document.addEventListener('keydown',e=>{
-  if(document.getElementById('reader').classList.contains('hidden')) return;
+  const reader=document.getElementById('reader');
+  if(reader.classList.contains('hidden')) return;
+  // A focused button/link handles its own Space/Enter activation —
+  // don't hijack it into a page turn (e.g. Read Aloud, Watch Video, dots).
+  const onControl = e.target.closest && e.target.closest('button, [href], input, select, textarea, [tabindex]');
+  if(e.key===' '&&onControl) return;
   if(e.key==='ArrowRight'||e.key===' '){ e.preventDefault(); nextPage(); }
   if(e.key==='ArrowLeft'){ e.preventDefault(); prevPage(); }
   if(e.key==='Escape') closeReader();
+  if(e.key==='Tab'){
+    const focusable=_readerFocusable(reader);
+    if(!focusable.length) return;
+    const first=focusable[0], last=focusable[focusable.length-1];
+    if(e.shiftKey){ if(document.activeElement===first){ e.preventDefault(); last.focus(); } }
+    else{ if(document.activeElement===last){ e.preventDefault(); first.focus(); } }
+  }
 });
 
 /* ── Touch ────────────────────────────────────────── */

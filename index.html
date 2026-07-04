@@ -68,7 +68,7 @@
   </div>
 
   <!-- ── READER OVERLAY ──────────────────────────────── -->
-  <div id="reader" class="reader hidden">
+  <div id="reader" class="reader hidden" role="dialog" aria-modal="true" aria-label="Story reader">
     <button class="reader-back" id="reader-back" aria-label="Back to stories">← Back</button>
 
     <div class="reader-layout">
@@ -95,6 +95,7 @@
       <button class="video-close-btn" id="video-close" aria-label="Close video">✕</button>
       <h2 class="video-title" id="video-title"></h2>
       <video id="video-player" class="video-player" playsinline controls preload="none"></video>
+      <p class="video-error hidden" id="video-error" role="alert">😔 This video couldn't load. Please check your connection and try again.</p>
     </div>
   </div>
 

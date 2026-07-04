@@ -81,6 +81,16 @@ const TIMER = (() => {
     el.classList.remove('hidden');
     el.classList.add('opening');
     setTimeout(() => el.classList.remove('opening'), 400);
+    setTimeout(() => document.getElementById('timer-dismiss')?.focus(), 50);
+  }
+
+  function _trapExpiredFocus(e) {
+    const el = document.getElementById('timer-expired-overlay');
+    if (!el || el.classList.contains('hidden')) return;
+    const dismissBtn = document.getElementById('timer-dismiss');
+    if (!dismissBtn) return;
+    if (e.key === 'Tab') { e.preventDefault(); dismissBtn.focus(); }
+    if (e.key === 'Escape') TIMER.dismissExpiry();
   }
 
   function _showSettings() {
@@ -134,6 +144,7 @@ const TIMER = (() => {
       // Dismiss expired overlay
       const dismissBtn = document.getElementById('timer-dismiss');
       if (dismissBtn) dismissBtn.addEventListener('click', () => TIMER.dismissExpiry());
+      document.addEventListener('keydown', _trapExpiredFocus);
 
       // Close popover on outside click
       document.addEventListener('click', e => {

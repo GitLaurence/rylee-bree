@@ -2,7 +2,7 @@
    Service Worker — Cache-first offline support
    ══════════════════════════════════════════════════ */
 
-const CACHE = 'bedtime-v4';
+const CACHE = 'bedtime-v5';
 const PRECACHE = [
   './',
   './index.html',
@@ -53,8 +53,13 @@ self.addEventListener('fetch', e => {
       return fetch(e.request).then(res => {
         if (!res || res.status !== 200 || res.type === 'opaque') return res;
         const clone = res.clone();
-        caches.open(CACHE).then(c => c.put(e.request, clone));
+        caches.open(CACHE).then(c => c.put(e.request, clone).catch(() => {})).catch(() => {});
         return res;
+      }).catch(() => {
+        // Offline and not cached — fall back to the app shell for page
+        // navigations so the toddler sees the book, not a browser error.
+        if (e.request.mode === 'navigate') return caches.match('./index.html');
+        return Response.error();
       });
     })
   );
