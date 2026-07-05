@@ -1605,13 +1605,23 @@ function ttsStop() {
   if ('speechSynthesis' in window) window.speechSynthesis.cancel();
 }
 
-function ttsToggle() {
-  ttsEnabled = !ttsEnabled;
+function _syncTtsButtons() {
   const btn = document.getElementById('tts-btn');
   if (btn) {
     btn.textContent = ttsEnabled ? '🔇 Stop Reading' : '🔊 Read Aloud';
     btn.classList.toggle('tts-active', ttsEnabled);
   }
+  const mobileBtn = document.getElementById('tts-btn-mobile');
+  if (mobileBtn) {
+    mobileBtn.textContent = ttsEnabled ? '🔇' : '🔊';
+    mobileBtn.classList.toggle('tts-active', ttsEnabled);
+    mobileBtn.setAttribute('aria-pressed', String(ttsEnabled));
+  }
+}
+
+function ttsToggle() {
+  ttsEnabled = !ttsEnabled;
+  _syncTtsButtons();
   if (ttsEnabled && currentStory) {
     ttsSpeak(currentStory.pages[currentPage].text);
   } else {
@@ -1638,8 +1648,7 @@ function openStory(story){
 function closeReader(){
   ttsStop();
   ttsEnabled = false;
-  const ttsBtn = document.getElementById('tts-btn');
-  if (ttsBtn) { ttsBtn.textContent = '🔊 Read Aloud'; ttsBtn.classList.remove('tts-active'); }
+  _syncTtsButtons();
   if(typeof SFX !== 'undefined') SFX.close();
   const reader=document.getElementById('reader');
   reader.classList.add('closing');
@@ -1717,7 +1726,14 @@ function renderDots(){
   currentStory.pages.forEach((_,i)=>{
     const d=document.createElement('div');
     d.className='dot'+(i===currentPage?' active':'');
+    d.setAttribute('role','button');
+    d.setAttribute('tabindex','0');
+    d.setAttribute('aria-label',`Go to page ${i+1} of ${currentStory.pages.length}`);
+    if(i===currentPage) d.setAttribute('aria-current','page');
     d.addEventListener('click',()=>goToPage(i));
+    d.addEventListener('keydown',e=>{
+      if(e.key==='Enter'||e.key===' '){ e.preventDefault(); goToPage(i); }
+    });
     dots.appendChild(d);
   });
 }
@@ -1737,6 +1753,9 @@ function prevPage(){ goToPage(currentPage-1); }
 /* ── Keyboard ─────────────────────────────────────── */
 document.addEventListener('keydown',e=>{
   if(document.getElementById('reader').classList.contains('hidden')) return;
+  // Don't act on the reader if another overlay is currently open on top of it
+  const coveredBy=['games-overlay','video-overlay','timer-expired-overlay'];
+  if(coveredBy.some(id=>!document.getElementById(id)?.classList.contains('hidden'))) return;
   if(e.key==='ArrowRight'||e.key===' '){ e.preventDefault(); nextPage(); }
   if(e.key==='ArrowLeft'){ e.preventDefault(); prevPage(); }
   if(e.key==='Escape') closeReader();
@@ -1752,6 +1771,7 @@ book.addEventListener('touchend',e=>{ const dx=e.changedTouches[0].clientX-touch
 document.getElementById('next-btn').addEventListener('click',nextPage);
 document.getElementById('prev-btn').addEventListener('click',prevPage);
 document.getElementById('reader-back').addEventListener('click',closeReader);
+document.getElementById('tts-btn-mobile').addEventListener('click',ttsToggle);
 
 document.querySelectorAll('.filter-btn').forEach(btn=>{
   btn.addEventListener('click',()=>{

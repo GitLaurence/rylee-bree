@@ -7,6 +7,7 @@ const TIMER = (() => {
   let remaining = 0;    // seconds
   let interval  = null;
   let state     = 'idle'; // idle | running | expired
+  let expiredTrigger = null;
 
   /* ── Persist across page reloads ────────────────── */
   function save() {
@@ -78,9 +79,14 @@ const TIMER = (() => {
   function _showExpiredOverlay() {
     const el = document.getElementById('timer-expired-overlay');
     if (!el) return;
+    expiredTrigger = document.activeElement;
     el.classList.remove('hidden');
     el.classList.add('opening');
-    setTimeout(() => el.classList.remove('opening'), 400);
+    setTimeout(() => {
+      el.classList.remove('opening');
+      const dismissBtn = document.getElementById('timer-dismiss');
+      if (dismissBtn) dismissBtn.focus();
+    }, 400);
   }
 
   function _showSettings() {
@@ -115,6 +121,7 @@ const TIMER = (() => {
       const el = document.getElementById('timer-expired-overlay');
       if (el) el.classList.add('hidden');
       TIMER.stop();
+      if (expiredTrigger) { expiredTrigger.focus(); expiredTrigger = null; }
     },
 
     init() {
@@ -134,6 +141,13 @@ const TIMER = (() => {
       // Dismiss expired overlay
       const dismissBtn = document.getElementById('timer-dismiss');
       if (dismissBtn) dismissBtn.addEventListener('click', () => TIMER.dismissExpiry());
+
+      // Escape dismisses the expired overlay
+      document.addEventListener('keydown', e => {
+        if (e.key !== 'Escape') return;
+        const el = document.getElementById('timer-expired-overlay');
+        if (el && !el.classList.contains('hidden')) TIMER.dismissExpiry();
+      });
 
       // Close popover on outside click
       document.addEventListener('click', e => {

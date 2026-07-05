@@ -83,6 +83,7 @@ function showFeedback(correct, container) {
 
 /* ── Overlay open/close ──────────────────────────── */
 let _gamesTrigger = null;
+let _roundTimeout = null;
 
 function openGames() {
   if (typeof SFX !== 'undefined') SFX.gamesOpen();
@@ -99,14 +100,15 @@ function openGames() {
 }
 
 function closeGames() {
+  clearTimeout(_roundTimeout);
+  gameState.current = null;
   const overlay = document.getElementById('games-overlay');
   overlay.classList.add('closing');
   setTimeout(() => {
     overlay.classList.add('hidden');
     overlay.classList.remove('closing');
-    gameState.current = null;
     if (_gamesTrigger) { _gamesTrigger.focus(); _gamesTrigger = null; }
-  }, 260);
+  }, 220);
 }
 
 function renderGameMenu() {
@@ -140,6 +142,7 @@ function renderGameMenu() {
 
 /* ── Game start ──────────────────────────────────── */
 function startGame(gameId) {
+  clearTimeout(_roundTimeout);
   gameState.current  = gameId;
   gameState.score    = 0;
   gameState.round    = 0;
@@ -213,7 +216,7 @@ function renderColorPop() {
       const correct = btn.dataset.color === gameState.target;
       if (correct) { gameState.score++; celebrateEffect(btn); }
       showFeedback(correct, content);
-      setTimeout(nextRound, 1100);
+      _roundTimeout = setTimeout(nextRound, 1100);
     });
   });
 }
@@ -251,7 +254,7 @@ function renderStarCount() {
       const correct = parseInt(btn.dataset.num) === gameState.target;
       if (correct) { gameState.score++; celebrateEffect(btn); }
       showFeedback(correct, content);
-      setTimeout(nextRound, 1100);
+      _roundTimeout = setTimeout(nextRound, 1100);
     });
   });
 }
@@ -296,7 +299,7 @@ function renderFindFriend() {
       const correct = btn.dataset.friend === gameState.target;
       if (correct) { gameState.score++; celebrateEffect(btn); }
       showFeedback(correct, content);
-      setTimeout(nextRound, 1100);
+      _roundTimeout = setTimeout(nextRound, 1100);
     });
   });
 }
@@ -332,7 +335,7 @@ function renderShapeMatch() {
       const correct = btn.dataset.shape === gameState.target;
       if (correct) { gameState.score++; celebrateEffect(btn); }
       showFeedback(correct, content);
-      setTimeout(nextRound, 1100);
+      _roundTimeout = setTimeout(nextRound, 1100);
     });
   });
 }

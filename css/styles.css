@@ -503,6 +503,31 @@ body {
 .reader-back:active  { transform: scale(.95); }
 .reader-back:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
 
+/* Mobile read-aloud toggle — desktop uses the .tts-btn inside .story-aside instead */
+.reader-tts-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 44px;
+  height: 44px;
+  background: rgba(255,255,255,.1);
+  border: var(--border-clay);
+  color: rgba(255,255,255,.88);
+  font-size: 1.1rem;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: var(--shadow-btn);
+  transition: background var(--dur-fast) ease, transform var(--dur-fast) var(--ease-bounce);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.reader-tts-btn:hover { background: rgba(255,255,255,.18); transform: scale(1.06); }
+.reader-tts-btn:active { transform: scale(.95); }
+.reader-tts-btn:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+.reader-tts-btn.tts-active { background: rgba(139,68,240,.35); border-color: rgba(139,68,240,.6); }
+
 /* Book wrapper */
 .book-wrap {
   width: 100%;
@@ -671,6 +696,10 @@ body {
   background: rgba(255,255,255,.58);
   transform: scale(1.15);
 }
+.dot:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
+}
 
 /* ── Floating star decoration ───────────────────── */
 .star-dot {
@@ -757,6 +786,9 @@ body {
 
   /* Hide the in-book text panel on desktop — aside handles it */
   .story-panel { display: none !important; }
+
+  /* Desktop has its own Read Aloud button inside .story-aside */
+  .reader-tts-btn { display: none; }
 
   /* ── Story Aside (desktop text panel) ── */
   .story-aside {
@@ -1659,6 +1691,14 @@ body {
     color: var(--text-dark);
     box-shadow: var(--shadow-btn);
   }
+
+  .reader-tts-btn {
+    background: rgba(255,255,255,.7);
+    border-color: rgba(0,0,0,.1);
+    color: var(--text-dark);
+    box-shadow: var(--shadow-btn);
+  }
+  .reader-tts-btn.tts-active { background: rgba(139,68,240,.15); border-color: #8B44F0; color: #5B14C0; }
 
   .games-panel {
     background: linear-gradient(155deg, #f0e8ff, #e8f0ff);

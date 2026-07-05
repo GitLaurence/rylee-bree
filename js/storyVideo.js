@@ -55,7 +55,7 @@ function closeStoryVideo() {
     overlay.classList.add('hidden');
     overlay.classList.remove('closing');
     if (_videoTrigger) { _videoTrigger.focus(); _videoTrigger = null; }
-  }, 260);
+  }, 220);
 }
 
 /* ── Focus trap (mirrors games.js pattern) ──────────── */
