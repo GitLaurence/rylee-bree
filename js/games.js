@@ -49,6 +49,11 @@ function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
 function cheer() { return pick(CHEERS); }
 
+function focusFirstChoice(content) {
+  const first = content.querySelector('button');
+  if (first) first.focus();
+}
+
 function celebrateEffect(el) {
   el.classList.add('game-correct-flash');
   setTimeout(() => el.classList.remove('game-correct-flash'), 600);
@@ -216,6 +221,7 @@ function renderColorPop() {
       setTimeout(nextRound, 1100);
     });
   });
+  focusFirstChoice(content);
 }
 
 /* ── Game 2: Star Count ──────────────────────────── */
@@ -254,6 +260,7 @@ function renderStarCount() {
       setTimeout(nextRound, 1100);
     });
   });
+  focusFirstChoice(content);
 }
 
 /* ── Game 3: Find the Friend ─────────────────────── */
@@ -299,6 +306,7 @@ function renderFindFriend() {
       setTimeout(nextRound, 1100);
     });
   });
+  focusFirstChoice(content);
 }
 
 /* ── Game 4: Shape Match ─────────────────────────── */
@@ -335,6 +343,7 @@ function renderShapeMatch() {
       setTimeout(nextRound, 1100);
     });
   });
+  focusFirstChoice(content);
 }
 
 function lighten(hex) {

@@ -49,24 +49,18 @@ const TIMER = (() => {
     return `${m}:${s}`;
   }
 
-  function _render() {
-    const pill = document.getElementById('timer-pill');
-    if (!pill) return;
-    if (state === 'idle') {
-      pill.classList.add('hidden');
-      return;
-    }
-    pill.classList.remove('hidden');
-    if (state === 'expired') {
-      pill.innerHTML = `<span class="timer-icon">🌙</span><span class="timer-time">Bedtime!</span>`;
-      pill.classList.add('timer-expired');
-      return;
-    }
-    pill.classList.remove('timer-expired');
-    const urgent = remaining <= 60;
+  let _lastAnnounceMinute = null;
+  let _lastRenderedState = null;
+
+  function _announce(msg) {
+    const el = document.getElementById('timer-announce');
+    if (el) el.textContent = msg;
+  }
+
+  function _buildPillContent(pill, urgent) {
     pill.innerHTML = `
       <span class="timer-icon">${urgent ? '⚠️' : '⏰'}</span>
-      <span class="timer-time ${urgent ? 'timer-urgent' : ''}">${_fmt(remaining)}</span>
+      <span class="timer-time ${urgent ? 'timer-urgent' : ''}" id="timer-time-text">${_fmt(remaining)}</span>
       <button class="timer-stop-btn" aria-label="Stop timer">✕</button>
     `;
     pill.querySelector('.timer-stop-btn').addEventListener('click', e => {
@@ -75,12 +69,85 @@ const TIMER = (() => {
     });
   }
 
+  function _render() {
+    const pill = document.getElementById('timer-pill');
+    if (!pill) return;
+    if (state === 'idle') {
+      pill.classList.add('hidden');
+      _lastRenderedState = state;
+      return;
+    }
+    pill.classList.remove('hidden');
+    if (state === 'expired') {
+      pill.innerHTML = `<span class="timer-icon">🌙</span><span class="timer-time">Bedtime!</span>`;
+      pill.classList.add('timer-expired');
+      if (_lastRenderedState !== 'expired') _announce('Time for sleep! Reading time is up.');
+      _lastRenderedState = state;
+      return;
+    }
+    pill.classList.remove('timer-expired');
+    const urgent = remaining <= 60;
+    // Only rebuild the whole pill (which would drop keyboard focus from the
+    // stop button) when the structure actually needs to change; otherwise
+    // just update the time text in place every tick.
+    const timeEl = pill.querySelector('#timer-time-text');
+    if (_lastRenderedState !== 'running' || !timeEl) {
+      _buildPillContent(pill, urgent);
+    } else {
+      timeEl.textContent = _fmt(remaining);
+      timeEl.classList.toggle('timer-urgent', urgent);
+      pill.querySelector('.timer-icon').textContent = urgent ? '⚠️' : '⏰';
+    }
+    _lastRenderedState = state;
+
+    // Announce sparingly (once per minute, and once when crossing into the
+    // final minute) instead of every second, so screen readers aren't
+    // flooded with the ticking countdown.
+    const minuteMark = Math.ceil(remaining / 60);
+    if (remaining > 0 && remaining % 60 === 0 && _lastAnnounceMinute !== minuteMark) {
+      _announce(`${minuteMark} minute${minuteMark === 1 ? '' : 's'} left`);
+      _lastAnnounceMinute = minuteMark;
+    } else if (urgent && _lastAnnounceMinute !== 0) {
+      _announce('Less than a minute left');
+      _lastAnnounceMinute = 0;
+    }
+  }
+
+  let _expiredTrigger = null;
+
   function _showExpiredOverlay() {
     const el = document.getElementById('timer-expired-overlay');
     if (!el) return;
+    _expiredTrigger = document.activeElement;
     el.classList.remove('hidden');
     el.classList.add('opening');
-    setTimeout(() => el.classList.remove('opening'), 400);
+    setTimeout(() => {
+      el.classList.remove('opening');
+      const dismissBtn = document.getElementById('timer-dismiss');
+      if (dismissBtn) dismissBtn.focus();
+    }, 400);
+  }
+
+  function _expiredFocusable(container) {
+    return [...container.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    )].filter(el => !el.disabled && el.offsetParent !== null);
+  }
+
+  function _trapExpiredFocus(e) {
+    const el = document.getElementById('timer-expired-overlay');
+    if (!el || el.classList.contains('hidden')) return;
+    if (e.key === 'Escape') { TIMER.dismissExpiry(); return; }
+    if (e.key !== 'Tab') return;
+    const focusable = _expiredFocusable(el);
+    if (!focusable.length) return;
+    const first = focusable[0];
+    const last  = focusable[focusable.length - 1];
+    if (e.shiftKey) {
+      if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+    } else {
+      if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
   }
 
   function _showSettings() {
@@ -97,6 +164,8 @@ const TIMER = (() => {
     start(minutes) {
       remaining = minutes * 60;
       state     = 'running';
+      _lastRenderedState = null;
+      _lastAnnounceMinute = null;
       save();
       _start();
       const popover = document.getElementById('timer-popover');
@@ -107,6 +176,8 @@ const TIMER = (() => {
       clearInterval(interval);
       remaining = 0;
       state     = 'idle';
+      _lastRenderedState = null;
+      _lastAnnounceMinute = null;
       try { localStorage.removeItem('timer-state'); } catch {}
       _render();
     },
@@ -114,6 +185,7 @@ const TIMER = (() => {
     dismissExpiry() {
       const el = document.getElementById('timer-expired-overlay');
       if (el) el.classList.add('hidden');
+      if (_expiredTrigger) { _expiredTrigger.focus(); _expiredTrigger = null; }
       TIMER.stop();
     },
 
@@ -156,6 +228,9 @@ const TIMER = (() => {
           if (typeof SFX !== 'undefined') { SFX.toggleMute(); updateSfxBtn(); }
         });
       }
+
+      // Focus trap + Escape-to-dismiss for the expired overlay
+      document.addEventListener('keydown', _trapExpiredFocus);
 
       // Restore state if page was reloaded mid-timer
       restore();

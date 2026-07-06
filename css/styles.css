@@ -5,6 +5,19 @@
    Skill: UI/UX Pro Max — children's app palette
    ══════════════════════════════════════════════════ */
 
+/* ── Utilities ──────────────────────────────────── */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* ── Design Tokens ──────────────────────────────── */
 :root {
   /* Characters */
@@ -1748,4 +1761,14 @@ body {
   }
   .timer-expired-msg { color: var(--text-mid); }
   .expired-star { background: #8B44F0; }
+
+  .game-score { color: #B8860B; }
+
+  .timer-pill {
+    background: rgba(139,68,240,.12);
+    border-color: rgba(139,68,240,.35);
+  }
+  .timer-time { color: var(--text-dark); }
+  .timer-stop-btn { color: rgba(45,26,74,.5); }
+  .timer-stop-btn:hover { color: var(--text-dark); }
 }

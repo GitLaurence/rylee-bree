@@ -1526,14 +1526,21 @@ function renderHome(){
   const grid=document.getElementById('story-grid');
   grid.innerHTML='';
 
-  if(filtered.length===0 && currentFilter==='favorites'){
-    grid.innerHTML=`<div class="empty-favourites"><div style="font-size:3rem;margin-bottom:12px">❤️</div><p>Tap the ❤️ on any story to save your favourites here!</p></div>`;
+  if(filtered.length===0){
+    const message = currentFilter==='favorites'
+      ? 'Tap the ❤️ on any story to save your favourites here!'
+      : 'No stories match this filter yet.';
+    const icon = currentFilter==='favorites' ? '❤️' : '📖';
+    grid.innerHTML=`<div class="empty-favourites"><div style="font-size:3rem;margin-bottom:12px">${icon}</div><p>${message}</p></div>`;
     return;
   }
 
   filtered.forEach((story,idx)=>{
     const card=document.createElement('div');
     card.className='story-card';
+    card.setAttribute('tabindex','0');
+    card.setAttribute('role','button');
+    card.setAttribute('aria-label',`Open story: ${story.title}`);
     card.style.setProperty('--card-i',idx);
     const isRead=readStories.has(story.id);
     const isFav=favouriteStories.has(story.id);
@@ -1552,6 +1559,12 @@ function renderHome(){
         </div>
       </div>`;
     card.addEventListener('click',()=>openStory(story));
+    card.addEventListener('keydown',e=>{
+      if(e.key==='Enter'||e.key===' '){
+        e.preventDefault();
+        openStory(story);
+      }
+    });
     if(hasVideo){
       const watchBtn=card.querySelector('.watch-badge');
       watchBtn.addEventListener('click',e=>{ e.stopPropagation(); openStoryVideo(story); });
@@ -1633,6 +1646,8 @@ function openStory(story){
   renderPage(false);
   renderDots();
   document.getElementById('home-screen').style.display='none';
+  const backBtn=document.getElementById('reader-back');
+  if(backBtn) backBtn.focus();
 }
 
 function closeReader(){
@@ -1717,7 +1732,16 @@ function renderDots(){
   currentStory.pages.forEach((_,i)=>{
     const d=document.createElement('div');
     d.className='dot'+(i===currentPage?' active':'');
+    d.setAttribute('tabindex','0');
+    d.setAttribute('role','button');
+    d.setAttribute('aria-label',`Go to page ${i+1}`);
     d.addEventListener('click',()=>goToPage(i));
+    d.addEventListener('keydown',e=>{
+      if(e.key==='Enter'||e.key===' '){
+        e.preventDefault();
+        goToPage(i);
+      }
+    });
     dots.appendChild(d);
   });
 }
