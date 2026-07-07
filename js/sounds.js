@@ -16,39 +16,43 @@ const SFX = (() => {
 
   function tone(freq, dur, type = 'sine', vol = 0.28, start = 0) {
     if (muted) return;
-    const c = getCtx();
-    const osc  = c.createOscillator();
-    const gain = c.createGain();
-    osc.connect(gain);
-    gain.connect(c.destination);
-    osc.type = type;
-    osc.frequency.setValueAtTime(freq, c.currentTime + start);
-    gain.gain.setValueAtTime(0, c.currentTime + start);
-    gain.gain.linearRampToValueAtTime(vol, c.currentTime + start + 0.012);
-    gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + start + dur);
-    osc.start(c.currentTime + start);
-    osc.stop(c.currentTime + start + dur + 0.02);
+    try {
+      const c = getCtx();
+      const osc  = c.createOscillator();
+      const gain = c.createGain();
+      osc.connect(gain);
+      gain.connect(c.destination);
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, c.currentTime + start);
+      gain.gain.setValueAtTime(0, c.currentTime + start);
+      gain.gain.linearRampToValueAtTime(vol, c.currentTime + start + 0.012);
+      gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + start + dur);
+      osc.start(c.currentTime + start);
+      osc.stop(c.currentTime + start + dur + 0.02);
+    } catch {}
   }
 
   function noise(dur, vol = 0.06, start = 0) {
     if (muted) return;
-    const c = getCtx();
-    const buf    = c.createBuffer(1, c.sampleRate * dur, c.sampleRate);
-    const data   = buf.getChannelData(0);
-    for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
-    const src    = c.createBufferSource();
-    const filter = c.createBiquadFilter();
-    const gain   = c.createGain();
-    src.buffer = buf;
-    filter.type = 'bandpass';
-    filter.frequency.value = 1200;
-    filter.Q.value = 0.5;
-    src.connect(filter);
-    filter.connect(gain);
-    gain.connect(c.destination);
-    gain.gain.setValueAtTime(vol, c.currentTime + start);
-    gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + start + dur);
-    src.start(c.currentTime + start);
+    try {
+      const c = getCtx();
+      const buf    = c.createBuffer(1, c.sampleRate * dur, c.sampleRate);
+      const data   = buf.getChannelData(0);
+      for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+      const src    = c.createBufferSource();
+      const filter = c.createBiquadFilter();
+      const gain   = c.createGain();
+      src.buffer = buf;
+      filter.type = 'bandpass';
+      filter.frequency.value = 1200;
+      filter.Q.value = 0.5;
+      src.connect(filter);
+      filter.connect(gain);
+      gain.connect(c.destination);
+      gain.gain.setValueAtTime(vol, c.currentTime + start);
+      gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + start + dur);
+      src.start(c.currentTime + start);
+    } catch {}
   }
 
   return {

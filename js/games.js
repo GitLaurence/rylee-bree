@@ -83,14 +83,18 @@ function showFeedback(correct, container) {
 
 /* ── Overlay open/close ──────────────────────────── */
 let _gamesTrigger = null;
+let _gamesOpenTimer = null;
+let _gamesCloseTimer = null;
 
 function openGames() {
   if (typeof SFX !== 'undefined') SFX.gamesOpen();
+  clearTimeout(_gamesCloseTimer);
   _gamesTrigger = document.activeElement;
   const overlay = document.getElementById('games-overlay');
-  overlay.classList.remove('hidden');
+  overlay.classList.remove('hidden', 'closing');
   overlay.classList.add('opening');
-  setTimeout(() => {
+  clearTimeout(_gamesOpenTimer);
+  _gamesOpenTimer = setTimeout(() => {
     overlay.classList.remove('opening');
     const first = getFocusable(overlay)[0];
     if (first) first.focus();
@@ -100,8 +104,11 @@ function openGames() {
 
 function closeGames() {
   const overlay = document.getElementById('games-overlay');
+  clearTimeout(_gamesOpenTimer);
   overlay.classList.add('closing');
-  setTimeout(() => {
+  overlay.classList.remove('opening');
+  clearTimeout(_gamesCloseTimer);
+  _gamesCloseTimer = setTimeout(() => {
     overlay.classList.add('hidden');
     overlay.classList.remove('closing');
     gameState.current = null;

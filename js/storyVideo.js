@@ -17,12 +17,15 @@ function hasStoryVideo(storyId) {
 }
 
 let _videoTrigger = null;
+let _videoOpenTimer = null;
+let _videoCloseTimer = null;
 
 function openStoryVideo(story) {
   const src = STORY_VIDEOS[story.id];
   if (!src) return;
   if (typeof SFX !== 'undefined') SFX.open();
 
+  clearTimeout(_videoCloseTimer);
   _videoTrigger = document.activeElement;
   const overlay = document.getElementById('video-overlay');
   const player  = document.getElementById('video-player');
@@ -35,9 +38,10 @@ function openStoryVideo(story) {
     player.load();
   }
 
-  overlay.classList.remove('hidden');
+  overlay.classList.remove('hidden', 'closing');
   overlay.classList.add('opening');
-  setTimeout(() => {
+  clearTimeout(_videoOpenTimer);
+  _videoOpenTimer = setTimeout(() => {
     overlay.classList.remove('opening');
     const closeBtn = document.getElementById('video-close');
     if (closeBtn) closeBtn.focus();
@@ -50,8 +54,11 @@ function closeStoryVideo() {
   const overlay = document.getElementById('video-overlay');
   const player  = document.getElementById('video-player');
   player.pause();
+  clearTimeout(_videoOpenTimer);
   overlay.classList.add('closing');
-  setTimeout(() => {
+  overlay.classList.remove('opening');
+  clearTimeout(_videoCloseTimer);
+  _videoCloseTimer = setTimeout(() => {
     overlay.classList.add('hidden');
     overlay.classList.remove('closing');
     if (_videoTrigger) { _videoTrigger.focus(); _videoTrigger = null; }

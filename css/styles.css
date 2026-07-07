@@ -671,6 +671,7 @@ body {
   background: rgba(255,255,255,.58);
   transform: scale(1.15);
 }
+.dot:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
 
 /* ── Floating star decoration ───────────────────── */
 .star-dot {

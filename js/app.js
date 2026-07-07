@@ -1621,11 +1621,13 @@ function ttsToggle() {
 
 /* ── Reader ───────────────────────────────────────── */
 let _readerTrigger=null;
+let _readerCloseTimer=null;
 
 function openStory(story){
   if(!story) return;
   currentStory=story; currentPage=0;
   if(typeof SFX !== 'undefined') SFX.open();
+  clearTimeout(_readerCloseTimer);
   _readerTrigger=document.activeElement;
   const reader=document.getElementById('reader');
   reader.classList.remove('hidden','closing');
@@ -1644,7 +1646,8 @@ function closeReader(){
   const reader=document.getElementById('reader');
   reader.classList.add('closing');
   reader.classList.remove('opening');
-  setTimeout(()=>{
+  clearTimeout(_readerCloseTimer);
+  _readerCloseTimer=setTimeout(()=>{
     reader.classList.add('hidden');
     reader.classList.remove('closing');
     document.getElementById('home-screen').style.display='';
@@ -1715,8 +1718,11 @@ function renderDots(){
   const dots=document.getElementById('dots');
   dots.innerHTML='';
   currentStory.pages.forEach((_,i)=>{
-    const d=document.createElement('div');
+    const d=document.createElement('button');
+    d.type='button';
     d.className='dot'+(i===currentPage?' active':'');
+    d.setAttribute('aria-label',`Go to page ${i+1}`);
+    if(i===currentPage) d.setAttribute('aria-current','true');
     d.addEventListener('click',()=>goToPage(i));
     dots.appendChild(d);
   });
@@ -1737,6 +1743,8 @@ function prevPage(){ goToPage(currentPage-1); }
 /* ── Keyboard ─────────────────────────────────────── */
 document.addEventListener('keydown',e=>{
   if(document.getElementById('reader').classList.contains('hidden')) return;
+  const videoOverlay=document.getElementById('video-overlay');
+  if(videoOverlay && !videoOverlay.classList.contains('hidden')) return;
   if(e.key==='ArrowRight'||e.key===' '){ e.preventDefault(); nextPage(); }
   if(e.key==='ArrowLeft'){ e.preventDefault(); prevPage(); }
   if(e.key==='Escape') closeReader();
@@ -1755,8 +1763,12 @@ document.getElementById('reader-back').addEventListener('click',closeReader);
 
 document.querySelectorAll('.filter-btn').forEach(btn=>{
   btn.addEventListener('click',()=>{
-    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.filter-btn').forEach(b=>{
+      b.classList.remove('active');
+      b.setAttribute('aria-pressed','false');
+    });
     btn.classList.add('active');
+    btn.setAttribute('aria-pressed','true');
     currentFilter=btn.dataset.char;
     renderHome();
   });
