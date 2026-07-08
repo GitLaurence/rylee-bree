@@ -1387,10 +1387,14 @@ function seededRand(seed) {
   };
 }
 
-function cardThumbSVG(scene, chars) {
+function cardThumbSVG(scene, chars, storyId) {
   const g=CARD_BG[scene]||CARD_BG.stars;
   const key=scene+(chars||[]).join('');
-  const gid=`g${key.split('').reduce((a,c)=>((a<<5)-a+c.charCodeAt(0))|0,0).toString(36).replace('-','n')}`;
+  // gid must be unique per card (many cards share scene+chars), but the seed
+  // used below for star/scene placement stays keyed on scene+chars alone so
+  // visually-identical cards keep a stable, shared art pattern.
+  const gidKey=key+(storyId||'');
+  const gid=`g${gidKey.split('').reduce((a,c)=>((a<<5)-a+c.charCodeAt(0))|0,0).toString(36).replace('-','n')}`;
   return `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <linearGradient id="${gid}" x1="0" y1="0" x2="0" y2="1">
@@ -1401,7 +1405,7 @@ function cardThumbSVG(scene, chars) {
   </defs>
   <rect width="120" height="120" fill="url(#${gid})"/>
   ${thumbScene(scene, key)}
-  ${thumbChars(chars, key)}
+  ${thumbChars(chars, key, storyId)}
 </svg>`;
 }
 
@@ -1441,10 +1445,11 @@ function thumbScene(scene, seed) {
   }
 }
 
-function thumbChars(chars, seed) {
+function thumbChars(chars, seed, storyId) {
   if(!chars||!chars.length) return '';
   const total=chars.length;
-  const uid=`th${(seed||chars.join('')).split('').reduce((a,c)=>a+c.charCodeAt(0),0).toString(36)}`;
+  const uidKey=(seed||chars.join(''))+(storyId||'');
+  const uid=`th${uidKey.split('').reduce((a,c)=>((a<<5)-a+c.charCodeAt(0))|0,0).toString(36).replace('-','n')}`;
   return chars.slice(0,3).map((c,i)=>{
     const x=total===1?60:total===2?[35,85][i]:[28,60,92][i]||60;
     const sc=total===1?.46:total===2?.4:.34;
@@ -1539,7 +1544,7 @@ function renderHome(){
     const isFav=favouriteStories.has(story.id);
     const hasVideo = typeof hasStoryVideo==='function' && hasStoryVideo(story.id);
     card.innerHTML=`
-      <div class="card-art">${cardThumbSVG(story.scene,story.chars)}</div>
+      <div class="card-art">${cardThumbSVG(story.scene,story.chars,story.id)}</div>
       <div class="card-body">
         ${isRead?'<span class="read-badge">⭐</span>':''}
         ${hasVideo?'<button class="watch-badge" aria-label="Watch the animated video for '+story.title+'">🎬 Watch</button>':''}
@@ -1621,6 +1626,7 @@ function ttsToggle() {
 
 /* ── Reader ───────────────────────────────────────── */
 let _readerTrigger=null;
+let _readerOpenTimer=null;
 let _readerCloseTimer=null;
 
 function openStory(story){
@@ -1635,6 +1641,11 @@ function openStory(story){
   renderPage(false);
   renderDots();
   document.getElementById('home-screen').style.display='none';
+  clearTimeout(_readerOpenTimer);
+  _readerOpenTimer=setTimeout(()=>{
+    reader.classList.remove('opening');
+    document.getElementById('reader-back').focus();
+  },50);
 }
 
 function closeReader(){
@@ -1644,6 +1655,7 @@ function closeReader(){
   if (ttsBtn) { ttsBtn.textContent = '🔊 Read Aloud'; ttsBtn.classList.remove('tts-active'); }
   if(typeof SFX !== 'undefined') SFX.close();
   const reader=document.getElementById('reader');
+  clearTimeout(_readerOpenTimer);
   reader.classList.add('closing');
   reader.classList.remove('opening');
   clearTimeout(_readerCloseTimer);
@@ -1664,10 +1676,11 @@ function renderPage(animate,direction='right'){
   const scene=pg.scene||currentStory.scene||'stars';
   const w=400, h=490;
   const charsOnPage=pg.chars||currentStory.chars||[];
+  const charPositions={1:[w*.5],2:[w*.3,w*.7],3:[w*.22,w*.5,w*.78],4:[w*.13,w*.38,w*.62,w*.87]};
   const charSVGs=charsOnPage.map((c,i)=>{
     const total=charsOnPage.length;
-    const x=total===1?w*.5:total===2?[w*.3,w*.7][i]:[w*.22,w*.5,w*.78][i]||w*.5;
-    const sc=total<=2?.72:.58;
+    const x=(charPositions[total]||charPositions[4])[i]??w*.5;
+    const sc=total<=2?.72:total===3?.58:.5;
     return charArt(c,x,h*.66,sc,`pg${currentPage}${i}`);
   }).join('');
   const panelH=pg.text.length>110?'48%':'42%';
