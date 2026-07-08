@@ -2,7 +2,7 @@
    Service Worker — Cache-first offline support
    ══════════════════════════════════════════════════ */
 
-const CACHE = 'bedtime-v4';
+const CACHE = 'bedtime-v5';
 const PRECACHE = [
   './',
   './index.html',
