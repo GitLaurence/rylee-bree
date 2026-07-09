@@ -23,6 +23,7 @@ let _videoCloseTimer = null;
 function openStoryVideo(story) {
   const src = STORY_VIDEOS[story.id];
   if (!src) return;
+  if (typeof ttsStop === 'function') ttsStop();
   if (typeof SFX !== 'undefined') SFX.open();
 
   clearTimeout(_videoCloseTimer);

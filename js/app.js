@@ -1511,6 +1511,7 @@ function showCompletionToast() {
   if (existing) existing.remove();
   const toast = document.createElement('div');
   toast.className = 'story-complete-toast';
+  toast.setAttribute('role', 'status');
   toast.textContent = '🎉 Story complete!';
   document.body.appendChild(toast);
   setTimeout(() => {

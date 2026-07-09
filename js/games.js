@@ -103,6 +103,7 @@ function openGames() {
 }
 
 function closeGames() {
+  clearTimeout(_roundAdvanceTimer);
   const overlay = document.getElementById('games-overlay');
   clearTimeout(_gamesOpenTimer);
   overlay.classList.add('closing');
@@ -146,7 +147,10 @@ function renderGameMenu() {
 }
 
 /* ── Game start ──────────────────────────────────── */
+let _roundAdvanceTimer = null;
+
 function startGame(gameId) {
+  clearTimeout(_roundAdvanceTimer);
   gameState.current  = gameId;
   gameState.score    = 0;
   gameState.round    = 0;
@@ -220,7 +224,8 @@ function renderColorPop() {
       const correct = btn.dataset.color === gameState.target;
       if (correct) { gameState.score++; celebrateEffect(btn); }
       showFeedback(correct, content);
-      setTimeout(nextRound, 1100);
+      clearTimeout(_roundAdvanceTimer);
+      _roundAdvanceTimer = setTimeout(nextRound, 1100);
     });
   });
 }
@@ -258,7 +263,8 @@ function renderStarCount() {
       const correct = parseInt(btn.dataset.num) === gameState.target;
       if (correct) { gameState.score++; celebrateEffect(btn); }
       showFeedback(correct, content);
-      setTimeout(nextRound, 1100);
+      clearTimeout(_roundAdvanceTimer);
+      _roundAdvanceTimer = setTimeout(nextRound, 1100);
     });
   });
 }
@@ -303,7 +309,8 @@ function renderFindFriend() {
       const correct = btn.dataset.friend === gameState.target;
       if (correct) { gameState.score++; celebrateEffect(btn); }
       showFeedback(correct, content);
-      setTimeout(nextRound, 1100);
+      clearTimeout(_roundAdvanceTimer);
+      _roundAdvanceTimer = setTimeout(nextRound, 1100);
     });
   });
 }
@@ -339,7 +346,8 @@ function renderShapeMatch() {
       const correct = btn.dataset.shape === gameState.target;
       if (correct) { gameState.score++; celebrateEffect(btn); }
       showFeedback(correct, content);
-      setTimeout(nextRound, 1100);
+      clearTimeout(_roundAdvanceTimer);
+      _roundAdvanceTimer = setTimeout(nextRound, 1100);
     });
   });
 }
