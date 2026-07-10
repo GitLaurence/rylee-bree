@@ -129,4 +129,9 @@
   }
   .random-btn { animation: none; }
   .star-twinkle { animation: twinkle 4s ease-in-out infinite; }
+  .sun-rays,
+  .cloud-drift,
+  .cloud-drift-slow {
+    animation: none !important;
+  }
 }

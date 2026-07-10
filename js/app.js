@@ -549,11 +549,15 @@ function sceneArt(scene, w, h) {
   <!-- Sky gradient fill -->
   <rect width="${s}" height="${t*.52}" fill="url(#gdSky)"/>
   <!-- Clouds -->
-  <ellipse cx="${s*.18}" cy="${t*.14}" rx="${s*.14}" ry="${t*.07}" fill="white" opacity=".9"/>
-  <ellipse cx="${s*.28}" cy="${t*.12}" rx="${s*.1}"  ry="${t*.06}" fill="white" opacity=".9"/>
-  <ellipse cx="${s*.22}" cy="${t*.1}"  rx="${s*.08}" ry="${t*.05}" fill="white" opacity=".95"/>
-  <ellipse cx="${s*.72}" cy="${t*.17}" rx="${s*.12}" ry="${t*.06}" fill="white" opacity=".85"/>
-  <ellipse cx="${s*.8}"  cy="${t*.15}" rx="${s*.09}" ry="${t*.05}" fill="white" opacity=".85"/>
+  <g class="cloud-drift">
+    <ellipse cx="${s*.18}" cy="${t*.14}" rx="${s*.14}" ry="${t*.07}" fill="white" opacity=".9"/>
+    <ellipse cx="${s*.28}" cy="${t*.12}" rx="${s*.1}"  ry="${t*.06}" fill="white" opacity=".9"/>
+    <ellipse cx="${s*.22}" cy="${t*.1}"  rx="${s*.08}" ry="${t*.05}" fill="white" opacity=".95"/>
+  </g>
+  <g class="cloud-drift-slow">
+    <ellipse cx="${s*.72}" cy="${t*.17}" rx="${s*.12}" ry="${t*.06}" fill="white" opacity=".85"/>
+    <ellipse cx="${s*.8}"  cy="${t*.15}" rx="${s*.09}" ry="${t*.05}" fill="white" opacity=".85"/>
+  </g>
   <!-- Sun -->
   <circle cx="${s*.88}" cy="${t*.11}" r="${s*.09}" fill="url(#gdSun)"/>
   ${sunRays(s*.88, t*.11, s*.09, s*.17)}
@@ -740,9 +744,13 @@ function sceneArt(scene, w, h) {
   <circle cx="${s*.79}" cy="${t*.12}" r="${s*.14}" fill="#0a0020"/>
   <circle cx="${s*.72}" cy="${t*.16}" r="${s*.26}" fill="url(#drGlow)"/>
   <!-- Dream cloud islands -->
-  <ellipse cx="${s*.2}"  cy="${t*.38}" rx="${s*.18}" ry="${t*.06}" fill="rgba(200,150,255,.35)"/>
-  <ellipse cx="${s*.2}"  cy="${t*.36}" rx="${s*.14}" ry="${t*.04}" fill="rgba(220,180,255,.3)"/>
-  <ellipse cx="${s*.75}" cy="${t*.32}" rx="${s*.16}" ry="${t*.05}" fill="rgba(180,130,255,.3)"/>
+  <g class="cloud-drift-slow">
+    <ellipse cx="${s*.2}"  cy="${t*.38}" rx="${s*.18}" ry="${t*.06}" fill="rgba(200,150,255,.35)"/>
+    <ellipse cx="${s*.2}"  cy="${t*.36}" rx="${s*.14}" ry="${t*.04}" fill="rgba(220,180,255,.3)"/>
+  </g>
+  <g class="cloud-drift">
+    <ellipse cx="${s*.75}" cy="${t*.32}" rx="${s*.16}" ry="${t*.05}" fill="rgba(180,130,255,.3)"/>
+  </g>
   <!-- Floating castle on cloud -->
   <rect x="${s*.3}" y="${t*.28}" width="${s*.4}" height="${t*.24}" rx="3" fill="#CE93D8" opacity=".9"/>
   <!-- Castle towers -->
@@ -778,9 +786,13 @@ function sceneArt(scene, w, h) {
   <circle cx="${s*.82}" cy="${t*.1}" r="${s*.1}" fill="url(#bcSun)"/>
   ${sunRays(s*.82, t*.1, s*.1, s*.18)}
   <!-- Clouds -->
-  <ellipse cx="${s*.2}"  cy="${t*.14}" rx="${s*.12}" ry="${t*.05}" fill="white" opacity=".85"/>
-  <ellipse cx="${s*.3}"  cy="${t*.12}" rx="${s*.08}" ry="${t*.04}" fill="white" opacity=".85"/>
-  <ellipse cx="${s*.55}" cy="${t*.18}" rx="${s*.1}"  ry="${t*.05}" fill="white" opacity=".75"/>
+  <g class="cloud-drift">
+    <ellipse cx="${s*.2}"  cy="${t*.14}" rx="${s*.12}" ry="${t*.05}" fill="white" opacity=".85"/>
+    <ellipse cx="${s*.3}"  cy="${t*.12}" rx="${s*.08}" ry="${t*.04}" fill="white" opacity=".85"/>
+  </g>
+  <g class="cloud-drift-slow">
+    <ellipse cx="${s*.55}" cy="${t*.18}" rx="${s*.1}"  ry="${t*.05}" fill="white" opacity=".75"/>
+  </g>
   <!-- Layered waves -->
   <path d="M0,${t*.44} Q${s*.12},${t*.4} ${s*.25},${t*.44} Q${s*.38},${t*.48} ${s*.5},${t*.44} Q${s*.62},${t*.4} ${s*.75},${t*.44} Q${s*.88},${t*.48} ${s},${t*.44} L${s},${t*.52} L0,${t*.52}Z" fill="#29B6F6" opacity=".8"/>
   <path d="M0,${t*.46} Q${s*.15},${t*.42} ${s*.3},${t*.46} Q${s*.45},${t*.5} ${s*.6},${t*.46} Q${s*.75},${t*.42} ${s},${t*.46} L${s},${t*.55} L0,${t*.55}Z" fill="#0288D1" opacity=".7"/>
@@ -936,12 +948,16 @@ function sceneArt(scene, w, h) {
   <rect x="0" y="${t*.52}" width="${s}" height="${t*.48}" fill="#5cb85c"/>
   <ellipse cx="${s*.5}" cy="${t*.52}" rx="${s*.7}" ry="${t*.05}" fill="#3d8b3d"/>
   <!-- Puffy clouds -->
-  <ellipse cx="${s*.18}" cy="${t*.13}" rx="${s*.13}" ry="${t*.065}" fill="white" opacity=".93"/>
-  <ellipse cx="${s*.27}" cy="${t*.11}" rx="${s*.09}" ry="${t*.055}" fill="white" opacity=".93"/>
-  <ellipse cx="${s*.22}" cy="${t*.09}" rx="${s*.07}" ry="${t*.045}" fill="white" opacity=".97"/>
-  <ellipse cx="${s*.6}"  cy="${t*.16}" rx="${s*.11}" ry="${t*.055}" fill="white" opacity=".88"/>
-  <ellipse cx="${s*.69}" cy="${t*.14}" rx="${s*.08}" ry="${t*.05}"  fill="white" opacity=".88"/>
-  <ellipse cx="${s*.64}" cy="${t*.12}" rx="${s*.065}" ry="${t*.04}" fill="white" opacity=".92"/>
+  <g class="cloud-drift">
+    <ellipse cx="${s*.18}" cy="${t*.13}" rx="${s*.13}" ry="${t*.065}" fill="white" opacity=".93"/>
+    <ellipse cx="${s*.27}" cy="${t*.11}" rx="${s*.09}" ry="${t*.055}" fill="white" opacity=".93"/>
+    <ellipse cx="${s*.22}" cy="${t*.09}" rx="${s*.07}" ry="${t*.045}" fill="white" opacity=".97"/>
+  </g>
+  <g class="cloud-drift-slow">
+    <ellipse cx="${s*.6}"  cy="${t*.16}" rx="${s*.11}" ry="${t*.055}" fill="white" opacity=".88"/>
+    <ellipse cx="${s*.69}" cy="${t*.14}" rx="${s*.08}" ry="${t*.05}"  fill="white" opacity=".88"/>
+    <ellipse cx="${s*.64}" cy="${t*.12}" rx="${s*.065}" ry="${t*.04}" fill="white" opacity=".92"/>
+  </g>
   <!-- Sun top-right -->
   <circle cx="${s*.88}" cy="${t*.1}" r="${s*.09}" fill="url(#pkSun)"/>
   ${sunRays(s*.88, t*.1, s*.09, s*.17)}
@@ -1221,12 +1237,16 @@ function sceneArt(scene, w, h) {
   <!-- Daytime sky -->
   <rect width="${s}" height="${t}" fill="url(#thSky)"/>
   <!-- Soft clouds -->
-  <ellipse cx="${s*.14}" cy="${t*.12}" rx="${s*.13}" ry="${t*.06}"  fill="white" opacity=".88"/>
-  <ellipse cx="${s*.23}" cy="${t*.1}"  rx="${s*.09}" ry="${t*.05}"  fill="white" opacity=".88"/>
-  <ellipse cx="${s*.19}" cy="${t*.08}" rx="${s*.07}" ry="${t*.042}" fill="white" opacity=".93"/>
-  <ellipse cx="${s*.7}"  cy="${t*.16}" rx="${s*.12}" ry="${t*.055}" fill="white" opacity=".82"/>
-  <ellipse cx="${s*.79}" cy="${t*.14}" rx="${s*.09}" ry="${t*.05}"  fill="white" opacity=".82"/>
-  <ellipse cx="${s*.75}" cy="${t*.12}" rx="${s*.07}" ry="${t*.04}"  fill="white" opacity=".87"/>
+  <g class="cloud-drift">
+    <ellipse cx="${s*.14}" cy="${t*.12}" rx="${s*.13}" ry="${t*.06}"  fill="white" opacity=".88"/>
+    <ellipse cx="${s*.23}" cy="${t*.1}"  rx="${s*.09}" ry="${t*.05}"  fill="white" opacity=".88"/>
+    <ellipse cx="${s*.19}" cy="${t*.08}" rx="${s*.07}" ry="${t*.042}" fill="white" opacity=".93"/>
+  </g>
+  <g class="cloud-drift-slow">
+    <ellipse cx="${s*.7}"  cy="${t*.16}" rx="${s*.12}" ry="${t*.055}" fill="white" opacity=".82"/>
+    <ellipse cx="${s*.79}" cy="${t*.14}" rx="${s*.09}" ry="${t*.05}"  fill="white" opacity=".82"/>
+    <ellipse cx="${s*.75}" cy="${t*.12}" rx="${s*.07}" ry="${t*.04}"  fill="white" opacity=".87"/>
+  </g>
   <!-- Massive tree trunk -->
   <rect x="${s*.42}" y="${t*.35}" width="${s*.16}" height="${t*.65}" rx="6" fill="#5d4037"/>
   <rect x="${s*.45}" y="${t*.35}" width="${s*.04}" height="${t*.65}" rx="4" fill="#4e342e" opacity=".5"/>
@@ -1303,12 +1323,13 @@ function sceneArt(scene, w, h) {
 
 /* ── SVG Helpers ──────────────────────────────────── */
 function sunRays(cx, cy, innerR, outerR, count=12) {
-  return Array.from({length:count},(_,i)=>{
+  const rays = Array.from({length:count},(_,i)=>{
     const a=(i/count)*Math.PI*2;
     const x1=(cx+Math.cos(a)*innerR*1.25).toFixed(1), y1=(cy+Math.sin(a)*innerR*1.25).toFixed(1);
     const x2=(cx+Math.cos(a)*outerR).toFixed(1),      y2=(cy+Math.sin(a)*outerR).toFixed(1);
     return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#FFD54F" stroke-width="2.5" opacity=".55"/>`;
   }).join('');
+  return `<g class="sun-rays">${rays}</g>`;
 }
 
 function flowers(w, h) {
