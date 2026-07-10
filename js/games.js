@@ -42,7 +42,13 @@ let gameState = {
   maxRounds: 5,
   target: null,
   answering: false,
+  roundTimer: null,
 };
+
+function scheduleNextRound() {
+  clearTimeout(gameState.roundTimer);
+  gameState.roundTimer = setTimeout(nextRound, 1100);
+}
 
 /* ── Helpers ─────────────────────────────────────── */
 function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
@@ -105,6 +111,7 @@ function openGames() {
 function closeGames() {
   const overlay = document.getElementById('games-overlay');
   clearTimeout(_gamesOpenTimer);
+  clearTimeout(gameState.roundTimer);
   overlay.classList.add('closing');
   overlay.classList.remove('opening');
   clearTimeout(_gamesCloseTimer);
@@ -147,6 +154,7 @@ function renderGameMenu() {
 
 /* ── Game start ──────────────────────────────────── */
 function startGame(gameId) {
+  clearTimeout(gameState.roundTimer);
   gameState.current  = gameId;
   gameState.score    = 0;
   gameState.round    = 0;
@@ -220,7 +228,7 @@ function renderColorPop() {
       const correct = btn.dataset.color === gameState.target;
       if (correct) { gameState.score++; celebrateEffect(btn); }
       showFeedback(correct, content);
-      setTimeout(nextRound, 1100);
+      scheduleNextRound();
     });
   });
 }
@@ -258,7 +266,7 @@ function renderStarCount() {
       const correct = parseInt(btn.dataset.num) === gameState.target;
       if (correct) { gameState.score++; celebrateEffect(btn); }
       showFeedback(correct, content);
-      setTimeout(nextRound, 1100);
+      scheduleNextRound();
     });
   });
 }
@@ -303,7 +311,7 @@ function renderFindFriend() {
       const correct = btn.dataset.friend === gameState.target;
       if (correct) { gameState.score++; celebrateEffect(btn); }
       showFeedback(correct, content);
-      setTimeout(nextRound, 1100);
+      scheduleNextRound();
     });
   });
 }
@@ -339,7 +347,7 @@ function renderShapeMatch() {
       const correct = btn.dataset.shape === gameState.target;
       if (correct) { gameState.score++; celebrateEffect(btn); }
       showFeedback(correct, content);
-      setTimeout(nextRound, 1100);
+      scheduleNextRound();
     });
   });
 }

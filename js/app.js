@@ -513,7 +513,7 @@ function sceneArt(scene, w, h) {
   <rect x="${s*.06}" y="${t*.58}" width="${s*.88}" height="${t*.3}" rx="10" fill="#9b59b6"/>
   <rect x="${s*.06}" y="${t*.56}" width="${s*.88}" height="${t*.08}" rx="5" fill="#7d3c98"/>
   <!-- Fluffy blanket with gradient -->
-  <rect x="${s*.06}" y="${t*.65}" width="${s*.88}" height="${t*.22}" rx="0 0 10 10" fill="#e8b4f8"/>
+  <rect x="${s*.06}" y="${t*.65}" width="${s*.88}" height="${t*.22}" rx="10" fill="#e8b4f8"/>
   <path d="M${s*.06},${t*.65} Q${s*.28},${t*.7} ${s*.5},${t*.65} Q${s*.72},${t*.6} ${s*.94},${t*.65}" stroke="#d488f5" stroke-width="2.5" fill="none"/>
   <!-- Pillows -->
   <rect x="${s*.1}" y="${t*.57}" width="${s*.3}" height="${t*.12}" rx="6" fill="#f8c8e0"/>
@@ -1019,16 +1019,16 @@ function sceneArt(scene, w, h) {
   <!-- Castle wide base -->
   <rect x="${s*.2}" y="${t*.52}" width="${s*.6}" height="${t*.36}" rx="2" fill="#c5c8f5"/>
   <!-- Castle shadow side -->
-  <rect x="${s*.58}" y="${t*.52}" width="${s*.22}" height="${t*.36}" rx="0 2 2 0" fill="#a8acec"/>
+  <rect x="${s*.58}" y="${t*.52}" width="${s*.22}" height="${t*.36}" rx="2" fill="#a8acec"/>
   <!-- Left side tower -->
   <rect x="${s*.14}" y="${t*.44}" width="${s*.18}" height="${t*.44}" rx="2" fill="#c5c8f5"/>
-  <rect x="${s*.24}" y="${t*.44}" width="${s*.08}" height="${t*.44}" rx="0 2 2 0" fill="#a8acec"/>
+  <rect x="${s*.24}" y="${t*.44}" width="${s*.08}" height="${t*.44}" rx="2" fill="#a8acec"/>
   <!-- Right side tower -->
   <rect x="${s*.68}" y="${t*.44}" width="${s*.18}" height="${t*.44}" rx="2" fill="#c5c8f5"/>
-  <rect x="${s*.76}" y="${t*.44}" width="${s*.1}"  height="${t*.44}" rx="0 2 2 0" fill="#a8acec"/>
+  <rect x="${s*.76}" y="${t*.44}" width="${s*.1}"  height="${t*.44}" rx="2" fill="#a8acec"/>
   <!-- Center (taller) tower -->
   <rect x="${s*.37}" y="${t*.32}" width="${s*.26}" height="${t*.56}" rx="2" fill="#c5c8f5"/>
-  <rect x="${s*.51}" y="${t*.32}" width="${s*.12}" height="${t*.56}" rx="0 2 2 0" fill="#a8acec"/>
+  <rect x="${s*.51}" y="${t*.32}" width="${s*.12}" height="${t*.56}" rx="2" fill="#a8acec"/>
   <!-- Tower roofs: triangles in pink/magenta -->
   <polygon points="${s*.14},${t*.44} ${s*.23},${t*.32} ${s*.32},${t*.44}" fill="#e040fb"/>
   <polygon points="${s*.68},${t*.44} ${s*.77},${t*.32} ${s*.86},${t*.44}" fill="#e040fb"/>
@@ -1118,7 +1118,7 @@ function sceneArt(scene, w, h) {
   <circle cx="${s*.48}" cy="${t*.8}" r="${s*.015}" fill="#f4a261"/>
   <!-- Treasure chest -->
   <rect x="${s*.72}" y="${t*.78}" width="${s*.12}" height="${t*.09}" rx="2" fill="#b8860b"/>
-  <rect x="${s*.72}" y="${t*.78}" width="${s*.12}" height="${t*.04}" rx="2 2 0 0" fill="#daa520"/>
+  <rect x="${s*.72}" y="${t*.78}" width="${s*.12}" height="${t*.04}" rx="2" fill="#daa520"/>
   <path d="M${s*.72},${t*.82} Q${s*.78},${t*.8} ${s*.84},${t*.82}" stroke="#ffd700" stroke-width="2" fill="none"/>
   <rect x="${s*.775}" y="${t*.8}" width="${s*.025}" height="${t*.03}" rx="1" fill="#ffd700"/>
   <!-- Bubbles rising -->
@@ -1255,7 +1255,7 @@ function sceneArt(scene, w, h) {
   <line x1="${s*.24}" y1="${t*.47}" x2="${s*.76}" y2="${t*.47}" stroke="#a1887f" stroke-width="2"/>
   <!-- Cabin walls -->
   <rect x="${s*.32}" y="${t*.38}" width="${s*.36}" height="${t*.14}" rx="2" fill="#a1887f"/>
-  <rect x="${s*.38}" y="${t*.38}" width="${s*.16}" height="${t*.14}" rx="0 0 0 0" fill="#8d7569" opacity=".5"/>
+  <rect x="${s*.38}" y="${t*.38}" width="${s*.16}" height="${t*.14}" rx="0" fill="#8d7569" opacity=".5"/>
   <!-- Cabin roof (triangle) -->
   <polygon points="${s*.3},${t*.38} ${s*.5},${t*.28} ${s*.7},${t*.38}" fill="#6d4c41"/>
   <polygon points="${s*.32},${t*.38} ${s*.5},${t*.29} ${s*.68},${t*.38}" fill="#795548"/>
@@ -1535,6 +1535,9 @@ function renderHome(){
     const card=document.createElement('div');
     card.className='story-card';
     card.style.setProperty('--card-i',idx);
+    card.tabIndex=0;
+    card.setAttribute('role','button');
+    card.setAttribute('aria-label',`Open story: ${story.title}`);
     const isRead=readStories.has(story.id);
     const isFav=favouriteStories.has(story.id);
     const hasVideo = typeof hasStoryVideo==='function' && hasStoryVideo(story.id);
@@ -1552,6 +1555,13 @@ function renderHome(){
         </div>
       </div>`;
     card.addEventListener('click',()=>openStory(story));
+    card.addEventListener('keydown',e=>{
+      if(e.target!==card) return; // let nested buttons (fav/watch) handle their own keys
+      if(e.key==='Enter'||e.key===' '||e.key==='Spacebar'){
+        e.preventDefault();
+        openStory(story);
+      }
+    });
     if(hasVideo){
       const watchBtn=card.querySelector('.watch-badge');
       watchBtn.addEventListener('click',e=>{ e.stopPropagation(); openStoryVideo(story); });

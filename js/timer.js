@@ -7,6 +7,7 @@ const TIMER = (() => {
   let remaining = 0;    // seconds
   let interval  = null;
   let state     = 'idle'; // idle | running | expired
+  let _pillShape = null; // 'running' | 'running-urgent' | 'expired' — tracks the pill's built DOM structure
 
   /* ── Persist across page reloads ────────────────── */
   function save() {
@@ -49,30 +50,50 @@ const TIMER = (() => {
     return `${m}:${s}`;
   }
 
+  function _announce(msg) {
+    const el = document.getElementById('timer-announcer');
+    if (el) el.textContent = msg;
+  }
+
   function _render() {
     const pill = document.getElementById('timer-pill');
     if (!pill) return;
     if (state === 'idle') {
       pill.classList.add('hidden');
+      _pillShape = null;
       return;
     }
     pill.classList.remove('hidden');
     if (state === 'expired') {
-      pill.innerHTML = `<span class="timer-icon">🌙</span><span class="timer-time">Bedtime!</span>`;
-      pill.classList.add('timer-expired');
+      if (_pillShape !== 'expired') {
+        pill.innerHTML = `<span class="timer-icon">🌙</span><span class="timer-time">Bedtime!</span>`;
+        pill.classList.add('timer-expired');
+        _pillShape = 'expired';
+        _announce('Bedtime! Timer finished.');
+      }
       return;
     }
     pill.classList.remove('timer-expired');
     const urgent = remaining <= 60;
-    pill.innerHTML = `
-      <span class="timer-icon">${urgent ? '⚠️' : '⏰'}</span>
-      <span class="timer-time ${urgent ? 'timer-urgent' : ''}">${_fmt(remaining)}</span>
-      <button class="timer-stop-btn" aria-label="Stop timer">✕</button>
-    `;
-    pill.querySelector('.timer-stop-btn').addEventListener('click', e => {
-      e.stopPropagation();
-      TIMER.stop();
-    });
+    const shape  = urgent ? 'running-urgent' : 'running';
+    if (_pillShape !== shape) {
+      // Structure changed (first render, or crossing the urgent threshold) — rebuild once.
+      pill.innerHTML = `
+        <span class="timer-icon">${urgent ? '⚠️' : '⏰'}</span>
+        <span class="timer-time ${urgent ? 'timer-urgent' : ''}">${_fmt(remaining)}</span>
+        <button class="timer-stop-btn" aria-label="Stop timer">✕</button>
+      `;
+      pill.querySelector('.timer-stop-btn').addEventListener('click', e => {
+        e.stopPropagation();
+        TIMER.stop();
+      });
+      _pillShape = shape;
+      if (urgent) _announce('One minute left.');
+    } else {
+      // Same structure — just update the displayed time, don't touch focus/listeners.
+      const timeEl = pill.querySelector('.timer-time');
+      if (timeEl) timeEl.textContent = _fmt(remaining);
+    }
   }
 
   function _showExpiredOverlay() {
@@ -99,6 +120,7 @@ const TIMER = (() => {
       state     = 'running';
       save();
       _start();
+      _announce(`Timer set for ${minutes} minutes.`);
       const popover = document.getElementById('timer-popover');
       if (popover) popover.classList.add('hidden');
     },
