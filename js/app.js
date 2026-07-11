@@ -1535,6 +1535,9 @@ function renderHome(){
     const card=document.createElement('div');
     card.className='story-card';
     card.style.setProperty('--card-i',idx);
+    card.tabIndex=0;
+    card.setAttribute('role','button');
+    card.setAttribute('aria-label',`Read ${story.title}`);
     const isRead=readStories.has(story.id);
     const isFav=favouriteStories.has(story.id);
     const hasVideo = typeof hasStoryVideo==='function' && hasStoryVideo(story.id);
@@ -1552,6 +1555,13 @@ function renderHome(){
         </div>
       </div>`;
     card.addEventListener('click',()=>openStory(story));
+    card.addEventListener('keydown',e=>{
+      if(e.target!==card) return;
+      if(e.key==='Enter'||e.key===' '){
+        e.preventDefault();
+        openStory(story);
+      }
+    });
     if(hasVideo){
       const watchBtn=card.querySelector('.watch-badge');
       watchBtn.addEventListener('click',e=>{ e.stopPropagation(); openStoryVideo(story); });

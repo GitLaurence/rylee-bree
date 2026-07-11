@@ -24,6 +24,7 @@ function openStoryVideo(story) {
   const src = STORY_VIDEOS[story.id];
   if (!src) return;
   if (typeof SFX !== 'undefined') SFX.open();
+  if (typeof ttsStop === 'function') ttsStop();
 
   clearTimeout(_videoCloseTimer);
   _videoTrigger = document.activeElement;
