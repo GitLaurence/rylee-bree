@@ -1622,6 +1622,8 @@ function ttsToggle() {
 /* ── Reader ───────────────────────────────────────── */
 let _readerTrigger=null;
 let _readerCloseTimer=null;
+let _pageAnimEl=null;
+let _pageAnimHandler=null;
 
 function openStory(story){
   if(!story) return;
@@ -1679,7 +1681,22 @@ function renderPage(animate,direction='right'){
       <div class="story-chapter">${currentStory.title}</div>
       <div class="story-text">${pg.text}</div>
     </div>`;
-  if(animate) pageEl.addEventListener('animationend',()=>pageEl.classList.remove(animClass),{once:true});
+  if(_pageAnimEl && _pageAnimHandler){
+    _pageAnimEl.removeEventListener('animationend',_pageAnimHandler);
+    _pageAnimEl.removeEventListener('animationcancel',_pageAnimHandler);
+    _pageAnimHandler=null;
+  }
+  if(animate){
+    _pageAnimHandler=()=>{
+      pageEl.classList.remove(animClass);
+      pageEl.removeEventListener('animationend',_pageAnimHandler);
+      pageEl.removeEventListener('animationcancel',_pageAnimHandler);
+      _pageAnimHandler=null;
+    };
+    _pageAnimEl=pageEl;
+    pageEl.addEventListener('animationend',_pageAnimHandler);
+    pageEl.addEventListener('animationcancel',_pageAnimHandler);
+  }
 
   // Desktop aside text panel
   const aside=document.getElementById('story-aside');
@@ -1745,6 +1762,8 @@ document.addEventListener('keydown',e=>{
   if(document.getElementById('reader').classList.contains('hidden')) return;
   const videoOverlay=document.getElementById('video-overlay');
   if(videoOverlay && !videoOverlay.classList.contains('hidden')) return;
+  const timerOverlay=document.getElementById('timer-expired-overlay');
+  if(timerOverlay && !timerOverlay.classList.contains('hidden')) return;
   if(e.key==='ArrowRight'||e.key===' '){ e.preventDefault(); nextPage(); }
   if(e.key==='ArrowLeft'){ e.preventDefault(); prevPage(); }
   if(e.key==='Escape') closeReader();

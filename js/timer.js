@@ -7,6 +7,7 @@ const TIMER = (() => {
   let remaining = 0;    // seconds
   let interval  = null;
   let state     = 'idle'; // idle | running | expired
+  let _expiredTrigger = null;
 
   /* ── Persist across page reloads ────────────────── */
   function save() {
@@ -78,9 +79,24 @@ const TIMER = (() => {
   function _showExpiredOverlay() {
     const el = document.getElementById('timer-expired-overlay');
     if (!el) return;
+    _expiredTrigger = document.activeElement;
     el.classList.remove('hidden');
     el.classList.add('opening');
     setTimeout(() => el.classList.remove('opening'), 400);
+    const dismissBtn = document.getElementById('timer-dismiss');
+    if (dismissBtn) dismissBtn.focus();
+  }
+
+  function _trapExpiredFocus(e) {
+    const el = document.getElementById('timer-expired-overlay');
+    if (!el || el.classList.contains('hidden')) return;
+    if (e.key === 'Tab') {
+      // Only one focusable control in this dialog — keep focus locked on it.
+      e.preventDefault();
+      document.getElementById('timer-dismiss')?.focus();
+    } else if (e.key === 'Escape') {
+      TIMER.dismissExpiry();
+    }
   }
 
   function _showSettings() {
@@ -115,6 +131,7 @@ const TIMER = (() => {
       const el = document.getElementById('timer-expired-overlay');
       if (el) el.classList.add('hidden');
       TIMER.stop();
+      if (_expiredTrigger) { _expiredTrigger.focus(); _expiredTrigger = null; }
     },
 
     init() {
@@ -134,6 +151,7 @@ const TIMER = (() => {
       // Dismiss expired overlay
       const dismissBtn = document.getElementById('timer-dismiss');
       if (dismissBtn) dismissBtn.addEventListener('click', () => TIMER.dismissExpiry());
+      document.addEventListener('keydown', _trapExpiredFocus);
 
       // Close popover on outside click
       document.addEventListener('click', e => {
