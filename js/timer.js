@@ -8,6 +8,7 @@ const TIMER = (() => {
   let interval  = null;
   let state     = 'idle'; // idle | running | expired
   let _expiredTrigger = null;
+  let _alarmTimer = null;
 
   /* ── Persist across page reloads ────────────────── */
   function save() {
@@ -41,7 +42,7 @@ const TIMER = (() => {
   function _onExpire() {
     _render();
     _showExpiredOverlay();
-    if (typeof SFX !== 'undefined') setTimeout(() => SFX.alarm(), 200);
+    if (typeof SFX !== 'undefined') _alarmTimer = setTimeout(() => SFX.alarm(), 200);
   }
 
   function _fmt(secs) {
@@ -65,15 +66,25 @@ const TIMER = (() => {
     }
     pill.classList.remove('timer-expired');
     const urgent = remaining <= 60;
-    pill.innerHTML = `
-      <span class="timer-icon">${urgent ? '⚠️' : '⏰'}</span>
-      <span class="timer-time ${urgent ? 'timer-urgent' : ''}">${_fmt(remaining)}</span>
-      <button class="timer-stop-btn" aria-label="Stop timer">✕</button>
-    `;
-    pill.querySelector('.timer-stop-btn').addEventListener('click', e => {
-      e.stopPropagation();
-      TIMER.stop();
-    });
+    // Patch existing nodes in place rather than rebuilding the pill every
+    // tick — replacing the stop button each second would steal focus from
+    // it mid-interaction and re-announce the whole pill to screen readers.
+    let timeEl = pill.querySelector('.timer-time');
+    if (!timeEl || !pill.querySelector('.timer-stop-btn')) {
+      pill.innerHTML = `
+        <span class="timer-icon"></span>
+        <span class="timer-time"></span>
+        <button class="timer-stop-btn" aria-label="Stop timer">✕</button>
+      `;
+      pill.querySelector('.timer-stop-btn').addEventListener('click', e => {
+        e.stopPropagation();
+        TIMER.stop();
+      });
+      timeEl = pill.querySelector('.timer-time');
+    }
+    pill.querySelector('.timer-icon').textContent = urgent ? '⚠️' : '⏰';
+    timeEl.textContent = _fmt(remaining);
+    timeEl.classList.toggle('timer-urgent', urgent);
   }
 
   function _showExpiredOverlay() {
@@ -130,6 +141,8 @@ const TIMER = (() => {
     dismissExpiry() {
       const el = document.getElementById('timer-expired-overlay');
       if (el) el.classList.add('hidden');
+      clearTimeout(_alarmTimer);
+      if (typeof SFX !== 'undefined' && SFX.stopAll) SFX.stopAll();
       TIMER.stop();
       if (_expiredTrigger) { _expiredTrigger.focus(); _expiredTrigger = null; }
     },

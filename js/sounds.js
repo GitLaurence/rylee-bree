@@ -6,6 +6,7 @@
 const SFX = (() => {
   let ctx = null;
   let muted = false;
+  let live = [];
   try { muted = JSON.parse(localStorage.getItem('sfx-muted') || 'false'); } catch {}
 
   function getCtx() {
@@ -29,6 +30,8 @@ const SFX = (() => {
       gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + start + dur);
       osc.start(c.currentTime + start);
       osc.stop(c.currentTime + start + dur + 0.02);
+      live.push(osc);
+      osc.onended = () => { live = live.filter(o => o !== osc); };
     } catch {}
   }
 
@@ -62,6 +65,12 @@ const SFX = (() => {
       muted = !muted;
       try { localStorage.setItem('sfx-muted', JSON.stringify(muted)); } catch {}
       return muted;
+    },
+
+    // Silence any in-flight/scheduled tones immediately (e.g. dismissing the bedtime alarm)
+    stopAll() {
+      live.forEach(o => { try { o.stop(); } catch {} });
+      live = [];
     },
 
     // Bright ascending arpeggio — game correct answer

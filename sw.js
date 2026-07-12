@@ -2,7 +2,7 @@
    Service Worker — Cache-first offline support
    ══════════════════════════════════════════════════ */
 
-const CACHE = 'bedtime-v4';
+const CACHE = 'bedtime-v5';
 const PRECACHE = [
   './',
   './index.html',
@@ -54,6 +54,11 @@ self.addEventListener('fetch', e => {
         if (!res || res.status !== 200 || res.type === 'opaque') return res;
         const clone = res.clone();
         return caches.open(CACHE).then(c => c.put(e.request, clone)).then(() => res);
+      }).catch(() => {
+        // Offline and not precached (e.g. a story video never watched online).
+        // Fall back to the app shell for navigations so the app still loads.
+        if (e.request.mode === 'navigate') return caches.match('./index.html');
+        return Promise.reject('offline');
       });
     })
   );

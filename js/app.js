@@ -1637,6 +1637,7 @@ function openStory(story){
   renderPage(false);
   renderDots();
   document.getElementById('home-screen').style.display='none';
+  document.getElementById('reader-back').focus();
 }
 
 function closeReader(){
@@ -1764,8 +1765,9 @@ document.addEventListener('keydown',e=>{
   if(videoOverlay && !videoOverlay.classList.contains('hidden')) return;
   const timerOverlay=document.getElementById('timer-expired-overlay');
   if(timerOverlay && !timerOverlay.classList.contains('hidden')) return;
-  if(e.key==='ArrowRight'||e.key===' '){ e.preventDefault(); nextPage(); }
-  if(e.key==='ArrowLeft'){ e.preventDefault(); prevPage(); }
+  const onControl=e.target.closest('button, a, [role="button"], input, select, textarea');
+  if((e.key==='ArrowRight'||e.key===' ')&&!onControl){ e.preventDefault(); nextPage(); }
+  if(e.key==='ArrowLeft'&&!onControl){ e.preventDefault(); prevPage(); }
   if(e.key==='Escape') closeReader();
 });
 
