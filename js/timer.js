@@ -17,11 +17,13 @@ const TIMER = (() => {
   function restore() {
     try {
       const d = JSON.parse(localStorage.getItem('timer-state') || 'null');
-      if (!d || d.state !== 'running') return;
+      if (!d) return;
+      if (d.state === 'expired') { state = 'expired'; _onExpire(); return; }
+      if (d.state !== 'running') return;
       const elapsed = Math.floor((Date.now() - d.savedAt) / 1000);
       remaining = Math.max(0, d.remaining - elapsed);
       if (remaining > 0) { state = 'running'; _start(); }
-      else               { state = 'expired'; _onExpire(); }
+      else               { state = 'expired'; _onExpire(); save(); }
     } catch {}
   }
 

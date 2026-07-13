@@ -1637,6 +1637,7 @@ function openStory(story){
   renderPage(false);
   renderDots();
   document.getElementById('home-screen').style.display='none';
+  document.getElementById('reader-back').focus();
 }
 
 function closeReader(){
@@ -1770,10 +1771,19 @@ document.addEventListener('keydown',e=>{
 });
 
 /* ── Touch ────────────────────────────────────────── */
-let touchStartX=0;
+let touchStartX=0, touchStartY=0;
 const book=document.getElementById('book');
-book.addEventListener('touchstart',e=>{ touchStartX=e.touches[0].clientX; },{passive:true});
-book.addEventListener('touchend',e=>{ const dx=e.changedTouches[0].clientX-touchStartX; if(Math.abs(dx)>40){ dx<0?nextPage():prevPage(); } });
+book.addEventListener('touchstart',e=>{
+  if(e.touches.length>1) return;
+  touchStartX=e.touches[0].clientX;
+  touchStartY=e.touches[0].clientY;
+},{passive:true});
+book.addEventListener('touchend',e=>{
+  if(e.touches.length>0) return;
+  const dx=e.changedTouches[0].clientX-touchStartX;
+  const dy=e.changedTouches[0].clientY-touchStartY;
+  if(Math.abs(dx)>40 && Math.abs(dx)>Math.abs(dy)){ dx<0?nextPage():prevPage(); }
+});
 
 /* ── Buttons ──────────────────────────────────────── */
 document.getElementById('next-btn').addEventListener('click',nextPage);

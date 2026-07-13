@@ -42,6 +42,7 @@ let gameState = {
   maxRounds: 5,
   target: null,
   answering: false,
+  roundTimer: null,
 };
 
 /* ── Helpers ─────────────────────────────────────── */
@@ -105,6 +106,7 @@ function openGames() {
 function closeGames() {
   const overlay = document.getElementById('games-overlay');
   clearTimeout(_gamesOpenTimer);
+  clearTimeout(gameState.roundTimer);
   overlay.classList.add('closing');
   overlay.classList.remove('opening');
   clearTimeout(_gamesCloseTimer);
@@ -147,6 +149,7 @@ function renderGameMenu() {
 
 /* ── Game start ──────────────────────────────────── */
 function startGame(gameId) {
+  clearTimeout(gameState.roundTimer);
   gameState.current  = gameId;
   gameState.score    = 0;
   gameState.round    = 0;
@@ -220,7 +223,7 @@ function renderColorPop() {
       const correct = btn.dataset.color === gameState.target;
       if (correct) { gameState.score++; celebrateEffect(btn); }
       showFeedback(correct, content);
-      setTimeout(nextRound, 1100);
+      gameState.roundTimer = setTimeout(nextRound, 1100);
     });
   });
 }
@@ -258,7 +261,7 @@ function renderStarCount() {
       const correct = parseInt(btn.dataset.num) === gameState.target;
       if (correct) { gameState.score++; celebrateEffect(btn); }
       showFeedback(correct, content);
-      setTimeout(nextRound, 1100);
+      gameState.roundTimer = setTimeout(nextRound, 1100);
     });
   });
 }
@@ -303,7 +306,7 @@ function renderFindFriend() {
       const correct = btn.dataset.friend === gameState.target;
       if (correct) { gameState.score++; celebrateEffect(btn); }
       showFeedback(correct, content);
-      setTimeout(nextRound, 1100);
+      gameState.roundTimer = setTimeout(nextRound, 1100);
     });
   });
 }
@@ -339,7 +342,7 @@ function renderShapeMatch() {
       const correct = btn.dataset.shape === gameState.target;
       if (correct) { gameState.score++; celebrateEffect(btn); }
       showFeedback(correct, content);
-      setTimeout(nextRound, 1100);
+      gameState.roundTimer = setTimeout(nextRound, 1100);
     });
   });
 }
