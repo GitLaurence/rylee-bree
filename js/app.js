@@ -1535,6 +1535,9 @@ function renderHome(){
     const card=document.createElement('div');
     card.className='story-card';
     card.style.setProperty('--card-i',idx);
+    card.tabIndex=0;
+    card.setAttribute('role','button');
+    card.setAttribute('aria-label',`Open story: ${story.title}`);
     const isRead=readStories.has(story.id);
     const isFav=favouriteStories.has(story.id);
     const hasVideo = typeof hasStoryVideo==='function' && hasStoryVideo(story.id);
@@ -1552,6 +1555,10 @@ function renderHome(){
         </div>
       </div>`;
     card.addEventListener('click',()=>openStory(story));
+    card.addEventListener('keydown',e=>{
+      if(e.target!==card) return;
+      if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openStory(story); }
+    });
     if(hasVideo){
       const watchBtn=card.querySelector('.watch-badge');
       watchBtn.addEventListener('click',e=>{ e.stopPropagation(); openStoryVideo(story); });
@@ -1734,15 +1741,21 @@ function renderPage(animate,direction='right'){
 
 function renderDots(){
   const dots=document.getElementById('dots');
-  dots.innerHTML='';
-  currentStory.pages.forEach((_,i)=>{
-    const d=document.createElement('button');
-    d.type='button';
+  const n=currentStory.pages.length;
+  if(dots.children.length!==n){
+    dots.innerHTML='';
+    for(let i=0;i<n;i++){
+      const d=document.createElement('button');
+      d.type='button';
+      d.setAttribute('aria-label',`Go to page ${i+1}`);
+      d.addEventListener('click',()=>goToPage(i));
+      dots.appendChild(d);
+    }
+  }
+  Array.from(dots.children).forEach((d,i)=>{
     d.className='dot'+(i===currentPage?' active':'');
-    d.setAttribute('aria-label',`Go to page ${i+1}`);
     if(i===currentPage) d.setAttribute('aria-current','true');
-    d.addEventListener('click',()=>goToPage(i));
-    dots.appendChild(d);
+    else d.removeAttribute('aria-current');
   });
 }
 
@@ -1765,7 +1778,8 @@ document.addEventListener('keydown',e=>{
   if(videoOverlay && !videoOverlay.classList.contains('hidden')) return;
   const timerOverlay=document.getElementById('timer-expired-overlay');
   if(timerOverlay && !timerOverlay.classList.contains('hidden')) return;
-  if(e.key==='ArrowRight'||e.key===' '){ e.preventDefault(); nextPage(); }
+  const onControl=e.target.closest('button, a, input, textarea, select, [role="button"], [tabindex]');
+  if(e.key==='ArrowRight'||(e.key===' '&&!onControl)){ e.preventDefault(); nextPage(); }
   if(e.key==='ArrowLeft'){ e.preventDefault(); prevPage(); }
   if(e.key==='Escape') closeReader();
 });
